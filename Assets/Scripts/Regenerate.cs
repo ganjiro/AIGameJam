@@ -57,7 +57,7 @@ public class Regenerate : MonoBehaviour
 
             }
 
-            //spawnEnemy();
+            spawnEnemy();
             spawnEnemy();
 
             float xP = Random.Range(-5, 4) + 0.5f;

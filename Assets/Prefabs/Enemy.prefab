@@ -243,7 +243,7 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   _stateDim: 100
-  _inference: 0
+  _inference: 1
   _currentAction: 99
   _defaultActionValue: 99
 --- !u!114 &7206057936256848189
