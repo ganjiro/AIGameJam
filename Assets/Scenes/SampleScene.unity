@@ -315,6 +315,7 @@ MonoBehaviour:
   cantMove:
     serializedVersion: 2
     m_Bits: 1344
+  _enemyManager: {fileID: 942250206}
 --- !u!1 &855382194
 GameObject:
   m_ObjectHideFlags: 0
@@ -1362,5 +1363,8 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5794935158782853498, guid: 6efa2c288868b924e871d399fa373ec3, type: 3}
+    - {fileID: 7206057936256848189, guid: 6efa2c288868b924e871d399fa373ec3, type: 3}
+    - {fileID: 6912750958474376202, guid: 6efa2c288868b924e871d399fa373ec3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6efa2c288868b924e871d399fa373ec3, type: 3}

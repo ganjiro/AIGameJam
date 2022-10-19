@@ -45,6 +45,28 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    public void actionMovement(int action)
+    {
+        switch (action)
+        {
+            case 0:
+                moveN();
+                break;
+            case 1:
+                moveS();
+                break;
+            case 2:
+                moveE();
+                break;
+            case 3:
+                moveW();
+                break;
+            default:
+                moveN();
+                break;
+        }
+    }
+
     public void moveN()
     {
         if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, 1f, 0f), .2f, cantMove))

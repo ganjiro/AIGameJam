@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f;
     public Transform movePoint;
     public LayerMask cantMove;
+    public EnemyManager _enemyManager;
 
     // Start is called before the first frame update
     void Start()
@@ -42,8 +43,8 @@ public class PlayerController : MonoBehaviour
             }
             if ((Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1) || (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1))
             {
-                Debug.Log("Invoacato");
-                moveEnemies.Invoke();
+                // moveEnemies.Invoke();
+                StartCoroutine(_enemyManager.moveAgents());
             }
         }
     }
