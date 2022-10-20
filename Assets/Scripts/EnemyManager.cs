@@ -18,7 +18,6 @@ public class EnemyManager : MonoBehaviour
 
     public IEnumerator moveAgents()
     {
-
         VictimAgent[] childAgents = new VictimAgent[transform.childCount];
         EnemyMovement[] childMovements = new EnemyMovement[transform.childCount];
 

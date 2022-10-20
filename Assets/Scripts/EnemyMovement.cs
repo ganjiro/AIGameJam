@@ -69,7 +69,7 @@ public class EnemyMovement : MonoBehaviour
         if (goal.transform.position == transform.position)
         {
             // Destroy(transform.gameObject);
-            Regenerate.instance.RemoveEnemyFromPool(gameObject));
+            Regenerate.instance.RemoveEnemyFromPool(gameObject);
         }
     }
 

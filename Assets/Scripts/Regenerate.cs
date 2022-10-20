@@ -168,7 +168,7 @@ public class Regenerate : MonoBehaviour
     {
         enemy.transform.SetParent(transform);
         enemy.transform.position = new Vector3(-99f, -99f, 0f);
-        enemy.GetComponent<EnemyMovement>().movePoint.transform.position = e.transform.position;
+        enemy.GetComponent<EnemyMovement>().movePoint.transform.position = enemy.transform.position;
         enemy.SetActive(false);
     }
 
