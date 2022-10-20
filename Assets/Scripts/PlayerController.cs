@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -17,8 +18,42 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         movePoint.parent = null;     
-    } 
+    }
 
+    private void MakeAction(int action)
+    {
+        switch (action)
+        {
+            // Movement action
+            case 0:
+                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, 1, 0f), .2f, cantMove)) 
+                {                   
+                    movePoint.position += new Vector3(0f, 1, 0f);
+                }
+                break;
+            case 1:
+                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, -1, 0f), .2f, cantMove)) 
+                {                   
+                    movePoint.position += new Vector3(0f, -1, 0f);
+                }
+                break;
+            case 2:
+                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(1, 0f, 0f), .2f, cantMove))
+                {
+                    movePoint.position += new Vector3(1, 0f, 0f);
+                }
+                break;
+            case 3:
+                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(-1, 0f, 0f), .2f, cantMove))
+                {
+                    movePoint.position += new Vector3(-1, 0f, 0f);
+                }
+                break;
+            default:
+                break;
+        }
+        
+    }
 
     // Update is called once per frame
     void Update()
@@ -26,28 +61,46 @@ public class PlayerController : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);    
 
         if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f)
-        {            
-            
-            if (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1)
+        {
+            // In case we are training, the player does not accept input
+            if (Regenerate.instance._training)
             {
-                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, Input.GetAxisRaw("Vertical"), 0f), .2f, cantMove)) 
-                {                   
-                    movePoint.position += new Vector3(0f, Input.GetAxisRaw("Vertical"), 0f);
-                }
-            }
-
-            if (Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1)
-            {
-                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(Input.GetAxisRaw("Horizontal"), 0f, 0f), .2f, cantMove))
-                {
-                    movePoint.position += new Vector3(Input.GetAxisRaw("Horizontal"), 0f, 0f);
-                }
-            }
-            if ((Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1) || (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1))
-            {
-                // moveEnemies.Invoke();
+                // Do some random action
+                int action = UnityEngine.Random.Range(0, 5);
+                MakeAction(action);
                 StartCoroutine(_enemyManager.moveAgents());
             }
+            // Otherwise, wait for input
+            else
+            {
+                if ((Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1) || (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1))
+                {
+                    int action = -1;
+                    if(Math.Ceiling(Input.GetAxisRaw("Vertical")) > 0)
+                    {
+                        action = 0;
+                    }
+
+                    if (Math.Ceiling(Input.GetAxisRaw("Vertical")) < 0)
+                    {
+                        action = 1;
+                    }
+                
+                    if (Math.Ceiling(Input.GetAxisRaw("Horizontal")) > 0)
+                    {
+                        action = 2;
+                    }
+                
+                    if (Math.Ceiling(Input.GetAxisRaw("Horizontal")) < 0)
+                    {
+                        action = 3;
+                    }
+                    MakeAction(action);
+                    // moveEnemies.Invoke();
+                    StartCoroutine(_enemyManager.moveAgents());
+                }
+            }
+            
         }
 
         if (Input.GetKeyDown(KeyCode.E))

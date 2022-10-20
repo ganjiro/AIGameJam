@@ -341,6 +341,7 @@ MonoBehaviour:
   _inference: 1
   _currentAction: 99
   _defaultActionValue: 99
+  _map: {fileID: 0}
 --- !u!114 &7206057936256848189
 MonoBehaviour:
   m_ObjectHideFlags: 0

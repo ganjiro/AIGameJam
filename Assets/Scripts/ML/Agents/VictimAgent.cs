@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using TMPro;
 using UnityEngine;
 using Unity.MLAgents;
@@ -18,6 +19,8 @@ public class VictimAgent : Agent
 
     public int _currentAction = 99;
     public int _defaultActionValue = 99;
+
+    public Regenerate _map;
 
     // Start is called before the first frame update
     void Start()
@@ -45,7 +48,9 @@ public class VictimAgent : Agent
         Debug.Log("Reset");
         _stepCount = 0;
         _currentAction = _defaultActionValue;
-
+        
+        if(Regenerate.instance._training)
+            Regenerate.instance.CreateMap();
     }
     
     // This is the actual method that will create the observation
@@ -53,9 +58,12 @@ public class VictimAgent : Agent
     private List<float> CreateStateObservation()
     {
         // Create a dummy observation
-        List<float> obs = new List<float>(_stateDim);
-        for (int i = 0; i < _stateDim; i++)
-            obs.Add(i);
+        List<float> obs = new List<float>();
+        int[,] categoricalMap = Regenerate.instance.getFullStateMatrix();
+        foreach (int v in categoricalMap)
+        {
+            obs.Add(v);
+        }
         return obs;
     }
     
