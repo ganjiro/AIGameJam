@@ -8,6 +8,7 @@ public class EnemyMovement : MonoBehaviour
     public Transform movePoint;
     public LayerMask cantMove;
     public GameObject goal;
+    public bool _isMoving = false;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +20,9 @@ public class EnemyMovement : MonoBehaviour
     void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
+        
+        // Store if this gameobject is moving or has finished the movement
+        _isMoving = Vector3.Distance(transform.position, movePoint.position) > 0.005f;
     }
 
     public void randomMovement()

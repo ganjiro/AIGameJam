@@ -73,7 +73,21 @@ public class PlayerController : MonoBehaviour
             // Otherwise, wait for input
             else
             {
-                if ((Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1) || (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1))
+                
+                // Check whether an enemy is moving
+                // If at least one enemy is moving, wait for it
+                bool oneEnemyMoving = false;
+                foreach (var e in Regenerate.instance.agents.GetComponentsInChildren<EnemyMovement>())
+                {
+                    if (e._isMoving)
+                    {
+                        oneEnemyMoving = true;
+                        break;
+                    }
+                }
+                
+                if (((Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1) || (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1))
+                    && !oneEnemyMoving)
                 {
                     int action = -1;
                     if(Math.Ceiling(Input.GetAxisRaw("Vertical")) > 0)
