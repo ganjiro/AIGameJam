@@ -79,10 +79,7 @@ public class Regenerate : MonoBehaviour
         // Reset enemy pool
         foreach (GameObject e in _enemyPool)
         {
-            e.transform.SetParent(transform);
-            e.transform.position = new Vector3(-99f, -99f, 0f);
-            e.GetComponent<EnemyMovement>().movePoint.transform.position = e.transform.position;
-            e.SetActive(false);
+            RemoveEnemyFromPool(e);
         }
 
         // foreach (Transform child in agents.transform)
@@ -166,6 +163,14 @@ public class Regenerate : MonoBehaviour
         enemy.transform.SetParent(agents.transform);
     }
 
+
+    public void RemoveEnemyFromPool(GameObject enemy)
+    {
+        enemy.transform.SetParent(transform);
+        enemy.transform.position = new Vector3(-99f, -99f, 0f);
+        enemy.GetComponent<EnemyMovement>().movePoint.transform.position = e.transform.position;
+        enemy.SetActive(false);
+    }
 
     public int[,] getFullStateMatrix()
     {
