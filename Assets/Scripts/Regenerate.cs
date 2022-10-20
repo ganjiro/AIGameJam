@@ -162,6 +162,7 @@ public class Regenerate : MonoBehaviour
         enemy.transform.rotation = Quaternion.identity;
         enemy.GetComponent<EnemyMovement>().movePoint.transform.position = enemy.transform.position;
         enemy.GetComponent<VictimAgent>()._inference = !_training;
+        enemy.GetComponent<EnemyMovement>().goal = goal;
         enemy.transform.SetParent(agents.transform);
     }
 

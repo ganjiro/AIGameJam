@@ -7,6 +7,7 @@ public class EnemyMovement : MonoBehaviour
     public float moveSpeed = 5f;
     public Transform movePoint;
     public LayerMask cantMove;
+    public GameObject goal;
 
     // Start is called before the first frame update
     void Start()
@@ -64,6 +65,10 @@ public class EnemyMovement : MonoBehaviour
             default:
                 moveN();
                 break;
+        }
+        if (goal.transform.position == transform.position)
+        {
+            Destroy(transform.gameObject);
         }
     }
 
