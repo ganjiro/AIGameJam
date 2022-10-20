@@ -20,8 +20,6 @@ public class VictimAgent : Agent
     public int _currentAction = 99;
     public int _defaultActionValue = 99;
 
-    public Regenerate _map;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -48,9 +46,7 @@ public class VictimAgent : Agent
         Debug.Log("Reset");
         _stepCount = 0;
         _currentAction = _defaultActionValue;
-        
-        if(Regenerate.instance._training)
-            Regenerate.instance.CreateMap();
+        GetComponent<EnemyMovement>()._isMoving = false;
     }
     
     // This is the actual method that will create the observation

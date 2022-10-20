@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Linq;
+using Unity.MLAgents;
 
 public class Regenerate : MonoBehaviour
 {
@@ -51,7 +52,10 @@ public class Regenerate : MonoBehaviour
         
         // If we are training, first of all create the map
         if (_training)
+        {
             CreateMap();
+            Academy.Instance.OnEnvironmentReset += CreateMap;
+        }
     }
 
     // Update is called once per frame
@@ -163,7 +167,8 @@ public class Regenerate : MonoBehaviour
         enemy.transform.SetParent(agents.transform);
     }
 
-
+    
+    
     public void RemoveEnemyFromPool(GameObject enemy)
     {
         enemy.transform.SetParent(transform);
