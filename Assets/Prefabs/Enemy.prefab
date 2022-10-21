@@ -203,6 +203,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1600
   goal: {fileID: 0}
+  _isMoving: 0
 --- !u!61 &7201677359210030739
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -242,7 +243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 100
+    VectorObservationSize: 109
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -279,7 +280,6 @@ MonoBehaviour:
   _inference: 1
   _currentAction: 99
   _defaultActionValue: 99
-  _map: {fileID: 0}
 --- !u!114 &7206057936256848189
 MonoBehaviour:
   m_ObjectHideFlags: 0
