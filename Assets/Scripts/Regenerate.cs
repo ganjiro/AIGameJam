@@ -219,13 +219,7 @@ public class Regenerate : MonoBehaviour
         }
         // GameObject instantiatedObject = Instantiate(enemyPrefab, new Vector3(x, y, 0f), Quaternion.identity);
         enemy.transform.position = new Vector3(x, y, 0f);
-        Debug.Log("DA RIMUOVERREEEEEE");
-        Debug.Log(enemy.transform.position.x);
-        Debug.Log(enemy.transform.position.y);
         enemy.transform.rotation = Quaternion.identity;
-        Debug.Log("ANCHE QUESTO");
-        Debug.Log(enemy.transform.position.x);
-        Debug.Log(enemy.transform.position.y);
         enemy.GetComponent<EnemyMovement>().movePoint.transform.position = enemy.transform.position;
         enemy.GetComponent<VictimAgent>()._inference = !_training;
         enemy.GetComponent<EnemyMovement>().goal = goal;
@@ -832,62 +826,105 @@ public class Regenerate : MonoBehaviour
     }
 
     public void checkLightOnEnemy(int flashlightState)
-    {   
-        float Threshold = 0.05f;
-     
-        int pX = (int) (player.transform.position.x + 0.5);
-        int pY = (int) (player.transform.position.y + 0.5);
+    {
 
-        int tlx = (int) (player.transform.Find("FlashLight").transform.position.x + 0.5);
-        int tly = (int) (player.transform.Find("FlashLight").transform.position.y + 0.5);
 
-        int plx = (int)(player.transform.Find("PointLight").transform.position.x + 0.5);
-        int ply = (int)(player.transform.Find("PointLight").transform.position.y + 0.5);
+        float pX = player.transform.position.x;
+        float pY = player.transform.position.y;
+
+        float flx = player.transform.Find("FlashLight").transform.position.x;
+        float fly = player.transform.Find("FlashLight").transform.position.y;
+
+        float plx = player.transform.Find("PointLight").transform.position.x;
+        float ply = player.transform.Find("PointLight").transform.position.y;
+
+        // pre-allcation
+        float fl1x = 99f;
+        float fl1y = 99f; 
+        float fl2x = 99f;
+        float fl2y = 99f;
 
         foreach (Transform agent in agents.transform)
         {
-            int eX = (int)(agent.transform.position.x + 0.5);
-            int eY = (int)(agent.transform.position.y + 0.5);
-            /*
+            float eX = agent.transform.position.x;
+            float eY = agent.transform.position.y;
+
             switch (flashlightState)
             {
-                case (0):
-                    if (pX+tl)
-                    {
-                        Regenerate.instance.RemoveEnemyFromPool(agent.gameObject);
-                        agent.gameObject.SetActive(false);
-                    }
+                case (0): // destra OK
+                    fl1x = pX + flx - 0.5f;
+                    fl1y = pY + fly; // fly it's zero
+
+                    fl2x = fl1x + 1;
+                    fl2y = fl1y;
                     break;
-                case (1):
-                   
+
+                case (1): // basso-destra
+                    fl1x = pX + flx - 0.5f;
+                    fl1y = pY + fly + 0.8f; // fly it's -1.2f
+
+                    fl2x = fl1x + 1;
+                    fl2y = fl1y -1f;
                     break;
-                case (2):
-                   
+
+                case (2): // basso OK
+                    fl1x = pX;
+                    fl1y = pY + fly + 0.8f; 
+
+                    fl2x = fl1x;
+                    fl2y = fl1y - 1f;
                     break;
-                case (3):
-                    
+
+                case (3): // basso sinistra
+                    fl1x = pX + flx + 0.5f;
+                    fl1y = pY + fly + 0.8f; 
+
+                    fl2x = fl1x - 1;
+                    fl2y = fl1y - 1f;
                     break;
-                case (4):
-                    
+
+                case (4): // sinistra OK
+                    fl1x = pX + flx + 0.5f;
+                    fl1y = pY + fly; 
+
+                    fl2x = fl1x - 1;
+                    fl2y = fl1y;
                     break;
-                case (5):
-                    
+
+                case (5): // alto sinistra OK
+                    fl1x = pX + flx + 0.5f;
+                    fl1y = pY + fly - 0.8f; 
+
+                    fl2x = fl1x - 1;
+                    fl2y = fl1y + 1f;
                     break;
-                case (6):
-                    
+
+                case (6): // alto OK
+                    fl1x = pX;
+                    fl1y = pY + fly - 0.8f; 
+
+                    fl2x = fl1x;
+                    fl2y = fl1y + 1f;
                     break;
-                case (7):
-                    
+
+                case (7): // alto destra
+                    fl1x = pX + flx - 0.5f;
+                    fl1y = pY + fly - 0.8f; 
+
+                    fl2x = fl1x + 1;
+                    fl2y = fl1y + 1f;
                     break;
             }
-            */
-        }
-        /*
-                ((pX + player.transform.Find("PintLight").transform.position.x - 0.5) == agent.transform.position.x) ||
-                ((pX + player.transform.Find("PintLight").transform.position.x - 0.5) == agent.transform.position.x) ||
-                ((pX + player.transform.Find("PintLight").transform.position.x - 0.5) == agent.transform.position.x) ||
-                ((pX + player.transform.Find("PintLight").transform.position.x - 0.5) == agent.transform.position.x))
-        */
 
+            if ((fl1x == eX && fl1y == eY) ||
+                       (fl2x == eX && fl2y == eY))
+            {
+                Regenerate.instance.RemoveEnemyFromPool(agent.gameObject);
+                agent.gameObject.SetActive(false);
+            }
+
+        }
     }
+     
+   
 }

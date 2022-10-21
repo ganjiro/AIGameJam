@@ -51,6 +51,8 @@ public class EnemyMovement : MonoBehaviour
 
         // Store if this gameobject is moving or has finished the movement
         _isMoving = Vector3.Distance(transform.position, movePoint.position) >= _movementThreshold;
+
+        
     }
 
     public void randomMovement()
