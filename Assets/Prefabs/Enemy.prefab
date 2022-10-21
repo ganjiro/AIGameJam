@@ -203,6 +203,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1600
   goal: {fileID: 0}
+  player: {fileID: 0}
   _isMoving: 0
 --- !u!61 &7201677359210030739
 BoxCollider2D:
@@ -243,7 +244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 109
+    VectorObservationSize: 100
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0

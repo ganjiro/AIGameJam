@@ -170,8 +170,6 @@ public class Regenerate : MonoBehaviour
 
         spawnEnemy();
         // spawnEnemy();
-        a++;
-        Debug.Log(a);
         float xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
         float yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
 
@@ -830,8 +828,6 @@ public class Regenerate : MonoBehaviour
 
     public void checkLightOnEnemy(int flashlightState)
     {
-
-
         float pX = player.transform.position.x;
         float pY = player.transform.position.y;
 
@@ -922,10 +918,18 @@ public class Regenerate : MonoBehaviour
             if ((fl1x == eX && fl1y == eY) ||
                        (fl2x == eX && fl2y == eY))
             {
-                Regenerate.instance.RemoveEnemyFromPool(agent.gameObject);
-                agent.gameObject.SetActive(false);
+                if (_training)
+                {
+                    // Give negative reward to the agent
+                    // TODO: I don't like this here, I prefer to have all the reward in EnemyMovement. But anyway
+                    agent.GetComponent<EnemyMovement>().GiveDeadReward();
+                }
+                else
+                {
+                    RemoveEnemyFromPool(agent.gameObject);
+                    agent.gameObject.SetActive(false);    
+                }
             }
-
         }
     }
      
