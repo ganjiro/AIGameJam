@@ -1044,18 +1044,7 @@ public class Regenerate : MonoBehaviour
             default:
                 break;
         }
-
-        string sus;
-        for (int i = 0; i < 10; i++)
-        {
-            sus = "";
-            for (int j = 0; j < 10; j++)
-            {
-                sus += stateMatrix[i, j].ToString();
-            }
-            Debug.Log(sus);
-        }
-
+                
         return stateMatrix;
     }
 
