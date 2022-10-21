@@ -5,6 +5,8 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Linq;
 
+
+
 public class Regenerate : MonoBehaviour
 {
     public GameObject obstacles;
@@ -69,6 +71,59 @@ public class Regenerate : MonoBehaviour
 
      }
 
+    public int[] getFeasibleActionset(Vector3 objPosition)
+    {
+        int[] feasible = new int[9];
+        
+        feasible[8] = 1; // wait always feasible
+
+        if (!Physics2D.OverlapCircle(objPosition + new Vector3(1f, 0f, 0f), .2f, cantMove)) // E
+        {
+            feasible[0] = 1; 
+        }
+        if (!Physics2D.OverlapCircle(objPosition + new Vector3(1f, -1f, 0f), .2f, cantMove)) // SE
+        {
+            feasible[1] = 1;
+        }
+        if (!Physics2D.OverlapCircle(objPosition + new Vector3(0f, -1f, 0f), .2f, cantMove)) // S
+        {
+            feasible[2] = 1;
+        }
+        if (!Physics2D.OverlapCircle(objPosition + new Vector3(-1f, -1f, 0f), .2f, cantMove)) // SO
+        {
+            feasible[3] = 1;
+        }
+        if (!Physics2D.OverlapCircle(objPosition + new Vector3(-1f, 0f, 0f), .2f, cantMove)) // O
+        {
+            feasible[4] = 1;
+        }
+        if (!Physics2D.OverlapCircle(objPosition + new Vector3(-1f, 1f, 0f), .2f, cantMove)) // NO
+        {
+            feasible[5] = 1;
+        }
+        if (!Physics2D.OverlapCircle(objPosition + new Vector3(0f, 1f, 0f), .2f, cantMove)) // N
+        {
+            feasible[6] = 1;
+        }
+        if (!Physics2D.OverlapCircle(objPosition + new Vector3(1f, 1f, 0f), .2f, cantMove)) // NE
+        {
+            feasible[7] = 1;
+        }
+
+        int sum = 0;
+        for (int i = 0; i < 9; i++)
+        {
+            sum += feasible[i]; // 0: not feasible
+        }
+        if(sum == 1)
+        {
+            Debug.Log("Devo per forza stare fermo");
+        }
+
+        return feasible;
+
+    }
+
     public void CreateMap()
     {
         foreach (Transform child in obstacles.transform)
@@ -90,13 +145,13 @@ public class Regenerate : MonoBehaviour
 
         for (int i=0; i < nObstacles; i++) {
 
-            float x = Random.Range(-5, 4) + 0.5f;
-            float y = Random.Range(-5, 4) + 0.5f;
+            float x = UnityEngine.Random.Range(-5, 4) + 0.5f;
+            float y = UnityEngine.Random.Range(-5, 4) + 0.5f;
 
             while (Physics2D.OverlapCircle(new Vector3(x, y, 0f), 1.2f, cantMove)) 
             {
-                x = Random.Range(-5, 4) + 0.5f;
-                y = Random.Range(-5, 4) + 0.5f;
+                x = UnityEngine.Random.Range(-5, 4) + 0.5f;
+                y = UnityEngine.Random.Range(-5, 4) + 0.5f;
             }
 
             GameObject instantiatedObject = Instantiate(obstaclesPrefab, new Vector3(x, y, 0f), Quaternion.identity);
@@ -107,25 +162,25 @@ public class Regenerate : MonoBehaviour
         spawnEnemy();
         // spawnEnemy();
 
-        float xP = Random.Range(-5, 4) + 0.5f;
-        float yP = Random.Range(-5, 4) + 0.5f;
+        float xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
+        float yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
 
         while (Physics2D.OverlapCircle(new Vector3(xP, yP, 0f), .2f, cantMove))
         {
-            xP = Random.Range(-5, 4) + 0.5f;
-            yP = Random.Range(-5, 4) + 0.5f;
+            xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
+            yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
         }
 
         player.transform.position = new Vector3(xP, yP, 0f);
         player.GetComponent<PlayerController>().movePoint.position = new Vector3(xP, yP, 0f);
 
-        xP = Random.Range(-5, 4) + 0.5f;
-        yP = Random.Range(-5, 4) + 0.5f;
+        xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
+        yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
 
         while (Physics2D.OverlapCircle(new Vector3(xP, yP, 0f), .2f, cantMove))
         {
-            xP = Random.Range(-5, 4) + 0.5f;
-            yP = Random.Range(-5, 4) + 0.5f;
+            xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
+            yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
         }
 
         goal.transform.position = new Vector3(xP, yP, 0f);
@@ -135,13 +190,13 @@ public class Regenerate : MonoBehaviour
     {
         // Get the first non active enemy from the pool
         
-        float x = Random.Range(-5, 4) + 0.5f;
-        float y = Random.Range(-5, 4) + 0.5f;
+        float x = UnityEngine.Random.Range(-5, 4) + 0.5f;
+        float y = UnityEngine.Random.Range(-5, 4) + 0.5f;
 
         while (Physics2D.OverlapCircle(new Vector3(x, y, 0f), .2f, cantMove))
         {
-            x = Random.Range(-5, 4) + 0.5f;
-            y = Random.Range(-5, 4) + 0.5f;
+            x = UnityEngine.Random.Range(-5, 4) + 0.5f;
+            y = UnityEngine.Random.Range(-5, 4) + 0.5f;
         }
 
         GameObject enemy = null;
@@ -172,23 +227,55 @@ public class Regenerate : MonoBehaviour
         enemy.SetActive(false);
     }
 
+    public int[,] getCropStateMatrix(Vector3 agentPosition, int radius)
+    {
+        int xRow = (int) (agentPosition.x + 4.5);
+        int yRow = (int)(Mathf.Abs((int)(agentPosition.y - 4.5)));
+
+
+        int diameter = (int)(radius) * 2 + 1;
+        int[,] cropStateMatrix = new int[diameter, diameter];
+        int[,] fullStateMatrix = getFullStateMatrix();
+    
+        for (int i = 0; i < diameter; i++)
+        {
+            for (int j = 0; j < diameter; j++)
+            {
+                cropStateMatrix[i, j] = 1;
+            }
+        }
+        // TODO FIX
+        for (int i = xRow-(diameter/2); i < xRow + (diameter / 2); i++)
+        {
+            for (int j = yRow - (diameter / 2); i < yRow + (diameter / 2); i++)
+            {
+                if (i >= 0 && i <= 9 && j >= 0 && j <= 9)
+                {
+                    cropStateMatrix[i, j] = fullStateMatrix[i, j];
+                }
+            }   
+        }
+
+        return null;
+
+    }
     public int[,] getFullStateMatrix()
     {
-        int[,] stateMatrix = new int[10, 10];
+        int[,] stateMatrix = new int[10, 10]; // 0: blank
 
         foreach (Transform child in obstacles.transform)
         {
-            stateMatrix[(int)(child.position.x + 4.5), Mathf.Abs((int)(child.position.y - 4.5))] = 1;
+            stateMatrix[(int)(child.position.x + 4.5), Mathf.Abs((int)(child.position.y - 4.5))] = 1; // 1: obstacles
         }
 
         foreach (Transform child in agents.transform)
         {
-            stateMatrix[(int)(child.position.x + 4.5), Mathf.Abs((int)(child.position.y - 4.5))] = 2;
+            stateMatrix[(int)(child.position.x + 4.5), Mathf.Abs((int)(child.position.y - 4.5))] = 2; // 2: agents
         }
 
 
-        stateMatrix[(int)(goal.transform.position.x + 4.5), Mathf.Abs((int)(goal.transform.position.y - 4.5))] = 3;
-        stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5))] = 4;
+        stateMatrix[(int)(goal.transform.position.x + 4.5), Mathf.Abs((int)(goal.transform.position.y - 4.5))] = 3; // 3: goal
+        stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5))] = 4; // 4: player
 
         int flashState = player.GetComponent<PlayerController>().flashlightState;
 
@@ -197,8 +284,15 @@ public class Regenerate : MonoBehaviour
             case (0):
                 try
                 {
-                    stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5)) + 1] = 5;
-                    stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5)) + 2] = 5;
+                    if (stateMatrix[(int)(player.transform.position.x + 4.5) + 1, Mathf.Abs((int)(player.transform.position.y - 4.5))] == 1)
+                    {
+                        break; 
+                    }
+                    else
+                    {
+                        stateMatrix[(int)(player.transform.position.x + 4.5) + 1, Mathf.Abs((int)(player.transform.position.y - 4.5))] = 5; // luce
+                        stateMatrix[(int)(player.transform.position.x + 4.5) + 2, Mathf.Abs((int)(player.transform.position.y - 4.5))] = 5;
+                    }
                 }
                 catch
                 { }
@@ -208,8 +302,16 @@ public class Regenerate : MonoBehaviour
             case (1):
                 try
                 {
-                    stateMatrix[(int)(player.transform.position.x + 4.5) + 1, Mathf.Abs((int)(player.transform.position.y - 4.5)) - 1] = 5;
-                    stateMatrix[(int)(player.transform.position.x + 4.5) + 2, Mathf.Abs((int)(player.transform.position.y - 4.5)) - 2] = 5;
+                    if (stateMatrix[(int)(player.transform.position.x + 4.5) + 1, Mathf.Abs((int)(player.transform.position.y - 4.5)) - 1] == 1)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        stateMatrix[(int)(player.transform.position.x + 4.5) + 1, Mathf.Abs((int)(player.transform.position.y - 4.5)) - 1] = 5;
+                        stateMatrix[(int)(player.transform.position.x + 4.5) + 2, Mathf.Abs((int)(player.transform.position.y - 4.5)) - 2] = 5;
+                    }
+                    
                 }
                 catch 
                 { }
@@ -217,8 +319,15 @@ public class Regenerate : MonoBehaviour
             case (2):
                 try
                 {
-                    stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5)) - 1] = 5;
-                    stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5)) - 2] = 5;
+                    if (stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5)) - 1] == 1)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5)) - 1] = 5;
+                        stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5)) - 2] = 5;
+                    }
                 }
                 catch 
                 { }
@@ -226,8 +335,15 @@ public class Regenerate : MonoBehaviour
             case (3):
                 try
                 {
-                    stateMatrix[(int)(player.transform.position.x + 4.5) - 1, Mathf.Abs((int)(player.transform.position.y - 4.5)) - 1] = 5;
-                    stateMatrix[(int)(player.transform.position.x + 4.5) - 2, Mathf.Abs((int)(player.transform.position.y - 4.5)) - 2] = 5;
+                    if (stateMatrix[(int)(player.transform.position.x + 4.5) - 1, Mathf.Abs((int)(player.transform.position.y - 4.5)) - 1] == 1)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        stateMatrix[(int)(player.transform.position.x + 4.5) - 1, Mathf.Abs((int)(player.transform.position.y - 4.5)) - 1] = 5;
+                        stateMatrix[(int)(player.transform.position.x + 4.5) - 2, Mathf.Abs((int)(player.transform.position.y - 4.5)) - 2] = 5;
+                    }
                 }
                 catch
                 { }
@@ -235,8 +351,15 @@ public class Regenerate : MonoBehaviour
             case (4):
                 try
                 {
-                    stateMatrix[(int)(player.transform.position.x + 4.5) - 1, Mathf.Abs((int)(player.transform.position.y - 4.5))] = 5;
-                    stateMatrix[(int)(player.transform.position.x + 4.5) - 2, Mathf.Abs((int)(player.transform.position.y - 4.5))] = 5;
+                    if (stateMatrix[(int)(player.transform.position.x + 4.5) - 1, Mathf.Abs((int)(player.transform.position.y - 4.5))] == 1)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        stateMatrix[(int)(player.transform.position.x + 4.5) - 1, Mathf.Abs((int)(player.transform.position.y - 4.5))] = 5;
+                        stateMatrix[(int)(player.transform.position.x + 4.5) - 2, Mathf.Abs((int)(player.transform.position.y - 4.5))] = 5;
+                    }
                 }
                 catch 
                 { }
@@ -244,8 +367,15 @@ public class Regenerate : MonoBehaviour
             case (5):
                 try
                 {
-                    stateMatrix[(int)(player.transform.position.x + 4.5) - 1, Mathf.Abs((int)(player.transform.position.y - 4.5)) + 1] = 5;
-                    stateMatrix[(int)(player.transform.position.x + 4.5) - 2, Mathf.Abs((int)(player.transform.position.y - 4.5)) + 2] = 5;
+                    if (stateMatrix[(int)(player.transform.position.x + 4.5) - 1, Mathf.Abs((int)(player.transform.position.y - 4.5)) + 1] == 1)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        stateMatrix[(int)(player.transform.position.x + 4.5) - 1, Mathf.Abs((int)(player.transform.position.y - 4.5)) + 1] = 5;
+                        stateMatrix[(int)(player.transform.position.x + 4.5) - 2, Mathf.Abs((int)(player.transform.position.y - 4.5)) + 2] = 5;
+                    }
                 }
                 catch 
                 { }
@@ -253,8 +383,15 @@ public class Regenerate : MonoBehaviour
             case (6):
                 try
                 {
-                    stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5)) + 1] = 5;
-                    stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5)) + 2] = 5;
+                    if (stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5)) + 1] == 1)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5)) + 1] = 5;
+                        stateMatrix[(int)(player.transform.position.x + 4.5), Mathf.Abs((int)(player.transform.position.y - 4.5)) + 2] = 5;
+                    }
                 }
                 catch 
                 { }
@@ -262,8 +399,15 @@ public class Regenerate : MonoBehaviour
             case (7):
                 try
                 {
-                    stateMatrix[(int)(player.transform.position.x + 4.5) + 1, Mathf.Abs((int)(player.transform.position.y - 4.5)) + 1] = 5;
-                    stateMatrix[(int)(player.transform.position.x + 4.5) + 2, Mathf.Abs((int)(player.transform.position.y - 4.5)) + 2] = 5;
+                    if (stateMatrix[(int)(player.transform.position.x + 4.5) + 1, Mathf.Abs((int)(player.transform.position.y - 4.5)) + 1] == 1)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        stateMatrix[(int)(player.transform.position.x + 4.5) + 1, Mathf.Abs((int)(player.transform.position.y - 4.5)) + 1] = 5;
+                        stateMatrix[(int)(player.transform.position.x + 4.5) + 2, Mathf.Abs((int)(player.transform.position.y - 4.5)) + 2] = 5;
+                    }
                 }
                 catch 
                 { }
@@ -271,18 +415,6 @@ public class Regenerate : MonoBehaviour
             default:
                 break;
         }
-
-        // string sus;
-        // for (int i = 0; i < 10; i++)
-        // {
-        //     sus = "";
-        //     for (int j = 0; j < 10; j++)
-        //     {
-        //         sus += stateMatrix[i, j].ToString();
-        //     }
-        //     Debug.Log(sus);
-        // }
-
 
         return stateMatrix;
     }

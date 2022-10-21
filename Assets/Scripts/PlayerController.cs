@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f;
     public Transform movePoint;
     public Transform flashLight;
+    public Transform positionalLight;
     public LayerMask cantMove;
     public EnemyManager _enemyManager;
     public int flashlightState = 0;
@@ -25,29 +26,31 @@ public class PlayerController : MonoBehaviour
         switch (action)
         {
             // Movement action
-            case 0:
-                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, 1, 0f), .2f, cantMove)) 
-                {                   
-                    movePoint.position += new Vector3(0f, 1, 0f);
-                }
+            case 0:                                 
+                movePoint.position += new Vector3(1f, 0f, 0f);               
                 break;
             case 1:
-                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, -1, 0f), .2f, cantMove)) 
-                {                   
-                    movePoint.position += new Vector3(0f, -1, 0f);
-                }
+                movePoint.position += new Vector3(1f, -1f, 0f);
                 break;
             case 2:
-                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(1, 0f, 0f), .2f, cantMove))
-                {
-                    movePoint.position += new Vector3(1, 0f, 0f);
-                }
+                movePoint.position += new Vector3(0f, -1f, 0f);
                 break;
             case 3:
-                if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(-1, 0f, 0f), .2f, cantMove))
-                {
-                    movePoint.position += new Vector3(-1, 0f, 0f);
-                }
+                movePoint.position += new Vector3(-1f, -1f, 0f);
+                break;
+            case 4:
+                movePoint.position += new Vector3(-1f, 0f, 0f);
+                break;
+            case 5:
+                movePoint.position += new Vector3(-1f, 1f, 0f);
+                break;
+            case 6:
+                movePoint.position += new Vector3(0f, 1f, 0f);
+                break;
+            case 7:
+                movePoint.position += new Vector3(1f, 1f, 0f);
+                break;
+            case 8:               
                 break;
             default:
                 break;
@@ -66,38 +69,87 @@ public class PlayerController : MonoBehaviour
             if (Regenerate.instance._training)
             {
                 // Do some random action
-                int action = UnityEngine.Random.Range(0, 5);
+                //int action = UnityEngine.Random.Range(0, 9);
+
+                // Do some fensible random action
+                
+                int[] feasibleActions = Regenerate.instance.getFeasibleActionset(transform.position);
+                var actionsIdxList = new ArrayList();
+                
+                for (int i = 0; i < 9; i++)
+                {
+                    if (feasibleActions[i] > 0)
+                    {
+                        actionsIdxList.Add(i);  
+                    }
+                }
+
+                int random = UnityEngine.Random.Range(0, actionsIdxList.Count);
+
+                int action = (int) actionsIdxList[random];
+                
                 MakeAction(action);
                 StartCoroutine(_enemyManager.moveAgents());
             }
             // Otherwise, wait for input
             else
             {
-                if ((Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1) || (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1))
+                if (Input.GetKeyDown(KeyCode.P))
                 {
-                    int action = -1;
-                    if(Math.Ceiling(Input.GetAxisRaw("Vertical")) > 0)
-                    {
-                        action = 0;
-                    }
-
-                    if (Math.Ceiling(Input.GetAxisRaw("Vertical")) < 0)
-                    {
-                        action = 1;
-                    }
-                
-                    if (Math.Ceiling(Input.GetAxisRaw("Horizontal")) > 0)
-                    {
-                        action = 2;
-                    }
-                
-                    if (Math.Ceiling(Input.GetAxisRaw("Horizontal")) < 0)
-                    {
-                        action = 3;
-                    }
+                    Regenerate.instance.getFullStateMatrix();
+                }
+                if (Input.GetKeyDown(KeyCode.L))
+                {
+                    Vector3 tmpVector = new Vector3(2.5f, 2.5f, 0f); // just to test
+                    Regenerate.instance.getCropStateMatrix(tmpVector, 3);
+                }
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    int action = 8;
                     MakeAction(action);
                     // moveEnemies.Invoke();
                     StartCoroutine(_enemyManager.moveAgents());
+                }
+                else if ((Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1) || (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1))
+                {
+                    int action = -1;
+                    if (Math.Ceiling(Input.GetAxisRaw("Horizontal")) > 0) 
+                    {
+                        action = 0;
+                    }else if ((Math.Ceiling(Input.GetAxisRaw("Vertical")) < 0) && (Math.Ceiling(Input.GetAxisRaw("Horizontal")) > 0) )
+                    {
+                        action = 1;
+                    }
+                    else if ((Math.Ceiling(Input.GetAxisRaw("Vertical")) < 0))
+                    {
+                        action = 2;
+                    }
+                    else if ((Math.Ceiling(Input.GetAxisRaw("Vertical")) < 0) && (Math.Ceiling(Input.GetAxisRaw("Horizontal")) < 0))
+                    {
+                        action = 3;
+                    }
+                    else if ((Math.Ceiling(Input.GetAxisRaw("Horizontal")) < 0))
+                    {
+                        action = 4;
+                    }
+                    else if ((Math.Ceiling(Input.GetAxisRaw("Vertical")) > 0) && (Math.Ceiling(Input.GetAxisRaw("Horizontal")) < 0))
+                    {
+                        action = 5;
+                    }
+                    else if ((Math.Ceiling(Input.GetAxisRaw("Vertical")) > 0) )
+                    {
+                        action = 6;
+                    }
+                    else if ((Math.Ceiling(Input.GetAxisRaw("Vertical")) > 0) && (Math.Ceiling(Input.GetAxisRaw("Horizontal")) > 0))
+                    {
+                        action = 7;
+                    }
+                    if (Regenerate.instance.getFeasibleActionset(transform.position)[action] == 1)
+                    {
+                        MakeAction(action);
+                        // moveEnemies.Invoke();
+                        StartCoroutine(_enemyManager.moveAgents()); 
+                    }
                 }
             }
             
@@ -112,12 +164,15 @@ public class PlayerController : MonoBehaviour
                     flashlightState = 1;
                     flashLight.localPosition = new Vector3(1.2f, -1.2f, 0f);
                     flashLight.rotation = Quaternion.Euler(0, 0, -45f);
+                                      
                     break;
-
                 case (1):
                     flashlightState = 2;
                     flashLight.localPosition = new Vector3(0f, -1.5f, 0f);
                     flashLight.rotation = Quaternion.Euler(0, 0, 90f);
+
+                    positionalLight.localPosition = new Vector3(0f, -0.5f, 0f);
+                    positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
                     break;
                 case (2):
                     flashlightState = 3;
@@ -128,6 +183,9 @@ public class PlayerController : MonoBehaviour
                     flashlightState = 4;
                     flashLight.localPosition = new Vector3(-1.5f, 0f, 0f);
                     flashLight.rotation = Quaternion.Euler(0, 0, 0);
+
+                    positionalLight.localPosition = new Vector3(-0.5f, 0f, 0f);
+                    positionalLight.rotation = Quaternion.Euler(0, 0, 0);
                     break;
                 case (4):
                     flashlightState = 5;
@@ -138,6 +196,9 @@ public class PlayerController : MonoBehaviour
                     flashlightState = 6;
                     flashLight.localPosition = new Vector3(0f, 1.5f, 0f);
                     flashLight.rotation = Quaternion.Euler(0, 0, 90f);
+
+                    positionalLight.localPosition = new Vector3(0f, 0.5f, 0f);
+                    positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
                     break;
                 case (6):
                     flashlightState = 7;
@@ -148,6 +209,9 @@ public class PlayerController : MonoBehaviour
                     flashlightState = 0;
                     flashLight.localPosition = new Vector3(1.5f, 0f, 0f);
                     flashLight.rotation = Quaternion.Euler(0, 0, 0f);
+
+                    positionalLight.localPosition = new Vector3(0.5f, 0f, 0f);
+                    positionalLight.rotation = Quaternion.Euler(0, 0, 0);
                     break;
                 default:
                     break;
@@ -169,9 +233,11 @@ public class PlayerController : MonoBehaviour
                         flashlightState = 0;
                         flashLight.localPosition = new Vector3(1.5f, 0f, 0f);
                         flashLight.rotation = Quaternion.Euler(0, 0, 0f);
-                        break;
 
-                        
+
+                        positionalLight.localPosition = new Vector3(0.5f, 0f, 0f);
+                        positionalLight.rotation = Quaternion.Euler(0, 0, 0);
+                        break;                        
                     case (2):
                         flashlightState = 1;
                         flashLight.localPosition = new Vector3(1.2f, -1.2f, 0f);
@@ -183,6 +249,9 @@ public class PlayerController : MonoBehaviour
                         flashlightState = 2;
                         flashLight.localPosition = new Vector3(0f, -1.5f, 0f);
                         flashLight.rotation = Quaternion.Euler(0, 0, 90f);
+
+                        positionalLight.localPosition = new Vector3(0f, -0.5f, 0f);
+                        positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
                         break;
                         
                     case (4):
@@ -195,6 +264,9 @@ public class PlayerController : MonoBehaviour
                         flashlightState = 4;
                         flashLight.localPosition = new Vector3(-1.5f, 0f, 0f);
                         flashLight.rotation = Quaternion.Euler(0, 0, 0);
+
+                        positionalLight.localPosition = new Vector3(-0.5f, 0f, 0f);
+                        positionalLight.rotation = Quaternion.Euler(0, 0, 0);
                         break;
                         
                     case (6):
@@ -206,6 +278,9 @@ public class PlayerController : MonoBehaviour
                         flashlightState = 6;
                         flashLight.localPosition = new Vector3(0f, 1.5f, 0f);
                         flashLight.rotation = Quaternion.Euler(0, 0, 90f);
+
+                        positionalLight.localPosition = new Vector3(0f, 0.5f, 0f);
+                        positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
                         break;
 
                     default:
