@@ -23,6 +23,9 @@ public class BarracudaModel : MonoBehaviour
     public NNModel _currentModel;
     protected int _stateDim;
 
+    public bool _actionMasking;
+    public int _actionSize;
+
     [HideInInspector]
     public int _actionDim;
     public int _top = 3;
@@ -39,9 +42,11 @@ public class BarracudaModel : MonoBehaviour
         if (_currentModel != null)
         {
             LoadModel();
-            input = new Tensor(1, _stateDim);
+            if(_actionMasking)
+                input = new Tensor(1, _stateDim - _actionSize);
+            else
+                input = new Tensor(1, _stateDim);
         }
-        
     }
 
     public void LoadModel()
@@ -171,11 +176,22 @@ public class BarracudaModel : MonoBehaviour
     public float[] GetProbs(List<float> state)
     {
 
-        for(int i = 0; i < _stateDim; i++)
+        if (_actionMasking)
         {
-            input[0, i] = state[i];
-        } 
-        _worker.Execute(input);    
+            for(int i = 0; i < _stateDim - _actionSize; i++)
+            {
+                input[0, i] = state[i];
+            } 
+            _worker.Execute(input);    
+        }
+        else
+        {
+            for(int i = 0; i < _stateDim; i++)
+            {
+                input[0, i] = state[i];
+            } 
+            _worker.Execute(input);    
+        }
         
         output = _worker.PeekOutput(_outputName);
         _actionDim = output.shape.channels;

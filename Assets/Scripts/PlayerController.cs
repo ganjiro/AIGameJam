@@ -217,8 +217,20 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);    
-
-        if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f)
+    
+        // Check whether an enemy is moving
+        // If at least one enemy is moving, wait for it
+        bool oneEnemyMoving = false;
+        foreach (var e in Regenerate.instance.agents.GetComponentsInChildren<EnemyMovement>())
+        {
+            if (e._isMoving)
+            {
+                oneEnemyMoving = true;
+                break;
+            }
+        }
+        
+        if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f && !oneEnemyMoving)
         {
             // In case we are training, the player does not accept input
             if (Regenerate.instance._training)
