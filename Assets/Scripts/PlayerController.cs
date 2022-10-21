@@ -94,16 +94,16 @@ public class PlayerController : MonoBehaviour
             // Otherwise, wait for input
             else
             {
-                if (Input.GetKeyDown(KeyCode.P))
+                if (Input.GetKeyDown(KeyCode.P)) // P: full matrix
                 {
                     Regenerate.instance.getFullStateMatrix();
                 }
-                if (Input.GetKeyDown(KeyCode.L))
+                if (Input.GetKeyDown(KeyCode.L)) // L: crop matrix
                 {
                     Vector3 tmpVector = new Vector3(2.5f, 2.5f, 0f); // just to test
                     Regenerate.instance.getCropStateMatrix(tmpVector, 3);
                 }
-                if (Input.GetKeyDown(KeyCode.F))
+                if (Input.GetKeyDown(KeyCode.F)) // F: wait 
                 {
                     int action = 8;
                     MakeAction(action);
@@ -151,142 +151,150 @@ public class PlayerController : MonoBehaviour
                         StartCoroutine(_enemyManager.moveAgents()); 
                     }
                 }
-            }
-            
-        }
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-
-            switch (flashlightState)
-            {
-                case (0):
-                    flashlightState = 1;
-                    flashLight.localPosition = new Vector3(1.2f, -1.2f, 0f);
-                    flashLight.rotation = Quaternion.Euler(0, 0, -45f);
-                                      
-                    break;
-                case (1):
-                    flashlightState = 2;
-                    flashLight.localPosition = new Vector3(0f, -1.5f, 0f);
-                    flashLight.rotation = Quaternion.Euler(0, 0, 90f);
-
-                    positionalLight.localPosition = new Vector3(0f, -0.5f, 0f);
-                    positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
-                    break;
-                case (2):
-                    flashlightState = 3;
-                    flashLight.localPosition = new Vector3(-1.2f, -1.2f, 0f);
-                    flashLight.rotation = Quaternion.Euler(0, 0, 45);
-                    break;
-                case (3):
-                    flashlightState = 4;
-                    flashLight.localPosition = new Vector3(-1.5f, 0f, 0f);
-                    flashLight.rotation = Quaternion.Euler(0, 0, 0);
-
-                    positionalLight.localPosition = new Vector3(-0.5f, 0f, 0f);
-                    positionalLight.rotation = Quaternion.Euler(0, 0, 0);
-                    break;
-                case (4):
-                    flashlightState = 5;
-                    flashLight.localPosition = new Vector3(-1.2f, 1.2f, 0f);
-                    flashLight.rotation = Quaternion.Euler(0, 0, -45f);
-                    break;
-                case (5):
-                    flashlightState = 6;
-                    flashLight.localPosition = new Vector3(0f, 1.5f, 0f);
-                    flashLight.rotation = Quaternion.Euler(0, 0, 90f);
-
-                    positionalLight.localPosition = new Vector3(0f, 0.5f, 0f);
-                    positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
-                    break;
-                case (6):
-                    flashlightState = 7;
-                    flashLight.localPosition = new Vector3(1.2f, 1.2f, 0f);
-                    flashLight.rotation = Quaternion.Euler(0, 0, 45f);
-                    break;
-                case (7):
-                    flashlightState = 0;
-                    flashLight.localPosition = new Vector3(1.5f, 0f, 0f);
-                    flashLight.rotation = Quaternion.Euler(0, 0, 0f);
-
-                    positionalLight.localPosition = new Vector3(0.5f, 0f, 0f);
-                    positionalLight.rotation = Quaternion.Euler(0, 0, 0);
-                    break;
-                default:
-                    break;
-            }
-        }
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-
-                switch (flashlightState)
+                if (Input.GetKeyDown(KeyCode.E))
                 {
-                    case (0):
-                        flashlightState = 7;
-                        flashLight.localPosition = new Vector3(1.2f, 1.2f, 0f);
-                        flashLight.rotation = Quaternion.Euler(0, 0, 45f);
-                        break;
-                                              
 
-                    case (1):
-                        flashlightState = 0;
-                        flashLight.localPosition = new Vector3(1.5f, 0f, 0f);
-                        flashLight.rotation = Quaternion.Euler(0, 0, 0f);
+                    switch (flashlightState)
+                    {
+                        case (0):
+                            flashlightState = 1;
+                            flashLight.localPosition = new Vector3(1.2f, -1.2f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, -45f);
 
+                            break;
+                        case (1):
+                            flashlightState = 2;
+                            flashLight.localPosition = new Vector3(0f, -1.5f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, 90f);
 
-                        positionalLight.localPosition = new Vector3(0.5f, 0f, 0f);
-                        positionalLight.rotation = Quaternion.Euler(0, 0, 0);
-                        break;                        
-                    case (2):
-                        flashlightState = 1;
-                        flashLight.localPosition = new Vector3(1.2f, -1.2f, 0f);
-                        flashLight.rotation = Quaternion.Euler(0, 0, -45f);
-                        break;
+                            positionalLight.localPosition = new Vector3(0f, -0.5f, 0f);
+                            positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
+                            break;
+                        case (2):
+                            flashlightState = 3;
+                            flashLight.localPosition = new Vector3(-1.2f, -1.2f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, 45);
+                            break;
+                        case (3):
+                            flashlightState = 4;
+                            flashLight.localPosition = new Vector3(-1.5f, 0f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, 0);
 
-                        
-                    case (3):
-                        flashlightState = 2;
-                        flashLight.localPosition = new Vector3(0f, -1.5f, 0f);
-                        flashLight.rotation = Quaternion.Euler(0, 0, 90f);
+                            positionalLight.localPosition = new Vector3(-0.5f, 0f, 0f);
+                            positionalLight.rotation = Quaternion.Euler(0, 0, 0);
+                            break;
+                        case (4):
+                            flashlightState = 5;
+                            flashLight.localPosition = new Vector3(-1.2f, 1.2f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, -45f);
+                            break;
+                        case (5):
+                            flashlightState = 6;
+                            flashLight.localPosition = new Vector3(0f, 1.5f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, 90f);
 
-                        positionalLight.localPosition = new Vector3(0f, -0.5f, 0f);
-                        positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
-                        break;
-                        
-                    case (4):
-                        flashlightState = 3;
-                        flashLight.localPosition = new Vector3(-1.2f, -1.2f, 0f);
-                        flashLight.rotation = Quaternion.Euler(0, 0, 45);
-                        break;
-                        
-                    case (5):
-                        flashlightState = 4;
-                        flashLight.localPosition = new Vector3(-1.5f, 0f, 0f);
-                        flashLight.rotation = Quaternion.Euler(0, 0, 0);
+                            positionalLight.localPosition = new Vector3(0f, 0.5f, 0f);
+                            positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
+                            break;
+                        case (6):
+                            flashlightState = 7;
+                            flashLight.localPosition = new Vector3(1.2f, 1.2f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, 45f);
+                            break;
+                        case (7):
+                            flashlightState = 0;
+                            flashLight.localPosition = new Vector3(1.5f, 0f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, 0f);
 
-                        positionalLight.localPosition = new Vector3(-0.5f, 0f, 0f);
-                        positionalLight.rotation = Quaternion.Euler(0, 0, 0);
-                        break;
-                        
-                    case (6):
-                        flashlightState = 5;
-                        flashLight.localPosition = new Vector3(-1.2f, 1.2f, 0f);
-                        flashLight.rotation = Quaternion.Euler(0, 0, -45f);
-                        break;                       
-                    case (7):
-                        flashlightState = 6;
-                        flashLight.localPosition = new Vector3(0f, 1.5f, 0f);
-                        flashLight.rotation = Quaternion.Euler(0, 0, 90f);
-
-                        positionalLight.localPosition = new Vector3(0f, 0.5f, 0f);
-                        positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
-                        break;
-
-                    default:
-                        break;
+                            positionalLight.localPosition = new Vector3(0.5f, 0f, 0f);
+                            positionalLight.rotation = Quaternion.Euler(0, 0, 0);
+                            break;
+                        default:
+                            break;
+                    }
+                    StartCoroutine(_enemyManager.moveAgents());
                 }
+                if (Input.GetKeyDown(KeyCode.Q))
+                {
+
+                    switch (flashlightState)
+                    {
+                        case (0):
+                            flashlightState = 7;
+                            flashLight.localPosition = new Vector3(1.2f, 1.2f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, 45f);
+                            break;
+
+
+                        case (1):
+                            flashlightState = 0;
+                            flashLight.localPosition = new Vector3(1.5f, 0f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, 0f);
+
+
+                            positionalLight.localPosition = new Vector3(0.5f, 0f, 0f);
+                            positionalLight.rotation = Quaternion.Euler(0, 0, 0);
+                            break;
+                        case (2):
+                            flashlightState = 1;
+                            flashLight.localPosition = new Vector3(1.2f, -1.2f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, -45f);
+                            break;
+
+
+                        case (3):
+                            flashlightState = 2;
+                            flashLight.localPosition = new Vector3(0f, -1.5f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, 90f);
+
+                            positionalLight.localPosition = new Vector3(0f, -0.5f, 0f);
+                            positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
+                            break;
+
+                        case (4):
+                            flashlightState = 3;
+                            flashLight.localPosition = new Vector3(-1.2f, -1.2f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, 45);
+                            break;
+
+                        case (5):
+                            flashlightState = 4;
+                            flashLight.localPosition = new Vector3(-1.5f, 0f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, 0);
+
+                            positionalLight.localPosition = new Vector3(-0.5f, 0f, 0f);
+                            positionalLight.rotation = Quaternion.Euler(0, 0, 0);
+                            break;
+
+                        case (6):
+                            flashlightState = 5;
+                            flashLight.localPosition = new Vector3(-1.2f, 1.2f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, -45f);
+                            break;
+                        case (7):
+                            flashlightState = 6;
+                            flashLight.localPosition = new Vector3(0f, 1.5f, 0f);
+                            flashLight.rotation = Quaternion.Euler(0, 0, 90f);
+
+                            positionalLight.localPosition = new Vector3(0f, 0.5f, 0f);
+                            positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
+                            break;
+
+                        default:
+                            break;
+                    }
+                    StartCoroutine(_enemyManager.moveAgents());
+                }
+
+
+                Regenerate.instance.checkLightOnEnemy(flashlightState);
+
+
             }
+        }
+
+        
     }
 
     

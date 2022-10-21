@@ -5,8 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using System.Linq;
 using Unity.MLAgents;
-
-
+using System;
 
 public class Regenerate : MonoBehaviour
 {
@@ -215,10 +214,17 @@ public class Regenerate : MonoBehaviour
         }
         // GameObject instantiatedObject = Instantiate(enemyPrefab, new Vector3(x, y, 0f), Quaternion.identity);
         enemy.transform.position = new Vector3(x, y, 0f);
+        Debug.Log("DA RIMUOVERREEEEEE");
+        Debug.Log(enemy.transform.position.x);
+        Debug.Log(enemy.transform.position.y);
         enemy.transform.rotation = Quaternion.identity;
+        Debug.Log("ANCHE QUESTO");
+        Debug.Log(enemy.transform.position.x);
+        Debug.Log(enemy.transform.position.y);
         enemy.GetComponent<EnemyMovement>().movePoint.transform.position = enemy.transform.position;
         enemy.GetComponent<VictimAgent>()._inference = !_training;
         enemy.GetComponent<EnemyMovement>().goal = goal;
+        enemy.GetComponent<EnemyMovement>().player = player;
         enemy.transform.SetParent(agents.transform);
     }
 
@@ -422,5 +428,65 @@ public class Regenerate : MonoBehaviour
         }
 
         return stateMatrix;
+    }
+
+    public void checkLightOnEnemy(int flashlightState)
+    {   
+        float Threshold = 0.05f;
+     
+        int pX = (int) (player.transform.position.x + 0.5);
+        int pY = (int) (player.transform.position.y + 0.5);
+
+        int tlx = (int) (player.transform.Find("FlashLight").transform.position.x + 0.5);
+        int tly = (int) (player.transform.Find("FlashLight").transform.position.y + 0.5);
+
+        int plx = (int)(player.transform.Find("PointLight").transform.position.x + 0.5);
+        int ply = (int)(player.transform.Find("PointLight").transform.position.y + 0.5);
+
+        foreach (Transform agent in agents.transform)
+        {
+            int eX = (int)(agent.transform.position.x + 0.5);
+            int eY = (int)(agent.transform.position.y + 0.5);
+            /*
+            switch (flashlightState)
+            {
+                case (0):
+                    if (pX+tl)
+                    {
+                        Regenerate.instance.RemoveEnemyFromPool(agent.gameObject);
+                        agent.gameObject.SetActive(false);
+                    }
+                    break;
+                case (1):
+                   
+                    break;
+                case (2):
+                   
+                    break;
+                case (3):
+                    
+                    break;
+                case (4):
+                    
+                    break;
+                case (5):
+                    
+                    break;
+                case (6):
+                    
+                    break;
+                case (7):
+                    
+                    break;
+            }
+            */
+        }
+        /*
+                ((pX + player.transform.Find("PintLight").transform.position.x - 0.5) == agent.transform.position.x) ||
+                ((pX + player.transform.Find("PintLight").transform.position.x - 0.5) == agent.transform.position.x) ||
+                ((pX + player.transform.Find("PintLight").transform.position.x - 0.5) == agent.transform.position.x) ||
+                ((pX + player.transform.Find("PintLight").transform.position.x - 0.5) == agent.transform.position.x))
+        */
+
     }
 }
