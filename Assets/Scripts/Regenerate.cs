@@ -252,13 +252,13 @@ public class Regenerate : MonoBehaviour
         {
             for (int j = 0; j < diameter; j++)
             {
-                cropStateMatrix[i, j] = 1;
+                cropStateMatrix[i, j] = 1; // default: obstacles
             }
         }
-        // TODO FIX
-        for (int i = xRow-(diameter/2); i < xRow + (diameter / 2); i++)
+   
+        for (int i = xRow-(diameter-1)/2; i < xRow + (diameter-1)/2; i++)
         {
-            for (int j = yRow - (diameter / 2); i < yRow + (diameter / 2); i++)
+            for (int j = yRow - (diameter - 1) / 2; i < yRow + (diameter - 1) / 2; i++)
             {
                 if (i >= 0 && i <= 9 && j >= 0 && j <= 9)
                 {
@@ -267,7 +267,7 @@ public class Regenerate : MonoBehaviour
             }   
         }
 
-        return null;
+        return cropStateMatrix;
 
     }
     public int[,] getFullStateMatrix()
