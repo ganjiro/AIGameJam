@@ -325,11 +325,9 @@ public class PlayerController : MonoBehaviour
                 }
 
 
-                Regenerate.instance.checkLightOnEnemy(flashlightState);
+                Regenerate.instance.checkLightOnEnemies();
             }
-        }
-
-        
+        }      
         
     }
 

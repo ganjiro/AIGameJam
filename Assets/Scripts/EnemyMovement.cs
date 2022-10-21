@@ -189,4 +189,22 @@ public class EnemyMovement : MonoBehaviour
             movePoint.position += new Vector3(-1f, 1f, 0f);
         }
     }
+
+    public void checkLightOnEnemy()
+    {
+        int[,] state = Regenerate.instance.getCropStateMatrix(transform.position, 1);
+
+        if (state[1,1] == 5)
+        {
+            if (Regenerate.instance._training)
+            {                
+                GiveDeadReward();
+            }
+            else
+            {
+                Regenerate.instance.RemoveEnemyFromPool(transform.gameObject);
+                transform.gameObject.SetActive(false);
+            }
+        }        
+    }
 }

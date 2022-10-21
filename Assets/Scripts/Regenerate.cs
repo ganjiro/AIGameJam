@@ -242,8 +242,7 @@ public class Regenerate : MonoBehaviour
     {
         int xRow = (int) (agentPosition.x + 4.5);
         int yRow = (int)(Mathf.Abs((int)(agentPosition.y - 4.5)));
-
-
+                
         int diameter = (int)(radius) * 2 + 1;
         int[,] cropStateMatrix = new int[diameter, diameter];
         int[,] fullStateMatrix = getFullStateMatrix();
@@ -255,20 +254,25 @@ public class Regenerate : MonoBehaviour
                 cropStateMatrix[i, j] = 1; // default: obstacles
             }
         }
-   
-        for (int i = xRow-(diameter-1)/2; i < xRow + (diameter-1)/2; i++)
+
+        int localX = 0;
+        int localY = 0;
+
+        for (int i = xRow-(diameter-1)/2; i < 1 + xRow + (diameter-1)/2; i++)
         {
-            for (int j = yRow - (diameter - 1) / 2; i < yRow + (diameter - 1) / 2; i++)
+            for (int j = yRow - (diameter - 1) / 2; j < 1 + yRow + (diameter - 1) / 2; j++)
             {
                 if (i >= 0 && i <= 9 && j >= 0 && j <= 9)
-                {
-                    cropStateMatrix[i, j] = fullStateMatrix[i, j];
+                {                    
+                    cropStateMatrix[localX, localY] = fullStateMatrix[i, j];                                        
                 }
-            }   
+                localY++;
+            }
+            localX++;
+            localY = 0;
         }
-
+        
         return cropStateMatrix;
-
     }
     public int[,] getFullStateMatrix()
     {
@@ -1048,110 +1052,11 @@ public class Regenerate : MonoBehaviour
         return stateMatrix;
     }
 
-    public void checkLightOnEnemy(int flashlightState)
+    public void checkLightOnEnemies()
     {
-        float pX = player.transform.position.x;
-        float pY = player.transform.position.y;
-
-        float flx = player.transform.Find("FlashLight").transform.position.x;
-        float fly = player.transform.Find("FlashLight").transform.position.y;
-
-        float plx = player.transform.Find("PointLight").transform.position.x;
-        float ply = player.transform.Find("PointLight").transform.position.y;
-
-        // pre-allcation
-        float fl1x = 99f;
-        float fl1y = 99f; 
-        float fl2x = 99f;
-        float fl2y = 99f;
-
-        foreach (Transform agent in agents.transform)
+        foreach (GameObject e in _enemyPool)
         {
-            float eX = agent.transform.position.x;
-            float eY = agent.transform.position.y;
-
-            switch (flashlightState)
-            {
-                case (0): // destra OK
-                    fl1x = pX + flx - 0.5f;
-                    fl1y = pY + fly; // fly it's zero
-
-                    fl2x = fl1x + 1;
-                    fl2y = fl1y;
-                    break;
-
-                case (1): // basso-destra
-                    fl1x = pX + flx - 0.5f;
-                    fl1y = pY + fly + 0.8f; // fly it's -1.2f
-
-                    fl2x = fl1x + 1;
-                    fl2y = fl1y -1f;
-                    break;
-
-                case (2): // basso OK
-                    fl1x = pX;
-                    fl1y = pY + fly + 0.8f; 
-
-                    fl2x = fl1x;
-                    fl2y = fl1y - 1f;
-                    break;
-
-                case (3): // basso sinistra
-                    fl1x = pX + flx + 0.5f;
-                    fl1y = pY + fly + 0.8f; 
-
-                    fl2x = fl1x - 1;
-                    fl2y = fl1y - 1f;
-                    break;
-
-                case (4): // sinistra OK
-                    fl1x = pX + flx + 0.5f;
-                    fl1y = pY + fly; 
-
-                    fl2x = fl1x - 1;
-                    fl2y = fl1y;
-                    break;
-
-                case (5): // alto sinistra OK
-                    fl1x = pX + flx + 0.5f;
-                    fl1y = pY + fly - 0.8f; 
-
-                    fl2x = fl1x - 1;
-                    fl2y = fl1y + 1f;
-                    break;
-
-                case (6): // alto OK
-                    fl1x = pX;
-                    fl1y = pY + fly - 0.8f; 
-
-                    fl2x = fl1x;
-                    fl2y = fl1y + 1f;
-                    break;
-
-                case (7): // alto destra
-                    fl1x = pX + flx - 0.5f;
-                    fl1y = pY + fly - 0.8f; 
-
-                    fl2x = fl1x + 1;
-                    fl2y = fl1y + 1f;
-                    break;
-            }
-
-            if ((fl1x == eX && fl1y == eY) ||
-                       (fl2x == eX && fl2y == eY))
-            {
-                if (_training)
-                {
-                    // Give negative reward to the agent
-                    // TODO: I don't like this here, I prefer to have all the reward in EnemyMovement. But anyway
-                    agent.GetComponent<EnemyMovement>().GiveDeadReward();
-                }
-                else
-                {
-                    RemoveEnemyFromPool(agent.gameObject);
-                    agent.gameObject.SetActive(false);    
-                }
-            }
+            e.GetComponent<EnemyMovement>().checkLightOnEnemy();
         }
     }
      
