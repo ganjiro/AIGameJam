@@ -43,7 +43,6 @@ public class VictimAgent : Agent
     // Call it when the episode restarts.
     public override void OnEpisodeBegin()
     {
-        Debug.Log("Reset");
         _stepCount = 0;
         _currentAction = _defaultActionValue;
         GetComponent<EnemyMovement>()._isMoving = false;
@@ -53,13 +52,21 @@ public class VictimAgent : Agent
     // It is called both from the built in package and custom Barracuda model. 
     private List<float> CreateStateObservation()
     {
-        // Create a dummy observation
+        // Create a global map observation
         List<float> obs = new List<float>();
         int[,] categoricalMap = Regenerate.instance.getFullStateMatrix();
         foreach (int v in categoricalMap)
         {
             obs.Add(v);
         }
+        
+        // Create action masking
+        int[] feasibleActions = Regenerate.instance.getFeasibleActionset(transform.position);
+        foreach(var a in feasibleActions)
+        {
+            obs.Add(a);
+        }
+        
         return obs;
     }
     

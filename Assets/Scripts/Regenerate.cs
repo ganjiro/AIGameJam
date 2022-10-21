@@ -63,7 +63,7 @@ public class Regenerate : MonoBehaviour
     void Update()
     {
         
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKey(KeyCode.K))
         {
             CreateMap();
         }
@@ -120,7 +120,7 @@ public class Regenerate : MonoBehaviour
         }
         if(sum == 1)
         {
-            Debug.Log("Devo per forza stare fermo");
+            // Debug.Log("Devo per forza stare fermo");
         }
 
         return feasible;
@@ -129,13 +129,14 @@ public class Regenerate : MonoBehaviour
 
     public void CreateMap()
     {
+
         int itr = 0;
 
         foreach (Transform child in obstacles.transform)
         {
             GameObject.Destroy(child.gameObject);
         }
-        
+
         // Reset enemy pool
         foreach (GameObject e in _enemyPool)
         {
@@ -166,10 +167,11 @@ public class Regenerate : MonoBehaviour
             instantiatedObject.transform.SetParent(obstacles.transform);            
 
         }
-        
+
         spawnEnemy();
         // spawnEnemy();
-
+        a++;
+        Debug.Log(a);
         float xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
         float yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
 
@@ -192,6 +194,7 @@ public class Regenerate : MonoBehaviour
         }
 
         goal.transform.position = new Vector3(xP, yP, 0f);
+
     }
 
     private void spawnEnemy()

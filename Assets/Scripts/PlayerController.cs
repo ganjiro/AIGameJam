@@ -53,6 +53,10 @@ public class PlayerController : MonoBehaviour
                 break;
             case 8:               
                 break;
+            case 9:
+                break;
+            case 10:
+                break;
             default:
                 break;
         }
@@ -84,7 +88,12 @@ public class PlayerController : MonoBehaviour
                         actionsIdxList.Add(i);  
                     }
                 }
-
+                
+                // Add flashlight actions, only for player
+                // The flashlight actions are always feasible
+                actionsIdxList.Add(9);
+                actionsIdxList.Add(10);
+                
                 int random = UnityEngine.Random.Range(0, actionsIdxList.Count);
 
                 int action = (int) actionsIdxList[random];
@@ -306,15 +315,11 @@ public class PlayerController : MonoBehaviour
 
 
                 Regenerate.instance.checkLightOnEnemy(flashlightState);
-
-
             }
         }
 
         
     }
-
-    
 
     
 
