@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask cantMove;
     public EnemyManager _enemyManager;
     public int flashlightState = 0;
+    public int oldFlashlightState = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -158,12 +159,14 @@ public class PlayerController : MonoBehaviour
                     switch (flashlightState)
                     {
                         case (0):
+                            oldFlashlightState = 0;
                             flashlightState = 1;
                             flashLight.localPosition = new Vector3(1.2f, -1.2f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, -45f);
 
                             break;
                         case (1):
+                            oldFlashlightState = 1;
                             flashlightState = 2;
                             flashLight.localPosition = new Vector3(0f, -1.5f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, 90f);
@@ -172,11 +175,13 @@ public class PlayerController : MonoBehaviour
                             positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
                             break;
                         case (2):
+                            oldFlashlightState = 2;
                             flashlightState = 3;
                             flashLight.localPosition = new Vector3(-1.2f, -1.2f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, 45);
                             break;
                         case (3):
+                            oldFlashlightState = 3;
                             flashlightState = 4;
                             flashLight.localPosition = new Vector3(-1.5f, 0f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, 0);
@@ -185,11 +190,13 @@ public class PlayerController : MonoBehaviour
                             positionalLight.rotation = Quaternion.Euler(0, 0, 0);
                             break;
                         case (4):
+                            oldFlashlightState = 4;
                             flashlightState = 5;
                             flashLight.localPosition = new Vector3(-1.2f, 1.2f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, -45f);
                             break;
                         case (5):
+                            oldFlashlightState = 5;
                             flashlightState = 6;
                             flashLight.localPosition = new Vector3(0f, 1.5f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, 90f);
@@ -198,11 +205,13 @@ public class PlayerController : MonoBehaviour
                             positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
                             break;
                         case (6):
+                            oldFlashlightState = 6;
                             flashlightState = 7;
                             flashLight.localPosition = new Vector3(1.2f, 1.2f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, 45f);
                             break;
                         case (7):
+                            oldFlashlightState = 7;
                             flashlightState = 0;
                             flashLight.localPosition = new Vector3(1.5f, 0f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, 0f);
@@ -221,6 +230,7 @@ public class PlayerController : MonoBehaviour
                     switch (flashlightState)
                     {
                         case (0):
+                            oldFlashlightState = 0;
                             flashlightState = 7;
                             flashLight.localPosition = new Vector3(1.2f, 1.2f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, 45f);
@@ -228,6 +238,7 @@ public class PlayerController : MonoBehaviour
 
 
                         case (1):
+                            oldFlashlightState = 2;
                             flashlightState = 0;
                             flashLight.localPosition = new Vector3(1.5f, 0f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, 0f);
@@ -237,6 +248,7 @@ public class PlayerController : MonoBehaviour
                             positionalLight.rotation = Quaternion.Euler(0, 0, 0);
                             break;
                         case (2):
+                            oldFlashlightState = 2;
                             flashlightState = 1;
                             flashLight.localPosition = new Vector3(1.2f, -1.2f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, -45f);
@@ -244,6 +256,7 @@ public class PlayerController : MonoBehaviour
 
 
                         case (3):
+                            oldFlashlightState = 3;
                             flashlightState = 2;
                             flashLight.localPosition = new Vector3(0f, -1.5f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, 90f);
@@ -253,12 +266,14 @@ public class PlayerController : MonoBehaviour
                             break;
 
                         case (4):
+                            oldFlashlightState = 4;
                             flashlightState = 3;
                             flashLight.localPosition = new Vector3(-1.2f, -1.2f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, 45);
                             break;
 
                         case (5):
+                            oldFlashlightState = 5;
                             flashlightState = 4;
                             flashLight.localPosition = new Vector3(-1.5f, 0f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, 0);
@@ -268,11 +283,13 @@ public class PlayerController : MonoBehaviour
                             break;
 
                         case (6):
+                            oldFlashlightState = 6;
                             flashlightState = 5;
                             flashLight.localPosition = new Vector3(-1.2f, 1.2f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, -45f);
                             break;
                         case (7):
+                            oldFlashlightState = 7;
                             flashlightState = 6;
                             flashLight.localPosition = new Vector3(0f, 1.5f, 0f);
                             flashLight.rotation = Quaternion.Euler(0, 0, 90f);
