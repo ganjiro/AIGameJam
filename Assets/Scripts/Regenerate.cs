@@ -64,7 +64,7 @@ public class Regenerate : MonoBehaviour
     void Update()
     {
         
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKey(KeyCode.K))
         {
             CreateMap();
         }
@@ -121,7 +121,7 @@ public class Regenerate : MonoBehaviour
         }
         if(sum == 1)
         {
-            Debug.Log("Devo per forza stare fermo");
+            // Debug.Log("Devo per forza stare fermo");
         }
 
         return feasible;
@@ -130,17 +130,22 @@ public class Regenerate : MonoBehaviour
 
     public void CreateMap()
     {
+        int a = 0;
+        a++;
+        Debug.Log(a);
         foreach (Transform child in obstacles.transform)
         {
             GameObject.Destroy(child.gameObject);
         }
-        
+        a++;
+        Debug.Log(a);
         // Reset enemy pool
         foreach (GameObject e in _enemyPool)
         {
             RemoveEnemyFromPool(e);
         }
-
+        a++;
+        Debug.Log(a);
         // foreach (Transform child in agents.transform)
         // {
         //     Destroy(child.GetComponent<EnemyMovement>().movePoint.gameObject);
@@ -162,10 +167,12 @@ public class Regenerate : MonoBehaviour
             instantiatedObject.transform.SetParent(obstacles.transform);            
 
         }
-        
+        a++;
+        Debug.Log(a);
         spawnEnemy();
         // spawnEnemy();
-
+        a++;
+        Debug.Log(a);
         float xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
         float yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
 
@@ -174,20 +181,26 @@ public class Regenerate : MonoBehaviour
             xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
             yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
         }
-
+        a++;
+        Debug.Log(a);
         player.transform.position = new Vector3(xP, yP, 0f);
         player.GetComponent<PlayerController>().movePoint.position = new Vector3(xP, yP, 0f);
 
         xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
         yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
-
+        a++;
+        Debug.Log(a);
         while (Physics2D.OverlapCircle(new Vector3(xP, yP, 0f), .2f, cantMove))
         {
             xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
             yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
         }
-
+        a++;
+        Debug.Log(a);
         goal.transform.position = new Vector3(xP, yP, 0f);
+        a++;
+        Debug.Log(a);
+
     }
 
     private void spawnEnemy()

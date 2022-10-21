@@ -28,8 +28,11 @@ public class EnemyMovement : MonoBehaviour
         // Give instantaneous reward only if the movement has finished
         if (_isMoving && Vector3.Distance(transform.position, movePoint.position) < _movementThreshold)
         {
-            if(_agentComponent != null)
-                Debug.Log("Add Reward");            
+            if (_agentComponent != null)
+            {
+                // Give a negative reward to finish as soon as it can
+                _agentComponent.AddReward(-0.01f);
+            }
         }
         
         // Give the reward to the agent
@@ -38,8 +41,7 @@ public class EnemyMovement : MonoBehaviour
             // Destroy(transform.gameObject);
             if (Regenerate.instance._training)
             {
-                Debug.Log("Add Reward 10");
-                Debug.Log("YEAHYEAHYEAH");
+                _agentComponent.AddReward(10f);
                 _agentComponent.EndEpisode();
             }
             else
@@ -82,19 +84,32 @@ public class EnemyMovement : MonoBehaviour
         switch (action)
         {
             case 0:
-                moveN();
-                break;
-            case 1:
-                moveS();
-                break;
-            case 2:
                 moveE();
                 break;
+            case 1:
+                moveSE();
+                break;
+            case 2:
+                moveS();
+                break;
             case 3:
+                moveSW();
+                break;
+            case 4:
                 moveW();
                 break;
-            default:
+            case 5:
+                moveNW();
+                break;
+            case 6:
                 moveN();
+                break;
+            case 7:
+                moveNE();
+                break;
+            case 8:
+                break;
+            default:
                 break;
         }
 
@@ -130,6 +145,38 @@ public class EnemyMovement : MonoBehaviour
         if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(1f, 0f, 0f), .2f, cantMove))
         {
             movePoint.position += new Vector3(1f, 0f, 0f);
+        }
+    }
+    
+    public void moveNE()
+    {
+        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(1f, 1f, 0f), .2f, cantMove))
+        {
+            movePoint.position += new Vector3(1f, 1f, 0f);
+        }
+    }
+    
+    public void moveSE()
+    {
+        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(1f, -1f, 0f), .2f, cantMove))
+        {
+            movePoint.position += new Vector3(1f, -1f, 0f);
+        }
+    }
+    
+    public void moveSW()
+    {
+        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(-1f, -1f, 0f), .2f, cantMove))
+        {
+            movePoint.position += new Vector3(-1f, -1f, 0f);
+        }
+    }
+    
+    public void moveNW()
+    {
+        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(-1f, 1f, 0f), .2f, cantMove))
+        {
+            movePoint.position += new Vector3(-1f, 1f, 0f);
         }
     }
 }
