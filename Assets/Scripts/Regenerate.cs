@@ -315,27 +315,27 @@ public class Regenerate : MonoBehaviour
 
                     //inzio FOV
                     //stato 0
-                    if (stateMatrix[posX , posY +1] == 1)
+                    if (stateMatrix[posX , posY +1] != 1)
                     {
                         stateMatrix[posX , posY + 1] = 5;
                     }
 
-                    if (stateMatrix[posX + 1, posY + 1] == 1)
+                    if (stateMatrix[posX + 1, posY + 1] != 1)
                     {
                         stateMatrix[posX + 1, posY + 1] = 5;
                     }
 
-                    if (stateMatrix[posX + 1, posY ] == 1)
+                    if (stateMatrix[posX + 1, posY ] != 1)
                     {
                         stateMatrix[posX + 1, posY ] = 5;
                     }
 
-                    if (stateMatrix[posX +1, posY -1] == 1)
+                    if (stateMatrix[posX +1, posY -1] != 1)
                     {
                         stateMatrix[posX + 1, posY - 1] = 5;
                     }
 
-                    if (stateMatrix[posX , posY - 1] == 1)
+                    if (stateMatrix[posX , posY - 1] != 1)
                     {
                         stateMatrix[posX, posY - 1] = 5;
                     }                    
@@ -369,27 +369,27 @@ public class Regenerate : MonoBehaviour
                     if (player.GetComponent<PlayerController>().oldFlashlightState == 0)
                     {
                         //stato 0
-                        if (stateMatrix[posX, posY + 1] == 1)
+                        if (stateMatrix[posX, posY + 1] != 1)
                         {
                             stateMatrix[posX, posY + 1] = 5;
                         }
 
-                        if (stateMatrix[posX + 1, posY + 1] == 1)
+                        if (stateMatrix[posX + 1, posY + 1] != 1)
                         {
                             stateMatrix[posX + 1, posY + 1] = 5;
                         }
 
-                        if (stateMatrix[posX + 1, posY] == 1)
+                        if (stateMatrix[posX + 1, posY] != 1)
                         {
                             stateMatrix[posX + 1, posY] = 5;
                         }
 
-                        if (stateMatrix[posX + 1, posY - 1] == 1)
+                        if (stateMatrix[posX + 1, posY - 1] != 1)
                         {
                             stateMatrix[posX + 1, posY - 1] = 5;
                         }
 
-                        if (stateMatrix[posX, posY - 1] == 1)
+                        if (stateMatrix[posX, posY - 1] != 1)
                         {
                             stateMatrix[posX, posY - 1] = 5;
                         }
@@ -397,27 +397,27 @@ public class Regenerate : MonoBehaviour
                     else
                     {                    
                         //stato 2
-                        if (stateMatrix[posX + 1, posY] == 1)
+                        if (stateMatrix[posX + 1, posY] != 1)
                         {
                             stateMatrix[posX + 1, posY] = 5;
                         }
 
-                        if (stateMatrix[posX + 1, posY - 1] == 1)
+                        if (stateMatrix[posX + 1, posY - 1] != 1)
                         {
                             stateMatrix[posX + 1, posY - 1] = 5;
                         }
 
-                        if (stateMatrix[posX, posY - 1] == 1)
+                        if (stateMatrix[posX, posY - 1] != 1)
                         {
                             stateMatrix[posX, posY - 1] = 5;
                         }
 
-                        if (stateMatrix[posX - 1, posY - 1] == 1)
+                        if (stateMatrix[posX - 1, posY - 1] != 1)
                         {
                             stateMatrix[posX - 1, posY - 1] = 5;
                         }
 
-                        if (stateMatrix[posX - 1, posY] == 1)
+                        if (stateMatrix[posX - 1, posY] != 1)
                         {
                             stateMatrix[posX - 1, posY] = 5;
                         }
@@ -445,35 +445,30 @@ public class Regenerate : MonoBehaviour
                         stateMatrix[posX, posY - 2] = 5;
                     }
 
-
-                    if (stateMatrix[posX + 1, posY] == 1)
-                    {
-                        stateMatrix[posX + 1, posY] = 5;
-                    }
-
+                                       
                     //inizio fov
                     //stato2
-                    if (stateMatrix[posX + 1, posY] == 1)
+                    if (stateMatrix[posX + 1, posY] != 1)
                     {
                         stateMatrix[posX + 1, posY] = 5;
                     }
 
-                    if (stateMatrix[posX + 1, posY - 1] == 1)
+                    if (stateMatrix[posX + 1, posY - 1] != 1)
                     {
                         stateMatrix[posX + 1, posY - 1] = 5;
                     }
 
-                    if (stateMatrix[posX, posY - 1] == 1)
+                    if (stateMatrix[posX, posY - 1] != 1)
                     {
                         stateMatrix[posX, posY - 1] = 5;
                     }
 
-                    if (stateMatrix[posX - 1, posY - 1] == 1)
+                    if (stateMatrix[posX - 1, posY - 1] != 1)
                     {
                         stateMatrix[posX - 1, posY - 1] = 5;
                     }
 
-                    if (stateMatrix[posX - 1, posY] == 1)
+                    if (stateMatrix[posX - 1, posY] != 1)
                     {
                         stateMatrix[posX - 1, posY] = 5;
                     }
@@ -503,27 +498,27 @@ public class Regenerate : MonoBehaviour
                     if (player.GetComponent<PlayerController>().oldFlashlightState == 2)
                     {
                         //stato 2
-                        if (stateMatrix[posX + 1, posY] == 1)
+                        if (stateMatrix[posX + 1, posY] != 1)
                         {
                             stateMatrix[posX + 1, posY] = 5;
                         }
 
-                        if (stateMatrix[posX + 1, posY - 1] == 1)
+                        if (stateMatrix[posX + 1, posY - 1] != 1)
                         {
                             stateMatrix[posX + 1, posY - 1] = 5;
                         }
 
-                        if (stateMatrix[posX, posY - 1] == 1)
+                        if (stateMatrix[posX, posY - 1] != 1)
                         {
                             stateMatrix[posX, posY - 1] = 5;
                         }
 
-                        if (stateMatrix[posX - 1, posY - 1] == 1)
+                        if (stateMatrix[posX - 1, posY - 1] != 1)
                         {
                             stateMatrix[posX - 1, posY - 1] = 5;
                         }
 
-                        if (stateMatrix[posX - 1, posY] == 1)
+                        if (stateMatrix[posX - 1, posY] != 1)
                         {
                             stateMatrix[posX - 1, posY] = 5;
                         }
@@ -531,27 +526,27 @@ public class Regenerate : MonoBehaviour
                     else
                     {
                         //stato 4                    
-                        if (stateMatrix[posX, posY - 1] == 1)
+                        if (stateMatrix[posX, posY - 1] != 1)
                         {
                             stateMatrix[posX, posY - 1] = 5;
                         }
 
-                        if (stateMatrix[posX - 1, posY - 1] == 1)
+                        if (stateMatrix[posX - 1, posY - 1] != 1)
                         {
                             stateMatrix[posX - 1, posY - 1] = 5;
                         }
 
-                        if (stateMatrix[posX - 1, posY] == 1)
+                        if (stateMatrix[posX - 1, posY] != 1)
                         {
                             stateMatrix[posX - 1, posY] = 5;
                         }
 
-                        if (stateMatrix[posX - 1, posY + 1] == 1)
+                        if (stateMatrix[posX - 1, posY + 1] != 1)
                         {
                             stateMatrix[posX - 1, posY + 1] = 5;
                         }
 
-                        if (stateMatrix[posX, posY + 1] == 1)
+                        if (stateMatrix[posX, posY + 1] != 1)
                         {
                             stateMatrix[posX, posY + 1] = 5;
                         }
@@ -582,27 +577,27 @@ public class Regenerate : MonoBehaviour
 
                     //inzio FOV
                     //stato 4                    
-                    if (stateMatrix[posX, posY - 1] == 1)
+                    if (stateMatrix[posX, posY - 1] != 1)
                     {
                         stateMatrix[posX, posY - 1] = 5;
                     }
 
-                    if (stateMatrix[posX - 1, posY - 1] == 1)
+                    if (stateMatrix[posX - 1, posY - 1] != 1)
                     {
                         stateMatrix[posX - 1, posY - 1] = 5;
                     }
 
-                    if (stateMatrix[posX - 1, posY] == 1)
+                    if (stateMatrix[posX - 1, posY] != 1)
                     {
                         stateMatrix[posX - 1, posY] = 5;
                     }
 
-                    if (stateMatrix[posX - 1, posY + 1] == 1)
+                    if (stateMatrix[posX - 1, posY + 1] != 1)
                     {
                         stateMatrix[posX - 1, posY + 1] = 5;
                     }
 
-                    if (stateMatrix[posX, posY + 1] == 1)
+                    if (stateMatrix[posX, posY + 1] != 1)
                     {
                         stateMatrix[posX, posY + 1] = 5;
                     }
@@ -633,27 +628,27 @@ public class Regenerate : MonoBehaviour
                     if (player.GetComponent<PlayerController>().oldFlashlightState == 4)
                     {
                         //stato 4                    
-                        if (stateMatrix[posX, posY - 1] == 1)
+                        if (stateMatrix[posX, posY - 1] != 1)
                         {
                             stateMatrix[posX, posY - 1] = 5;
                         }
 
-                        if (stateMatrix[posX - 1, posY - 1] == 1)
+                        if (stateMatrix[posX - 1, posY - 1] != 1)
                         {
                             stateMatrix[posX - 1, posY - 1] = 5;
                         }
 
-                        if (stateMatrix[posX - 1, posY] == 1)
+                        if (stateMatrix[posX - 1, posY] != 1)
                         {
                             stateMatrix[posX - 1, posY] = 5;
                         }
 
-                        if (stateMatrix[posX - 1, posY + 1] == 1)
+                        if (stateMatrix[posX - 1, posY + 1] != 1)
                         {
                             stateMatrix[posX - 1, posY + 1] = 5;
                         }
 
-                        if (stateMatrix[posX, posY + 1] == 1)
+                        if (stateMatrix[posX, posY + 1] != 1)
                         {
                             stateMatrix[posX, posY + 1] = 5;
                         }
@@ -661,27 +656,27 @@ public class Regenerate : MonoBehaviour
                     else
                     {
                         //stato 6                 
-                        if (stateMatrix[posX - 1, posY] == 1)
+                        if (stateMatrix[posX - 1, posY] != 1)
                         {
                             stateMatrix[posX - 1, posY] = 5;
                         }
 
-                        if (stateMatrix[posX - 1, posY + 1] == 1)
+                        if (stateMatrix[posX - 1, posY + 1] != 1)
                         {
                             stateMatrix[posX - 1, posY + 1] = 5;
                         }
 
-                        if (stateMatrix[posX, posY + 1] == 1)
+                        if (stateMatrix[posX, posY + 1] != 1)
                         {
                             stateMatrix[posX, posY + 1] = 5;
                         }
 
-                        if (stateMatrix[posX + 1, posY + 1] == 1)
+                        if (stateMatrix[posX + 1, posY + 1] != 1)
                         {
                             stateMatrix[posX + 1, posY + 1] = 5;
                         }
 
-                        if (stateMatrix[posX + 1, posY] == 1)
+                        if (stateMatrix[posX + 1, posY] != 1)
                         {
                             stateMatrix[posX + 1, posY] = 5;
                         }
@@ -711,27 +706,27 @@ public class Regenerate : MonoBehaviour
 
                     //inizio FOV
                     //stato 6                 
-                    if (stateMatrix[posX - 1, posY] == 1)
+                    if (stateMatrix[posX - 1, posY] != 1)
                     {
                         stateMatrix[posX - 1, posY] = 5;
                     }
 
-                    if (stateMatrix[posX - 1, posY + 1] == 1)
+                    if (stateMatrix[posX - 1, posY + 1] != 1)
                     {
                         stateMatrix[posX - 1, posY + 1] = 5;
                     }
 
-                    if (stateMatrix[posX, posY + 1] == 1)
+                    if (stateMatrix[posX, posY + 1] != 1)
                     {
                         stateMatrix[posX, posY + 1] = 5;
                     }
 
-                    if (stateMatrix[posX + 1, posY + 1] == 1)
+                    if (stateMatrix[posX + 1, posY + 1] != 1)
                     {
                         stateMatrix[posX + 1, posY + 1] = 5;
                     }
 
-                    if (stateMatrix[posX + 1, posY] == 1)
+                    if (stateMatrix[posX + 1, posY] != 1)
                     {
                         stateMatrix[posX + 1, posY] = 5;
                     }
@@ -761,27 +756,27 @@ public class Regenerate : MonoBehaviour
                     if (player.GetComponent<PlayerController>().oldFlashlightState == 6)
                     {
                         //stato 6                 
-                        if (stateMatrix[posX - 1, posY] == 1)
+                        if (stateMatrix[posX - 1, posY] != 1)
                         {
                             stateMatrix[posX - 1, posY] = 5;
                         }
 
-                        if (stateMatrix[posX - 1, posY + 1] == 1)
+                        if (stateMatrix[posX - 1, posY + 1] != 1)
                         {
                             stateMatrix[posX - 1, posY + 1] = 5;
                         }
 
-                        if (stateMatrix[posX, posY + 1] == 1)
+                        if (stateMatrix[posX, posY + 1] != 1)
                         {
                             stateMatrix[posX, posY + 1] = 5;
                         }
 
-                        if (stateMatrix[posX + 1, posY + 1] == 1)
+                        if (stateMatrix[posX + 1, posY + 1] != 1)
                         {
                             stateMatrix[posX + 1, posY + 1] = 5;
                         }
 
-                        if (stateMatrix[posX + 1, posY] == 1)
+                        if (stateMatrix[posX + 1, posY] != 1)
                         {
                             stateMatrix[posX + 1, posY] = 5;
                         }
@@ -789,27 +784,27 @@ public class Regenerate : MonoBehaviour
                     else
                     {
                         //stato 0
-                        if (stateMatrix[posX, posY + 1] == 1)
+                        if (stateMatrix[posX, posY + 1] != 1)
                         {
                             stateMatrix[posX, posY + 1] = 5;
                         }
 
-                        if (stateMatrix[posX + 1, posY + 1] == 1)
+                        if (stateMatrix[posX + 1, posY + 1] != 1)
                         {
                             stateMatrix[posX + 1, posY + 1] = 5;
                         }
 
-                        if (stateMatrix[posX + 1, posY] == 1)
+                        if (stateMatrix[posX + 1, posY] != 1)
                         {
                             stateMatrix[posX + 1, posY] = 5;
                         }
 
-                        if (stateMatrix[posX + 1, posY - 1] == 1)
+                        if (stateMatrix[posX + 1, posY - 1] != 1)
                         {
                             stateMatrix[posX + 1, posY - 1] = 5;
                         }
 
-                        if (stateMatrix[posX, posY - 1] == 1)
+                        if (stateMatrix[posX, posY - 1] != 1)
                         {
                             stateMatrix[posX, posY - 1] = 5;
                         }
