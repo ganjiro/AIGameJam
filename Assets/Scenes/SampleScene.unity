@@ -261,7 +261,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1930740320}
   - component: {fileID: 1930740321}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Goal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -411,6 +411,10 @@ PrefabInstance:
       propertyPath: _training
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4834341128210292643, guid: 0478d9856697a26419116f56e9b94e74, type: 3}
+      propertyPath: cantMove.m_Bits
+      value: 1984
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0478d9856697a26419116f56e9b94e74, type: 3}
 --- !u!1001 &8338922058541587564
@@ -426,7 +430,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2898775554197972835, guid: b5b6a6ef7c59e7749a0feb386a5a4a35, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.5
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2898775554197972835, guid: b5b6a6ef7c59e7749a0feb386a5a4a35, type: 3}
       propertyPath: m_LocalPosition.y

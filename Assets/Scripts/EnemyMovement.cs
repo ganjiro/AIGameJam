@@ -8,6 +8,7 @@ public class EnemyMovement : MonoBehaviour
     public Transform movePoint;
     public LayerMask cantMove;
     public GameObject goal;
+    public GameObject player;
     public bool _isMoving = false;
 
     private VictimAgent _agentComponent;
@@ -26,7 +27,7 @@ public class EnemyMovement : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
         
         // Give instantaneous reward only if the movement has finished
-        if (_isMoving && Vector3.Distance(transform.position, movePoint.position) < _movementThreshold)
+        if (_isMoving && (Vector3.Distance(transform.position, movePoint.position) < _movementThreshold))
         {
             if (_agentComponent != null)
             {
@@ -52,6 +53,8 @@ public class EnemyMovement : MonoBehaviour
 
         // Store if this gameobject is moving or has finished the movement
         _isMoving = Vector3.Distance(transform.position, movePoint.position) >= _movementThreshold;
+
+        
     }
 
     public void randomMovement()
