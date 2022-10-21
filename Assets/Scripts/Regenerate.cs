@@ -129,6 +129,8 @@ public class Regenerate : MonoBehaviour
 
     public void CreateMap()
     {
+        int itr = 0;
+
         foreach (Transform child in obstacles.transform)
         {
             GameObject.Destroy(child.gameObject);
@@ -146,16 +148,19 @@ public class Regenerate : MonoBehaviour
         //     GameObject.Destroy(child.gameObject);
         // }
 
+        
         for (int i=0; i < nObstacles; i++) {
-
+            itr = 0;
             float x = UnityEngine.Random.Range(-5, 4) + 0.5f;
             float y = UnityEngine.Random.Range(-5, 4) + 0.5f;
 
-            while (Physics2D.OverlapCircle(new Vector3(x, y, 0f), 1.2f, cantMove)) 
+            while (Physics2D.OverlapCircle(new Vector3(x, y, 0f), 1.2f, cantMove) && itr < 50) 
             {
+                itr++;
                 x = UnityEngine.Random.Range(-5, 4) + 0.5f;
                 y = UnityEngine.Random.Range(-5, 4) + 0.5f;
             }
+            if (itr >= 50) break;
 
             GameObject instantiatedObject = Instantiate(obstaclesPrefab, new Vector3(x, y, 0f), Quaternion.identity);
             instantiatedObject.transform.SetParent(obstacles.transform);            
