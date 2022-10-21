@@ -8,22 +8,53 @@ public class EnemyMovement : MonoBehaviour
     public Transform movePoint;
     public LayerMask cantMove;
     public GameObject goal;
+    public bool _isMoving = false;
+
+    private VictimAgent _agentComponent;
+    private float _movementThreshold = 0.005f;
 
     // Start is called before the first frame update
     void Start()
     {
         movePoint.parent = null;
+        _agentComponent = GetComponent<VictimAgent>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
+        
+        // Give instantaneous reward only if the movement has finished
+        if (_isMoving && Vector3.Distance(transform.position, movePoint.position) < _movementThreshold)
+        {
+            if(_agentComponent != null)
+                Debug.Log("Add Reward");            
+        }
+        
+        // Give the reward to the agent
+        if (_agentComponent != null && goal.transform.position == transform.position)
+        {
+            // Destroy(transform.gameObject);
+            if (Regenerate.instance._training)
+            {
+                Debug.Log("Add Reward 10");
+                Debug.Log("YEAHYEAHYEAH");
+                _agentComponent.EndEpisode();
+            }
+            else
+            {
+                Regenerate.instance.RemoveEnemyFromPool(gameObject);
+            }
+        }
+
+        // Store if this gameobject is moving or has finished the movement
+        _isMoving = Vector3.Distance(transform.position, movePoint.position) >= _movementThreshold;
     }
 
     public void randomMovement()
     {
-        if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f)
+        if (Vector3.Distance(transform.position, movePoint.position) <= _movementThreshold)
         {
             int x = Random.Range(0, 5);
 
@@ -66,11 +97,8 @@ public class EnemyMovement : MonoBehaviour
                 moveN();
                 break;
         }
-        if (goal.transform.position == transform.position)
-        {
-            // Destroy(transform.gameObject);
-            Regenerate.instance.RemoveEnemyFromPool(gameObject);
-        }
+
+        _isMoving = true;
     }
 
     public void moveN()
