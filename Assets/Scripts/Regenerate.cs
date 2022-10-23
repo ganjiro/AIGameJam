@@ -229,14 +229,44 @@ public class Regenerate : MonoBehaviour
         player.GetComponent<PlayerController>().randomFlashLightOrientation();
         setTorch(pos[0], pos[1], spawnStateMatrix, player.GetComponent<PlayerController>().flashlightState);
 
-<<<<<<< HEAD
         pos = getFensibleIndexs(spawnStateMatrix);
-        setFull(pos[0], pos[1], spawnStateMatrix);
+        spawnStateMatrix[(int)(pos[0] + 4.5), Mathf.Abs((int)(pos[1] - 4.5))] = 1;
         spawnEnemy(pos[0], pos[1]);
-=======
-        float goalRadius = Academy.Instance.EnvironmentParameters.GetWithDefault("goalRadius", 10);
-        spawnEnemy();
-        spawnGoal(goalRadius);
+
+        float[] pos_goal = getFensibleIndexDistance(spawnStateMatrix, pos, 2);
+        setFull(pos_goal[0], pos_goal[1], spawnStateMatrix);
+        goal.transform.position = new Vector3(pos_goal[0], pos_goal[1], 0f);
+
+        setFull(pos[0], pos[1], spawnStateMatrix);
+
+        for (int i = 0; i < nObstacles; i++)
+        {
+            float[] pos_obs = getFensibleIndexs(spawnStateMatrix);
+            setFull(pos_obs[0], pos_obs[1], spawnStateMatrix);
+
+            GameObject instantiatedObject = Instantiate(obstaclesPrefab, new Vector3(pos_obs[0], pos_obs[1], 0f), Quaternion.identity);
+            instantiatedObject.transform.SetParent(obstacles.transform);
+        }
+    }
+
+    private float[] getFensibleIndexDistance(int[,] spawnStateMatrix, float[] pos, int radius)
+    {
+        int maxX = (int)Math.Min(pos[0] - 0.5f + radius, 4);       
+        int minX = (int)Math.Max(pos[0] - 0.5f - radius, -5);
+
+        int maxY = (int)Math.Min(pos[1] - 0.5f + radius, 4);
+        int minY = (int)Math.Max(pos[1] - 0.5f - radius, -5);
+
+        float xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;           
+        float yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;
+               
+        while (spawnStateMatrix[(int)(xP + 4.5), Mathf.Abs((int)(yP - 4.5))] == 1)
+        {
+            xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;
+            yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;            
+        }
+        
+        return new float[] { xP, yP };
     }
 
     private void spawnGoal(float goalRadius)
@@ -249,34 +279,15 @@ public class Regenerate : MonoBehaviour
         
         float xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;
         float yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;
->>>>>>> 21204dd032649d2d78ed0323e66d993861c62654
 
-        pos = getFensibleIndexs(spawnStateMatrix);
-        setFull(pos[0], pos[1], spawnStateMatrix);
-        goal.transform.position = new Vector3(pos[0], pos[1], 0f);
-
-        for (int i = 0; i < nObstacles; i++)
-        {
-<<<<<<< HEAD
-            float[] pos_obs = getFensibleIndexs(spawnStateMatrix);
-            setFull(pos_obs[0], pos_obs[1], spawnStateMatrix);
-
-            GameObject instantiatedObject = Instantiate(obstaclesPrefab, new Vector3(pos_obs[0], pos_obs[1], 0f), Quaternion.identity);
-            instantiatedObject.transform.SetParent(obstacles.transform);
-        }
-    }
-
-    private void spawnEnemy(float x, float y)
-=======
-            xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;
-            yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;
-        }
+        xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;
+        yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;
+       
 
         goal.transform.position = new Vector3(xP, yP, 0f);
     }
     
-    private void spawnEnemy()
->>>>>>> 21204dd032649d2d78ed0323e66d993861c62654
+    private void spawnEnemy(float x, float y)
     {
         // Get the first non active enemy from the pool       
         GameObject enemy = null;
