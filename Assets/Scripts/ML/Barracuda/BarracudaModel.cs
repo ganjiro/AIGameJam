@@ -12,9 +12,9 @@ using System.Linq;
 using UnityEditor;
 using System;
 using System.ComponentModel.Design;
+using Unity.Mathematics;
 using Unity.MLAgents.Demonstrations;
 using Random = System.Random;
-
 
 public class BarracudaModel : MonoBehaviour
 {
@@ -22,6 +22,9 @@ public class BarracudaModel : MonoBehaviour
     protected IWorker _worker;
     public NNModel _currentModel;
     protected int _stateDim;
+
+    public bool _withActionMasking;
+    public int _actionSize;
 
     [HideInInspector]
     public int _actionDim;
@@ -36,6 +39,10 @@ public class BarracudaModel : MonoBehaviour
     {
         // Get the state dimensionality
         _stateDim = GetComponent<Unity.MLAgents.Policies.BehaviorParameters>().BrainParameters.VectorObservationSize;
+        if (_withActionMasking)
+        {
+            _stateDim -= _actionSize;
+        }
         if (_currentModel != null)
         {
             LoadModel();
@@ -72,6 +79,15 @@ public class BarracudaModel : MonoBehaviour
         int action = SampleDiscreteAction(probs, false);
         return action;
     }
+    // With action masking
+    public int requestDiscreteDecision(List<float> state, float[] masking)
+    {
+        if(input == null)
+            return 0;
+        float[] probs = GetProbs(state, masking);
+        int action = SampleDiscreteAction(probs, false);
+        return action;
+    }
 
     public float[] Softmax(float[] logits)
     {
@@ -80,6 +96,25 @@ public class BarracudaModel : MonoBehaviour
         var softmax = logits_exp.Select(i => i / (sum_logits_exp)).ToArray<float>();
         
         return softmax;
+    }
+    
+    // Softmax with action masking. 1 => available action
+    public float[] Softmax(float[] logits, float[] masking)
+    {
+        float[] masked_logits = new float[logits.Length];
+        for (int i = 0; i < logits.Length; i++)
+        {
+            if (masking[i] < 1)
+            {
+                masked_logits[i] = float.NegativeInfinity;
+            }
+            else
+            {
+                masked_logits[i] = logits[i];
+            }
+        }
+
+        return Softmax(masked_logits);
     }
 
     // Sample a discrete action given probabilities 
@@ -167,7 +202,7 @@ public class BarracudaModel : MonoBehaviour
         return action;
     }
     
-    // If discrete action disctribution, get the probabilities given the state
+    // If discrete action distribution, get the probabilities given the state
     public float[] GetProbs(List<float> state)
     {
 
@@ -176,7 +211,7 @@ public class BarracudaModel : MonoBehaviour
             input[0, i] = state[i];
         } 
         _worker.Execute(input);    
-        
+
         output = _worker.PeekOutput(_outputName);
         _actionDim = output.shape.channels;
 
@@ -186,6 +221,30 @@ public class BarracudaModel : MonoBehaviour
             probs[i] = output[0, i];
         }
         probs = Softmax(probs);
+        output.Dispose();
+
+        return probs;
+    }
+    
+    // If discrete action distribution, get the probabilities given the state
+    public float[] GetProbs(List<float> state, float[] masking)
+    {
+
+        for(int i = 0; i < _stateDim; i++)
+        {
+            input[0, i] = state[i];
+        } 
+        _worker.Execute(input);    
+
+        output = _worker.PeekOutput(_outputName);
+        _actionDim = output.shape.channels;
+
+        float[] probs = new float[_actionDim];
+        for(int i=0; i < _actionDim; i++)
+        {
+            probs[i] = output[0, i];
+        }
+        probs = Softmax(probs, masking);
         output.Dispose();
 
         return probs;

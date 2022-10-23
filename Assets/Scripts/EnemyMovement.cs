@@ -12,7 +12,7 @@ public class EnemyMovement : MonoBehaviour
     public bool _isMoving = false;
 
     private VictimAgent _agentComponent;
-    private float _movementThreshold = 0.005f;
+    public float _movementThreshold = 0.005f;
 
     // Start is called before the first frame update
     void Start()
@@ -51,8 +51,15 @@ public class EnemyMovement : MonoBehaviour
             }
         }
 
+        checkLightOnEnemy();
         // Store if this gameobject is moving or has finished the movement
-        _isMoving = Vector3.Distance(transform.position, movePoint.position) >= _movementThreshold;
+        // Do this only for the agent
+        // TODO: I don't defintely like this
+        if (_agentComponent != null)
+        {
+            _isMoving = Vector3.Distance(transform.position, movePoint.position) >= _movementThreshold;            
+        }
+        
     }
 
     public void GiveDeadReward()
@@ -197,7 +204,7 @@ public class EnemyMovement : MonoBehaviour
         if (state[1,1] == 5)
         {
             if (Regenerate.instance._training)
-            {                
+            {
                 GiveDeadReward();
             }
             else

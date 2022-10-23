@@ -28,7 +28,10 @@ public class EnemyManager : MonoBehaviour
             // This method is asynchronous, so we call it and then we wait 
             childAgents[i] = transform.GetChild(i).GetComponent<VictimAgent>();
             childMovements[i] = transform.GetChild(i).GetComponent<EnemyMovement>();
-            childAgents[i].MakeAction();
+            if (!childAgents[i]._waitingForAction)
+            {
+                childAgents[i].MakeAction();
+            }
         }
 
         for(int i = 0; i < childAgents.Length; i ++)
@@ -40,13 +43,17 @@ public class EnemyManager : MonoBehaviour
             }
         }
         
+        Regenerate.instance.player.GetComponent<EnemyMovement>()._isMoving = false;
+
         for(int i = 0; i < childAgents.Length; i ++)
         {
             // Once the action is computed by the NN, it is saved in the _currentAction variable of the Agent
             // Use that action to move, and then reset it to default value
             childMovements[i].actionMovement(childAgents[i]._currentAction);
             childAgents[i]._currentAction = 99;
-        }
+            childAgents[i]._waitingForAction = false;
+        }        
+
 
     }
 }

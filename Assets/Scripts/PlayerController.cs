@@ -62,7 +62,8 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
-        
+        GetComponent<EnemyMovement>()._isMoving = true;
+
     }
 
     private void TurnFlashlightRight()
@@ -216,9 +217,29 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);    
+        transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, movePoint.position) <= 0.05f)
+        bool oneIsMoving = false;
+        foreach (EnemyMovement e in Regenerate.instance.agents.GetComponentsInChildren<EnemyMovement>())
+        {
+            if (e._isMoving)
+            {
+                oneIsMoving = true;
+                break;
+            }
+        }
+        
+        // if the player has ended its action, do the enemy action
+        if (GetComponent<EnemyMovement>()._isMoving)
+        {
+            if (Vector3.Distance(transform.position, movePoint.position) <
+                GetComponent<EnemyMovement>()._movementThreshold)
+            {
+                StartCoroutine(_enemyManager.moveAgents());
+            }
+        }
+        
+        if (!GetComponent<EnemyMovement>()._isMoving && !oneIsMoving)
         {
             // In case we are training, the player does not accept input
             if (Regenerate.instance._training)
@@ -249,7 +270,7 @@ public class PlayerController : MonoBehaviour
                 int action = (int) actionsIdxList[random];
                 
                 MakeAction(action);
-                StartCoroutine(_enemyManager.moveAgents());
+                // StartCoroutine(_enemyManager.moveAgents());
             }
             // Otherwise, wait for input
             else
@@ -268,7 +289,7 @@ public class PlayerController : MonoBehaviour
                     int action = 8;
                     MakeAction(action);
                     // moveEnemies.Invoke();
-                    StartCoroutine(_enemyManager.moveAgents());
+                    // StartCoroutine(_enemyManager.moveAgents());
                 }
                 else if ((Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1) || (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1))
                 {
@@ -308,7 +329,7 @@ public class PlayerController : MonoBehaviour
                     {
                         MakeAction(action);
                         // moveEnemies.Invoke();
-                        StartCoroutine(_enemyManager.moveAgents()); 
+                        // StartCoroutine(_enemyManager.moveAgents()); 
                     }
                 }
 
@@ -316,12 +337,12 @@ public class PlayerController : MonoBehaviour
                 {
 
                     TurnFlashlightRight();
-                    StartCoroutine(_enemyManager.moveAgents());
+                    // StartCoroutine(_enemyManager.moveAgents());
                 }
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
                     TurnFlashlightLeft();
-                    StartCoroutine(_enemyManager.moveAgents());
+                    // StartCoroutine(_enemyManager.moveAgents());
                 }
 
 

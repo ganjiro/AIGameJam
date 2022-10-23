@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 100
+    VectorObservationSize: 143
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -294,5 +294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentModel: {fileID: 5022602860645237092, guid: 3fa5ea7d57606566e81e1181ecbbe68f, type: 3}
+  _withActionMasking: 1
+  _actionSize: 9
   _actionDim: 0
   _top: 3
