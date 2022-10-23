@@ -62,7 +62,6 @@ public class Regenerate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         if (Input.GetKey(KeyCode.K))
         {
             CreateMap();
@@ -71,8 +70,7 @@ public class Regenerate : MonoBehaviour
         {
             getFullStateMatrix();
         }
-
-     }
+    }
 
     public int[] getFeasibleActionset(Vector3 objPosition)
     {
@@ -183,19 +181,30 @@ public class Regenerate : MonoBehaviour
         player.GetComponent<PlayerController>().movePoint.position = new Vector3(xP, yP, 0f);
         player.GetComponent<EnemyMovement>()._isMoving = false;
 
-        xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
-        yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
+        float goalRadius = Academy.Instance.EnvironmentParameters.GetWithDefault("goalRadius", 10);
+        spawnGoal(goalRadius);
+    }
+
+    private void spawnGoal(float goalRadius)
+    {
+        int maxX = (int)Math.Min(agents.transform.GetChild(0).transform.position.x - 0.5f + goalRadius, 4);
+        int minX = (int)Math.Max(agents.transform.GetChild(0).transform.position.x - 0.5f - goalRadius, -5);
+        
+        int maxY = (int)Math.Min(agents.transform.GetChild(0).transform.position.y - 0.5f + goalRadius, 4);
+        int minY = (int)Math.Max(agents.transform.GetChild(0).transform.position.y - 0.5f - goalRadius, -5);
+        
+        float xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;
+        float yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;
 
         while (Physics2D.OverlapCircle(new Vector3(xP, yP, 0f), .2f, cantMove))
         {
-            xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
-            yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
+            xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;
+            yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;
         }
 
         goal.transform.position = new Vector3(xP, yP, 0f);
-
     }
-
+    
     private void spawnEnemy()
     {
         // Get the first non active enemy from the pool

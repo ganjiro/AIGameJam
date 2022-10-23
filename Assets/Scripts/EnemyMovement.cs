@@ -32,7 +32,7 @@ public class EnemyMovement : MonoBehaviour
             if (_agentComponent != null)
             {
                 // Give a negative reward to finish as soon as it can
-                _agentComponent.AddReward(-0.01f);
+                _agentComponent.AddReward(-0.05f);
             }
         }
         
