@@ -233,7 +233,7 @@ public class Regenerate : MonoBehaviour
         spawnStateMatrix[(int)(pos[0] + 4.5), Mathf.Abs((int)(pos[1] - 4.5))] = 1;
         spawnEnemy(pos[0], pos[1]);
 
-        float[] pos_goal = getFensibleIndexDistance(spawnStateMatrix, pos, 2);
+        float[] pos_goal = getFensibleIndexDistance(spawnStateMatrix, pos, 10);
         setFull(pos_goal[0], pos_goal[1], spawnStateMatrix);
         goal.transform.position = new Vector3(pos_goal[0], pos_goal[1], 0f);
 
