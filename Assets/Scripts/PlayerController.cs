@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
         movePoint.parent = null;     
     }
 
-    private void MakeAction(int action)
+    public void MakeAction(int action)
     {
         switch (action)
         {
