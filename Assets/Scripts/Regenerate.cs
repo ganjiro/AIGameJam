@@ -169,7 +169,8 @@ public class Regenerate : MonoBehaviour
             instantiatedObject.transform.SetParent(obstacles.transform);            
 
         }
-               
+         
+        // spwan player 
         float xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
         float yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
 
@@ -180,6 +181,7 @@ public class Regenerate : MonoBehaviour
         }
 
         player.transform.position = new Vector3(xP, yP, 0f);
+        
         player.GetComponent<PlayerController>().movePoint.position = new Vector3(xP, yP, 0f);
         player.GetComponent<EnemyMovement>()._isMoving = false;
 
