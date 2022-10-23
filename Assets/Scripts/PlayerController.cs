@@ -66,6 +66,16 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public void randomFlashLightOrientation()
+    {
+        int n = UnityEngine.Random.Range(0, 8);
+
+        for(int i = 0; i < n; i++)
+        {
+            TurnFlashlightRight();
+        }
+    }
+
     private void TurnFlashlightRight()
     {
         switch (flashlightState)

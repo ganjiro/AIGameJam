@@ -127,6 +127,81 @@ public class Regenerate : MonoBehaviour
 
     }
 
+    private void setFull(float x, float y, int[,] spawnStateMatrix)
+    {
+        for (int i = -1; i < 2; i++)
+        {
+            for (int j = -1; j < 2; j++)
+            {
+                try
+                {
+                    spawnStateMatrix[(int)(x + 4.5) + i, Mathf.Abs((int)(y - 4.5)) + j] = 1;
+                }
+                catch {}
+            }
+        }
+    }
+
+    private void setTorch(float x, float y, int[,] spawnStateMatrix, int state)
+    {
+        try { 
+            switch (state)
+            {
+                case (0):
+                    spawnStateMatrix[(int)(x + 4.5) + 2, Mathf.Abs((int)(y - 4.5))] = 1;
+                    break;
+                case (1):
+                    spawnStateMatrix[(int)(x + 4.5) + 2, Mathf.Abs((int)(y - 4.5)) - 2] = 1;
+                    break;
+                case (2):
+                    spawnStateMatrix[(int)(x + 4.5), Mathf.Abs((int)(y - 4.5)) - 2] = 1;
+                    break;
+                case (3):
+                    spawnStateMatrix[(int)(x + 4.5) - 2, Mathf.Abs((int)(y - 4.5)) - 2] = 1;
+                    break;
+                case (4):
+                    spawnStateMatrix[(int)(x + 4.5) - 2, Mathf.Abs((int)(y - 4.5))] = 1;
+                    break;
+                case (5):
+                    spawnStateMatrix[(int)(x + 4.5) - 2, Mathf.Abs((int)(y - 4.5)) + 2] = 1;
+                    break;
+                case (6):
+                    spawnStateMatrix[(int)(x + 4.5), Mathf.Abs((int)(y - 4.5)) + 2] = 1;
+                    break;
+                case (7):
+                    spawnStateMatrix[(int)(x + 4.5) + 2, Mathf.Abs((int)(y - 4.5)) + 2] = 1;
+                    break;
+                default:
+                    break;
+            }
+        }
+        catch { }
+    }
+
+
+
+    private float[] getFensibleIndexs(int[,] spawnStateMatrix)
+    {
+        float xP = UnityEngine.Random.Range(-5, 4) + 0.5f;  
+        float yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
+        int itr = 0;                                      
+
+        while (spawnStateMatrix[(int)(xP + 4.5), Mathf.Abs((int)(yP - 4.5))] == 1 && itr < 80)
+        {
+            xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
+            yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
+            itr++;
+        }
+
+        if (itr == 80)
+        {
+            xP = UnityEngine.Random.Range(50, 60) + 0.5f;
+            yP = UnityEngine.Random.Range(50, 60) + 0.5f;
+        } 
+
+        return new float[] {xP, yP};
+    }
+
     public void CreateMap()
     {
 
@@ -143,75 +218,40 @@ public class Regenerate : MonoBehaviour
             RemoveEnemyFromPool(e);
         }
 
-        // foreach (Transform child in agents.transform)
-        // {
-        //     Destroy(child.GetComponent<EnemyMovement>().movePoint.gameObject);
-        //     GameObject.Destroy(child.gameObject);
-        // }
-
         goal.transform.position = new Vector3(89f, 89f, 0f);
         player.transform.position = new Vector3(79f, 79f, 0f);
-               
-        for (int i=0; i < nObstacles; i++) {
-            itr = 0;
-            float x = UnityEngine.Random.Range(-5, 4) + 0.5f;
-            float y = UnityEngine.Random.Range(-5, 4) + 0.5f;
 
-            while (Physics2D.OverlapCircle(new Vector3(x, y, 0f), 1.2f, cantMove) && itr < 50) 
-            {
-                itr++;
-                x = UnityEngine.Random.Range(-5, 4) + 0.5f;
-                y = UnityEngine.Random.Range(-5, 4) + 0.5f;
-            }
-            if (itr >= 50) break;
+        int[,] spawnStateMatrix = new int[10, 10];
 
-            GameObject instantiatedObject = Instantiate(obstaclesPrefab, new Vector3(x, y, 0f), Quaternion.identity);
-            instantiatedObject.transform.SetParent(obstacles.transform);            
-
-        }
-         
-        // spwan player 
-        float xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
-        float yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
-
-        while (Physics2D.OverlapCircle(new Vector3(xP, yP, 0f), .2f, cantMove))
-        {
-            xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
-            yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
-        }
-
-        player.transform.position = new Vector3(xP, yP, 0f);
-        
-        player.GetComponent<PlayerController>().movePoint.position = new Vector3(xP, yP, 0f);
+        float[] pos = getFensibleIndexs(spawnStateMatrix);
+        setFull(pos[0], pos[1], spawnStateMatrix);
+        player.transform.position = new Vector3(pos[0], pos[1], 0f);        
+        player.GetComponent<PlayerController>().movePoint.position = new Vector3(pos[0], pos[1], 0f);
         player.GetComponent<EnemyMovement>()._isMoving = false;
+        player.GetComponent<PlayerController>().randomFlashLightOrientation();
+        setTorch(pos[0], pos[1], spawnStateMatrix, player.GetComponent<PlayerController>().flashlightState);
 
-        xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
-        yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
+        pos = getFensibleIndexs(spawnStateMatrix);
+        setFull(pos[0], pos[1], spawnStateMatrix);
+        spawnEnemy(pos[0], pos[1]);
 
-        while (Physics2D.OverlapCircle(new Vector3(xP, yP, 0f), .2f, cantMove))
+        pos = getFensibleIndexs(spawnStateMatrix);
+        setFull(pos[0], pos[1], spawnStateMatrix);
+        goal.transform.position = new Vector3(pos[0], pos[1], 0f);
+
+        for (int i = 0; i < nObstacles; i++)
         {
-            xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
-            yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
+            float[] pos_obs = getFensibleIndexs(spawnStateMatrix);
+            setFull(pos_obs[0], pos_obs[1], spawnStateMatrix);
+
+            GameObject instantiatedObject = Instantiate(obstaclesPrefab, new Vector3(pos_obs[0], pos_obs[1], 0f), Quaternion.identity);
+            instantiatedObject.transform.SetParent(obstacles.transform);
         }
-
-        goal.transform.position = new Vector3(xP, yP, 0f);
-
-        spawnEnemy();
     }
 
-    private void spawnEnemy()
+    private void spawnEnemy(float x, float y)
     {
-        // Get the first non active enemy from the pool
-        
-        float x = UnityEngine.Random.Range(-5, 4) + 0.5f;
-        float y = UnityEngine.Random.Range(-5, 4) + 0.5f;
-
-        while (Physics2D.OverlapCircle(new Vector3(x, y, 0f), .2f, cantMove))
-        {
-            x = UnityEngine.Random.Range(-5, 4) + 0.5f;
-            y = UnityEngine.Random.Range(-5, 4) + 0.5f;
-        }
-
+        // Get the first non active enemy from the pool       
         GameObject enemy = null;
         foreach (GameObject e in _enemyPool)
         {
@@ -278,13 +318,21 @@ public class Regenerate : MonoBehaviour
         
         return cropStateMatrix;
     }
+
     public int[,] getFullStateMatrix()
     {
         int[,] stateMatrix = new int[10, 10]; // 0: blank
 
         foreach (Transform child in obstacles.transform)
         {
-            stateMatrix[(int)(child.position.x + 4.5), Mathf.Abs((int)(child.position.y - 4.5))] = 1; // 1: obstacles
+            try
+            {
+                stateMatrix[(int)(child.position.x + 4.5), Mathf.Abs((int)(child.position.y - 4.5))] = 1; // 1: obstacles
+            }
+            catch
+            {              
+            }
+
         }
 
         foreach (Transform child in agents.transform)
