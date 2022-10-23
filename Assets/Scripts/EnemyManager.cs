@@ -52,8 +52,13 @@ public class EnemyManager : MonoBehaviour
             childMovements[i].actionMovement(childAgents[i]._currentAction);
             childAgents[i]._currentAction = 99;
             childAgents[i]._waitingForAction = false;
-        }        
+        }    
+        
 
 
     }
+    
+    
+    
+    
 }
