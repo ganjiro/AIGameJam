@@ -149,7 +149,9 @@ public class Regenerate : MonoBehaviour
         //     GameObject.Destroy(child.gameObject);
         // }
 
-        
+        goal.transform.position = new Vector3(89f, 89f, 0f);
+        player.transform.position = new Vector3(79f, 79f, 0f);
+               
         for (int i=0; i < nObstacles; i++) {
             itr = 0;
             float x = UnityEngine.Random.Range(-5, 4) + 0.5f;
@@ -167,9 +169,7 @@ public class Regenerate : MonoBehaviour
             instantiatedObject.transform.SetParent(obstacles.transform);            
 
         }
-
-        spawnEnemy();
-        // spawnEnemy();
+               
         float xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
         float yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
 
@@ -194,6 +194,7 @@ public class Regenerate : MonoBehaviour
 
         goal.transform.position = new Vector3(xP, yP, 0f);
 
+        spawnEnemy();
     }
 
     private void spawnEnemy()
