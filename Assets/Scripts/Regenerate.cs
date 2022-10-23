@@ -62,7 +62,6 @@ public class Regenerate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         if (Input.GetKey(KeyCode.K))
         {
             CreateMap();
@@ -71,8 +70,7 @@ public class Regenerate : MonoBehaviour
         {
             getFullStateMatrix();
         }
-
-     }
+    }
 
     public int[] getFeasibleActionset(Vector3 objPosition)
     {
@@ -231,9 +229,27 @@ public class Regenerate : MonoBehaviour
         player.GetComponent<PlayerController>().randomFlashLightOrientation();
         setTorch(pos[0], pos[1], spawnStateMatrix, player.GetComponent<PlayerController>().flashlightState);
 
+<<<<<<< HEAD
         pos = getFensibleIndexs(spawnStateMatrix);
         setFull(pos[0], pos[1], spawnStateMatrix);
         spawnEnemy(pos[0], pos[1]);
+=======
+        float goalRadius = Academy.Instance.EnvironmentParameters.GetWithDefault("goalRadius", 10);
+        spawnEnemy();
+        spawnGoal(goalRadius);
+    }
+
+    private void spawnGoal(float goalRadius)
+    {
+        int maxX = (int)Math.Min(agents.transform.GetChild(0).transform.position.x - 0.5f + goalRadius, 4);
+        int minX = (int)Math.Max(agents.transform.GetChild(0).transform.position.x - 0.5f - goalRadius, -5);
+        
+        int maxY = (int)Math.Min(agents.transform.GetChild(0).transform.position.y - 0.5f + goalRadius, 4);
+        int minY = (int)Math.Max(agents.transform.GetChild(0).transform.position.y - 0.5f - goalRadius, -5);
+        
+        float xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;
+        float yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;
+>>>>>>> 21204dd032649d2d78ed0323e66d993861c62654
 
         pos = getFensibleIndexs(spawnStateMatrix);
         setFull(pos[0], pos[1], spawnStateMatrix);
@@ -241,6 +257,7 @@ public class Regenerate : MonoBehaviour
 
         for (int i = 0; i < nObstacles; i++)
         {
+<<<<<<< HEAD
             float[] pos_obs = getFensibleIndexs(spawnStateMatrix);
             setFull(pos_obs[0], pos_obs[1], spawnStateMatrix);
 
@@ -250,6 +267,16 @@ public class Regenerate : MonoBehaviour
     }
 
     private void spawnEnemy(float x, float y)
+=======
+            xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;
+            yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;
+        }
+
+        goal.transform.position = new Vector3(xP, yP, 0f);
+    }
+    
+    private void spawnEnemy()
+>>>>>>> 21204dd032649d2d78ed0323e66d993861c62654
     {
         // Get the first non active enemy from the pool       
         GameObject enemy = null;
