@@ -17,6 +17,7 @@ public class VictimAgent : Agent
 
     public int _stateDim;
     public bool _inference;
+    public bool _decision;
     public bool _waitingForAction;
     
     private int _stepCount = 0;
@@ -102,30 +103,27 @@ public class VictimAgent : Agent
         
         if (_inference)
         {
-            /*int[,] map = Regenerate.instance.getFullStateMatrix();
-            Tile startTile = new Tile(map[(int)(transform.position.y + 4.5f), (int) (transform.position.x + 4.5f)], 
-                new []{(int)(transform.position.y + 4.5f), (int) (transform.position.x + 4.5f)},
-                new []{transform.position.y, transform.position.x});
-
-            Transform goal = GetComponent<EnemyMovement>().goal.transform;
-            Tile endTile = new Tile(map[(int)(goal.position.y + 4.5f), (int) (goal.position.x + 4.5f)], 
-                new []{(int)(goal.position.y + 4.5f), (int) (goal.position.x + 4.5f)},
-                new []{goal.position.y, goal.position.x});
-            
-            Debug.Log(transform.position.x + " " + transform.position.y);
-            List<Tile> path = findPath(startTile, endTile, false, null, Regenerate.instance.getFullStateMatrix());
-            Tile nextTile = path[path.Count - 1];
-            GetComponent<EnemyMovement>().movePoint.transform.position =
-                new Vector3(nextTile.worldCoordinates[1], nextTile.worldCoordinates[0], 0);
-            Debug.Log(nextTile.worldCoordinates[1] + " " +  nextTile.worldCoordinates[0]);*/
-
-            int[] actionMasking =  Regenerate.instance.getFeasibleActionset(transform.position);
-            float[] fActionMasking = new float[actionMasking.Length];
-            for (int i = 0; i < actionMasking.Length; i++)
+            if(_decision)
             {
-                fActionMasking[i] = actionMasking[i];
+                List<Tile> path = findPath(false, null, Regenerate.instance.getFullStateMatrix());
+                Tile nextTile = path[path.Count - 1];
+
+                _currentAction = GetComponent<EnemyMovement>().VectorToAction(nextTile.getVectWorldCoord());
             }
-            _currentAction = _brain.requestDiscreteDecision(CreateStateObservation(), fActionMasking);
+            else
+            {
+                GetComponent<EnemyMovement>().movePoint.transform.position =
+                    new Vector3(nextTile.worldCoordinates[1], nextTile.worldCoordinates[0], 0);
+                GetComponent<EnemyMovement>()._isMoving = true;
+
+                int[] actionMasking =  Regenerate.instance.getFeasibleActionset(transform.position);
+                float[] fActionMasking = new float[actionMasking.Length];
+                for (int i = 0; i < actionMasking.Length; i++)
+                {
+                    fActionMasking[i] = actionMasking[i];
+                }
+                _currentAction = _brain.requestDiscreteDecision(CreateStateObservation(), fActionMasking);
+            }
         }
         else
         {
@@ -156,6 +154,16 @@ public class VictimAgent : Agent
             this.matrixCoordinates = matrixCoordinates;
             this.worldCoordinates = worldCoordinates;
         }
+
+        public Vector2 getVectMatrixCoord()
+        {
+            return new Vector2(matrixCoordinates[0], matrixCoordinates[1]);
+        }
+
+        public Vector2 getVectWorldCoord()
+        {
+            return new Vector2(worldCoordinates[1], worldCoordinates[0]);
+        }
     }
     
     // Utility class for Djkstra
@@ -171,7 +179,7 @@ public class VictimAgent : Agent
         }
     }
 
-    private List<Tile> getNeighbourhood(Tile tile, List<Tile> allTiles)
+    private List<Tile> getNeighbourhood(Tile tile, List<Tile> allTiles, List<Tile> q)
     {
 
         List<Tile> neighborhood = new List<Tile>();
@@ -191,7 +199,7 @@ public class VictimAgent : Agent
             if (x + xn >= 0 && x + xn <= 9 &&
                 y + yn >= 0 && y + yn <= 9)
             {
-                foreach (Tile t in allTiles)
+                foreach (Tile t in q)
                 {
                     if (t.matrixCoordinates[0] == x + xn && t.matrixCoordinates[1] == y + yn)
                     {
@@ -200,14 +208,18 @@ public class VictimAgent : Agent
                 }
             }
         }
-
         return neighborhood;
     }
     
     // Find the best path from startTile to endTile with Djkstra
-    public List<Tile> findPath(Tile startTile, Tile endTile, bool withItem, List<Tile> avoidTiles, int[,] map)
+    public List<Tile> findPath(bool withItem, List<Tile> avoidTiles, int[,] map)
     {
         Dictionary<Vector2, Tile> prev = new Dictionary<Vector2, Tile>();
+        Dictionary<Vector2, float> dist = new Dictionary<Vector2, float>();
+        List<Tile> q = new List<Tile>();
+
+        Tile startTile = null;
+        Tile endTile = null;
         
         // Construct a list of tiles
         List<Tile> tiles = new List<Tile>();
@@ -216,85 +228,89 @@ public class VictimAgent : Agent
         {
             for (int j = 0; j < 10; j++)
             {
-                tiles.Add(new Tile(map[j, i], new []{j, i}, new []{j - 5f + 0.5f, i + 0.5f - 5f }));
+                msg = msg + map[j, i] + " ";
+                if(map[j, i] == 0 || map[j, i] == 3 || map[j, i] == 5 || map[j, i] == 2 )
+                {
+                    tiles.Add(new Tile(map[j, i], new []{j, i}, new []{-(i - 5f + 0.5f), j - 5f + 0.5f }));
+                }
+                if(map[j, i] == 2)
+                {
+                    startTile = new Tile(map[j, i], new []{j, i}, new []{-(i - 5f + 0.5f), j - 5f + 0.5f });
+                }
+                if(map[j, i] == 3)
+                {
+                    endTile = new Tile(map[j, i], new []{j, i}, new []{-(i - 5f + 0.5f), j - 5f + 0.5f });
+                }
+                    
             }
         }
-        
-        List<TileDist> allTileDist = new List<TileDist>();
-        List<TileDist> allTiles = new List<TileDist>();
-        
                 
         foreach (Tile t in tiles)
         {
-            TileDist tileDist = new TileDist(t);
-            allTileDist.Add(tileDist);
-            allTiles.Add(tileDist);
-            prev.Add(new Vector2(t.matrixCoordinates[0], t.matrixCoordinates[1]),  null);
+
+            dist.Add(t.getVectMatrixCoord(), float.PositiveInfinity);
+            prev.Add(t.getVectMatrixCoord(),  null);
+            q.Add(t);
         }
 
-        allTileDist.First(item => (item.tile.matrixCoordinates[0] == startTile.matrixCoordinates[0] && 
-                                   item.tile.matrixCoordinates[1] == startTile.matrixCoordinates[1])).dist = 0;
-        while (allTileDist.Count > 0)
+        dist[startTile.getVectMatrixCoord()] = 0;
+
+        while (q.Count > 0)
         {
-            allTileDist = allTileDist.OrderBy(o => o.dist).ToList();
-            TileDist u = allTileDist[0];
-            if (u.tile.matrixCoordinates[0] == endTile.matrixCoordinates[0] && u.tile.matrixCoordinates[1] == endTile.matrixCoordinates[1])
-                break;
-            allTileDist.Remove(allTileDist[0]);
-            if (float.IsPositiveInfinity(u.dist))
+
+            // Get u with min dist[u]
+            Tile u = null;
+            float minDist = float.PositiveInfinity;
+            int minIndex = -99;
+            for(int i = 0; i < q.Count; i++)
+            {
+                Tile uTmp = q[i];
+                if(dist[uTmp.getVectMatrixCoord()] < minDist)
+                {
+                    u = uTmp;
+                    minDist = dist[uTmp.getVectMatrixCoord()];
+                    minIndex = i;
+                }
+            }
+
+            // If start, break
+            if(u.getVectMatrixCoord()[0] == endTile.getVectMatrixCoord()[0] && u.getVectMatrixCoord()[1] == endTile.getVectMatrixCoord()[1])
             {
                 break;
             }
-            
-            foreach (Tile neigh in getNeighbourhood(u.tile, tiles))
+
+            // Remove u from q
+            q.RemoveAt(minIndex);
+
+            foreach (Tile neigh in getNeighbourhood(u, tiles, q))
             {
-
-                if (neigh.value == 1 || neigh.value == 4 || neigh.value == 2 || neigh.value == 5)
+                if (neigh.value == 1 || neigh.value == 4)
                 {
-                    continue;
+                    // continue;   
+                }
+                else
+                {
+                    float alt = dist[u.getVectMatrixCoord()] + computeDistance(u, neigh);
                     
-                }
-
-                if (allTiles.FirstOrDefault(item => (item.tile.matrixCoordinates[0] == neigh.matrixCoordinates[0] 
-                                                     && item.tile.matrixCoordinates[1] == neigh.matrixCoordinates[1])) == null)
-                {
-                    TileDist tileDist = new TileDist(neigh);
-                    allTiles.Add(tileDist);
-                    allTileDist.Add(tileDist);
-                }
-                
-                TileDist v = allTiles.First(item => (item.tile.matrixCoordinates[0] == neigh.matrixCoordinates[0] 
-                                                     && item.tile.matrixCoordinates[1] == neigh.matrixCoordinates[1]));
-                float alt = u.dist + computeDistance(v.tile, u.tile);
-                if (alt < v.dist)
-                {
-                    v.dist = alt;
-                    Debug.Log(u.tile.value);
-
-                    prev[new Vector2(v.tile.matrixCoordinates[0], v.tile.matrixCoordinates[1])] = u.tile;
-
+                    if(alt < dist[neigh.getVectMatrixCoord()])
+                    {
+                        dist[neigh.getVectMatrixCoord()] = alt;
+                        prev[neigh.getVectMatrixCoord()] = u;
+                    }
                 }
             }
         }
 
         List<Tile> path = new List<Tile>();
         path.Add(endTile);
-        Tile next = prev[new Vector2(endTile.matrixCoordinates[0], endTile.matrixCoordinates[1])];
-        Debug.Log("Qui");
-        Debug.Log(startTile.matrixCoordinates[0] + " " + startTile.matrixCoordinates[1]);
-
-        Debug.Log(endTile.matrixCoordinates[0] + " " + endTile.matrixCoordinates[1]);
-        Debug.Log(next.matrixCoordinates[0] + " " + next.matrixCoordinates[1]);
-        Debug.Log(" ");
+        Tile next = prev[endTile.getVectMatrixCoord()];
         int count = 0;
         while ((next.matrixCoordinates[0] != startTile.matrixCoordinates[0] || next.matrixCoordinates[1] != startTile.matrixCoordinates[1]) && count < 1000)
         {
             path.Add(next);
             try
             {
-                next = prev[new Vector2(next.matrixCoordinates[0], next.matrixCoordinates[0])];
-                Debug.Log(next.matrixCoordinates[0] + " " + next.matrixCoordinates[1]);
-                Debug.Log(" ");
+                next = prev[next.getVectMatrixCoord()];
             }
             catch (System.Exception)
             {
@@ -303,14 +319,13 @@ public class VictimAgent : Agent
 
             count++;
         }
-        Debug.Log(count);
         return path;
     }
 
     // Same as before, but avoiding collectibles
     public List<Tile> findPath(Tile startTile, Tile endTile, int[,] map)
     {
-        return findPath(startTile, endTile, false, null, map);
+        return findPath(false, null, map);
     }
 
     // Compute distance value from 2 tile; the tiles in oblique position have

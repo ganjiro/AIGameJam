@@ -133,6 +133,46 @@ public class EnemyMovement : MonoBehaviour
         _isMoving = true;
     }
 
+    public int VectorToAction(Vector2 endTile)
+    {
+        Vector3 endTile3 = new Vector3(endTile.x, endTile.y, 0);
+        Vector3 offset = endTile3 - movePoint.position;
+
+        if(offset.x == 0f && offset.y == 1f)
+        {
+            return 6;
+        }
+        if(offset.x == 0f && offset.y == -1f)
+        {
+            return 2;
+        }
+        if(offset.x == -1f && offset.y == 0f)
+        {
+            return 4;
+        }
+        if(offset.x == 1f && offset.y == 0f)
+        {
+            return 0;
+        }
+        if(offset.x == 1f && offset.y == 1f)
+        {
+            return 7;
+        }
+        if(offset.x == 1f && offset.y == -1f)
+        {
+            return 1;
+        }
+        if(offset.x == -1f && offset.y == -1f)
+        {
+            return 3;
+        }
+        if(offset.x == -1f && offset.y == 1f)
+        {
+            return 5;
+        }
+        return 99;
+    }
+
     public void moveN()
     {
         if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, 1f, 0f), .2f, cantMove))
