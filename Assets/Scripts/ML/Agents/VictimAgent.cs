@@ -112,10 +112,6 @@ public class VictimAgent : Agent
             }
             else
             {
-                GetComponent<EnemyMovement>().movePoint.transform.position =
-                    new Vector3(nextTile.worldCoordinates[1], nextTile.worldCoordinates[0], 0);
-                GetComponent<EnemyMovement>()._isMoving = true;
-
                 int[] actionMasking =  Regenerate.instance.getFeasibleActionset(transform.position);
                 float[] fActionMasking = new float[actionMasking.Length];
                 for (int i = 0; i < actionMasking.Length; i++)
