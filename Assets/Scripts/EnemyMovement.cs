@@ -161,7 +161,7 @@ public class EnemyMovement : MonoBehaviour
 
     public int VectorToAction(Vector2 endTile)
     {
-        Vector3 endTile3 = new Vector3(endTile.x, endTile.y, 0);
+        Vector3 endTile3 = Regenerate.instance.setAndGetVector(endTile.x, endTile.y);
         Vector3 offset = endTile3 - movePoint.position;
 
         if(offset.x == 0f && offset.y == 1f)
@@ -201,65 +201,65 @@ public class EnemyMovement : MonoBehaviour
 
     public void moveN()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, 1f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(0f, 1f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(0f, 1f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(0f, 1f);
         }
     }
 
     public void moveS()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, -1f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(0f, -1f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(0f, -1f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(0f, -1f);
         }
     }
 
     public void moveW()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(-1f, 0f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(-1f, 0f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(-1f, 0f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(-1f, 0f);
         }
     }
 
     public void moveE()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(1f, 0f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(1f, 0f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(1f, 0f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(1f, 0f);
         }
     }
     
     public void moveNE()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(1f, 1f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(1f, 1f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(1f, 1f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(1f, 1f);
         }
     }
     
     public void moveSE()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(1f, -1f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(1f, -1f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(1f, -1f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(1f, -1f);
         }
     }
     
     public void moveSW()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(-1f, -1f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(-1f, -1f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(-1f, -1f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(-1f, -1f);
         }
     }
     
     public void moveNW()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(-1f, 1f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(-1f, 1f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(-1f, 1f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(-1f, 1f);
         }
     }
 

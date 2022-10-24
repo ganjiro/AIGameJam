@@ -28,28 +28,28 @@ public class PlayerController : MonoBehaviour
         {
             // Movement action
             case 0:                                 
-                movePoint.position += new Vector3(1f, 0f, 0f);               
+                movePoint.position += Regenerate.instance.setAndGetVector(1f, 0f);               
                 break;
             case 1:
-                movePoint.position += new Vector3(1f, -1f, 0f);
+                movePoint.position += Regenerate.instance.setAndGetVector(1f, -1f);
                 break;
             case 2:
-                movePoint.position += new Vector3(0f, -1f, 0f);
+                movePoint.position += Regenerate.instance.setAndGetVector(0f, -1f);
                 break;
             case 3:
-                movePoint.position += new Vector3(-1f, -1f, 0f);
+                movePoint.position += Regenerate.instance.setAndGetVector(-1f, -1f);
                 break;
             case 4:
-                movePoint.position += new Vector3(-1f, 0f, 0f);
+                movePoint.position += Regenerate.instance.setAndGetVector(-1f, 0f);
                 break;
             case 5:
-                movePoint.position += new Vector3(-1f, 1f, 0f);
+                movePoint.position += Regenerate.instance.setAndGetVector(-1f, 1f);
                 break;
             case 6:
-                movePoint.position += new Vector3(0f, 1f, 0f);
+                movePoint.position += Regenerate.instance.setAndGetVector(0f, 1f);
                 break;
             case 7:
-                movePoint.position += new Vector3(1f, 1f, 0f);
+                movePoint.position += Regenerate.instance.setAndGetVector(1f, 1f);
                 break;
             case 8:               
                 break;
@@ -83,62 +83,62 @@ public class PlayerController : MonoBehaviour
             case (0):
                 oldFlashlightState = 0;
                 flashlightState = 1;
-                flashLight.localPosition = new Vector3(1.2f, -1.2f, 0f);
+                flashLight.localPosition = Regenerate.instance.setAndGetVector(1.2f, -1.2f);
                 flashLight.rotation = Quaternion.Euler(0, 0, -45f);
 
                 break;
             case (1):
                 oldFlashlightState = 1;
                 flashlightState = 2;
-                flashLight.localPosition = new Vector3(0f, -1.5f, 0f);
+                flashLight.localPosition = Regenerate.instance.setAndGetVector(0f, -1.5f);
                 flashLight.rotation = Quaternion.Euler(0, 0, 90f);
 
-                positionalLight.localPosition = new Vector3(0f, -0.5f, 0f);
+                positionalLight.localPosition = Regenerate.instance.setAndGetVector(0f, -0.5f);
                 positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
                 break;
             case (2):
                 oldFlashlightState = 2;
                 flashlightState = 3;
-                flashLight.localPosition = new Vector3(-1.2f, -1.2f, 0f);
+                flashLight.localPosition = Regenerate.instance.setAndGetVector(-1.2f, -1.2f);
                 flashLight.rotation = Quaternion.Euler(0, 0, 45);
                 break;
             case (3):
                 oldFlashlightState = 3;
                 flashlightState = 4;
-                flashLight.localPosition = new Vector3(-1.5f, 0f, 0f);
+                flashLight.localPosition = Regenerate.instance.setAndGetVector(-1.5f, 0f);
                 flashLight.rotation = Quaternion.Euler(0, 0, 0);
 
-                positionalLight.localPosition = new Vector3(-0.5f, 0f, 0f);
+                positionalLight.localPosition = Regenerate.instance.setAndGetVector(-0.5f, 0f);
                 positionalLight.rotation = Quaternion.Euler(0, 0, 0);
                 break;
             case (4):
                 oldFlashlightState = 4;
                 flashlightState = 5;
-                flashLight.localPosition = new Vector3(-1.2f, 1.2f, 0f);
+                flashLight.localPosition = Regenerate.instance.setAndGetVector(-1.2f, 1.2f);
                 flashLight.rotation = Quaternion.Euler(0, 0, -45f);
                 break;
             case (5):
                 oldFlashlightState = 5;
                 flashlightState = 6;
-                flashLight.localPosition = new Vector3(0f, 1.5f, 0f);
+                flashLight.localPosition = Regenerate.instance.setAndGetVector(0f, 1.5f);
                 flashLight.rotation = Quaternion.Euler(0, 0, 90f);
 
-                positionalLight.localPosition = new Vector3(0f, 0.5f, 0f);
+                positionalLight.localPosition = Regenerate.instance.setAndGetVector(0f, 0.5f);
                 positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
                 break;
             case (6):
                 oldFlashlightState = 6;
                 flashlightState = 7;
-                flashLight.localPosition = new Vector3(1.2f, 1.2f, 0f);
+                flashLight.localPosition = Regenerate.instance.setAndGetVector(1.2f, 1.2f);
                 flashLight.rotation = Quaternion.Euler(0, 0, 45f);
                 break;
             case (7):
                 oldFlashlightState = 7;
                 flashlightState = 0;
-                flashLight.localPosition = new Vector3(1.5f, 0f, 0f);
+                flashLight.localPosition = Regenerate.instance.setAndGetVector(1.5f, 0f);
                 flashLight.rotation = Quaternion.Euler(0, 0, 0f);
 
-                positionalLight.localPosition = new Vector3(0.5f, 0f, 0f);
+                positionalLight.localPosition = Regenerate.instance.setAndGetVector(0.5f, 0f);
                 positionalLight.rotation = Quaternion.Euler(0, 0, 0);
                 break;
             default:
@@ -153,7 +153,7 @@ public class PlayerController : MonoBehaviour
                 case (0):
                     oldFlashlightState = 0;
                     flashlightState = 7;
-                    flashLight.localPosition = new Vector3(1.2f, 1.2f, 0f);
+                    flashLight.localPosition = Regenerate.instance.setAndGetVector(1.2f, 1.2f);
                     flashLight.rotation = Quaternion.Euler(0, 0, 45f);
                     break;
 
@@ -161,17 +161,17 @@ public class PlayerController : MonoBehaviour
                 case (1):
                     oldFlashlightState = 2;
                     flashlightState = 0;
-                    flashLight.localPosition = new Vector3(1.5f, 0f, 0f);
+                    flashLight.localPosition = Regenerate.instance.setAndGetVector(1.5f, 0f);
                     flashLight.rotation = Quaternion.Euler(0, 0, 0f);
 
 
-                    positionalLight.localPosition = new Vector3(0.5f, 0f, 0f);
+                    positionalLight.localPosition = Regenerate.instance.setAndGetVector(0.5f, 0f);
                     positionalLight.rotation = Quaternion.Euler(0, 0, 0);
                     break;
                 case (2):
                     oldFlashlightState = 2;
                     flashlightState = 1;
-                    flashLight.localPosition = new Vector3(1.2f, -1.2f, 0f);
+                    flashLight.localPosition = Regenerate.instance.setAndGetVector(1.2f, -1.2f);
                     flashLight.rotation = Quaternion.Euler(0, 0, -45f);
                     break;
 
@@ -179,43 +179,43 @@ public class PlayerController : MonoBehaviour
                 case (3):
                     oldFlashlightState = 3;
                     flashlightState = 2;
-                    flashLight.localPosition = new Vector3(0f, -1.5f, 0f);
+                    flashLight.localPosition = Regenerate.instance.setAndGetVector(0f, -1.5f);
                     flashLight.rotation = Quaternion.Euler(0, 0, 90f);
 
-                    positionalLight.localPosition = new Vector3(0f, -0.5f, 0f);
+                    positionalLight.localPosition = Regenerate.instance.setAndGetVector(0f, -0.5f);
                     positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
                     break;
 
                 case (4):
                     oldFlashlightState = 4;
                     flashlightState = 3;
-                    flashLight.localPosition = new Vector3(-1.2f, -1.2f, 0f);
+                    flashLight.localPosition = Regenerate.instance.setAndGetVector(-1.2f, -1.2f);
                     flashLight.rotation = Quaternion.Euler(0, 0, 45);
                     break;
 
                 case (5):
                     oldFlashlightState = 5;
                     flashlightState = 4;
-                    flashLight.localPosition = new Vector3(-1.5f, 0f, 0f);
+                    flashLight.localPosition = Regenerate.instance.setAndGetVector(-1.5f, 0f);
                     flashLight.rotation = Quaternion.Euler(0, 0, 0);
 
-                    positionalLight.localPosition = new Vector3(-0.5f, 0f, 0f);
+                    positionalLight.localPosition = Regenerate.instance.setAndGetVector(-0.5f, 0f);
                     positionalLight.rotation = Quaternion.Euler(0, 0, 0);
                     break;
 
                 case (6):
                     oldFlashlightState = 6;
                     flashlightState = 5;
-                    flashLight.localPosition = new Vector3(-1.2f, 1.2f, 0f);
+                    flashLight.localPosition = Regenerate.instance.setAndGetVector(-1.2f, 1.2f);
                     flashLight.rotation = Quaternion.Euler(0, 0, -45f);
                     break;
                 case (7):
                     oldFlashlightState = 7;
                     flashlightState = 6;
-                    flashLight.localPosition = new Vector3(0f, 1.5f, 0f);
+                    flashLight.localPosition = Regenerate.instance.setAndGetVector(0f, 1.5f);
                     flashLight.rotation = Quaternion.Euler(0, 0, 90f);
 
-                    positionalLight.localPosition = new Vector3(0f, 0.5f, 0f);
+                    positionalLight.localPosition = Regenerate.instance.setAndGetVector(0f, 0.5f);
                     positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
                     break;
 
@@ -291,7 +291,7 @@ public class PlayerController : MonoBehaviour
                 }
                 if (Input.GetKeyDown(KeyCode.L)) // L: crop matrix
                 {
-                    Vector3 tmpVector = new Vector3(2.5f, 2.5f, 0f); // just to test
+                    Vector3 tmpVector = Regenerate.instance.setAndGetVector(2.5f, 2.5f); // just to test
                     Regenerate.instance.getCropStateMatrix(tmpVector, 3);
                 }
                 if (Input.GetKeyDown(KeyCode.F)) // F: wait 

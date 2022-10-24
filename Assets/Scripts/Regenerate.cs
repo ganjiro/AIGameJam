@@ -8,7 +8,9 @@ using Unity.MLAgents;
 using System;
 
 public class Regenerate : MonoBehaviour
-{
+{   
+
+ 
     public GameObject obstacles;
     public GameObject player;
     public GameObject agents;
@@ -19,13 +21,33 @@ public class Regenerate : MonoBehaviour
     public GameObject playerPrefab;
     public LayerMask cantMove;
     public bool _training;
+    int[,] spawnStateMatrix = new int[10, 10];
+    int[] feasible = new int[9];
+    float[] pos = new float[2];
+    float[] posGoal = new float[2];
+    Vector3 aux3dVector = new Vector3(0f, 0f, 0f);
+    int[,] stateMatrix = new int[10, 10]; // 0: blank
 
     public List<GameObject> _enemyPool;
     
     public static Regenerate instance;
 
+
+    public Vector3 setAndGetVector(float x, float y)
+    {
+        aux3dVector[0] = x;
+        aux3dVector[1] = y;
+        return aux3dVector;
+    }
     void Awake()
     {
+
+        for (int i = 0; i < nObstacles; i++)
+        {            
+            GameObject instantiatedObject = Instantiate(obstaclesPrefab, setAndGetVector(69f, 69f), Quaternion.identity);
+            instantiatedObject.transform.SetParent(obstacles.transform);
+        }
+
         //Check if instance already exists
         if (instance == null)
 
@@ -44,13 +66,14 @@ public class Regenerate : MonoBehaviour
         // Populate enemy pool
         for (int i = 0; i < 10; i++)
         {
-            GameObject instantiatedObject = Instantiate(enemyPrefab, new Vector3(-99f, -99f, 0f), Quaternion.identity);
+            GameObject instantiatedObject = Instantiate(enemyPrefab, setAndGetVector(-99f, -99f), Quaternion.identity);
             instantiatedObject.SetActive(false);
             instantiatedObject.transform.SetParent(transform);
             _enemyPool.Add(instantiatedObject);            
         }
 
-        
+      
+
         // If we are training, first of all create the map
         if (_training)
         {
@@ -74,39 +97,42 @@ public class Regenerate : MonoBehaviour
 
     public int[] getFeasibleActionset(Vector3 objPosition)
     {
-        int[] feasible = new int[9];
-        
+        for (int i = 0; i < 9; i++)
+        {
+            feasible[i] = 0; 
+        }
+
         feasible[8] = 1; // wait always feasible
 
-        if (!Physics2D.OverlapCircle(objPosition + new Vector3(1f, 0f, 0f), .2f, cantMove)) // E
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(1f, 0f), .2f, cantMove)) // E
         {
             feasible[0] = 1; 
         }
-        if (!Physics2D.OverlapCircle(objPosition + new Vector3(1f, -1f, 0f), .2f, cantMove)) // SE
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(1f, -1f), .2f, cantMove)) // SE
         {
             feasible[1] = 1;
         }
-        if (!Physics2D.OverlapCircle(objPosition + new Vector3(0f, -1f, 0f), .2f, cantMove)) // S
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(0f, -1f), .2f, cantMove)) // S
         {
             feasible[2] = 1;
         }
-        if (!Physics2D.OverlapCircle(objPosition + new Vector3(-1f, -1f, 0f), .2f, cantMove)) // SO
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(-1f, -1f), .2f, cantMove)) // SO
         {
             feasible[3] = 1;
         }
-        if (!Physics2D.OverlapCircle(objPosition + new Vector3(-1f, 0f, 0f), .2f, cantMove)) // O
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(-1f, 0f), .2f, cantMove)) // O
         {
             feasible[4] = 1;
         }
-        if (!Physics2D.OverlapCircle(objPosition + new Vector3(-1f, 1f, 0f), .2f, cantMove)) // NO
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(-1f, 1f), .2f, cantMove)) // NO
         {
             feasible[5] = 1;
         }
-        if (!Physics2D.OverlapCircle(objPosition + new Vector3(0f, 1f, 0f), .2f, cantMove)) // N
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(0f,1f), .2f, cantMove)) // N
         {
             feasible[6] = 1;
         }
-        if (!Physics2D.OverlapCircle(objPosition + new Vector3(1f, 1f, 0f), .2f, cantMove)) // NE
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(1f, 1f), .2f, cantMove)) // NE
         {
             feasible[7] = 1;
         }
@@ -176,8 +202,6 @@ public class Regenerate : MonoBehaviour
         catch { }
     }
 
-
-
     private float[] getFensibleIndexs(int[,] spawnStateMatrix)
     {
         float xP = UnityEngine.Random.Range(-5, 4) + 0.5f;  
@@ -195,9 +219,12 @@ public class Regenerate : MonoBehaviour
         {
             xP = UnityEngine.Random.Range(50, 60) + 0.5f;
             yP = UnityEngine.Random.Range(50, 60) + 0.5f;
-        } 
+        }
 
-        return new float[] {xP, yP};
+        pos[0] = xP;
+        pos[1] = yP;
+
+        return pos;
     }
 
     public void CreateMap()
@@ -207,7 +234,7 @@ public class Regenerate : MonoBehaviour
 
         foreach (Transform child in obstacles.transform)
         {
-            GameObject.Destroy(child.gameObject);
+            child.position = setAndGetVector(69f, 69f);
         }
 
         // Reset enemy pool
@@ -216,36 +243,41 @@ public class Regenerate : MonoBehaviour
             RemoveEnemyFromPool(e);
         }
 
-        goal.transform.position = new Vector3(89f, 89f, 0f);
-        player.transform.position = new Vector3(79f, 79f, 0f);
+        goal.transform.position = setAndGetVector(89f, 89f);
+        player.transform.position = setAndGetVector(79f, 79f);
 
-        int[,] spawnStateMatrix = new int[10, 10];
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                spawnStateMatrix[i, j] = 0;
+            }
+        }
 
-        float[] pos = getFensibleIndexs(spawnStateMatrix);
-        setFull(pos[0], pos[1], spawnStateMatrix);
-        player.transform.position = new Vector3(pos[0], pos[1], 0f);        
-        player.GetComponent<PlayerController>().movePoint.position = new Vector3(pos[0], pos[1], 0f);
+        float[] posXY = getFensibleIndexs(spawnStateMatrix);
+        setFull(posXY[0], posXY[1], spawnStateMatrix);
+        player.transform.position = setAndGetVector(posXY[0], posXY[1]);        
+        player.GetComponent<PlayerController>().movePoint.position = setAndGetVector(posXY[0], posXY[1]);
         player.GetComponent<EnemyMovement>()._isMoving = false;
         player.GetComponent<PlayerController>().randomFlashLightOrientation();
-        setTorch(pos[0], pos[1], spawnStateMatrix, player.GetComponent<PlayerController>().flashlightState);
+        setTorch(posXY[0], posXY[1], spawnStateMatrix, player.GetComponent<PlayerController>().flashlightState);
 
-        pos = getFensibleIndexs(spawnStateMatrix);
-        spawnStateMatrix[(int)(pos[0] + 4.5), Mathf.Abs((int)(pos[1] - 4.5))] = 1;
-        spawnEnemy(pos[0], pos[1]);
+        posXY = getFensibleIndexs(spawnStateMatrix);
+        spawnStateMatrix[(int)(posXY[0] + 4.5), Mathf.Abs((int)(posXY[1] - 4.5))] = 1;
+        spawnEnemy(posXY[0], posXY[1]);
+         
 
-        float[] pos_goal = getFensibleIndexDistance(spawnStateMatrix, pos, 10);
-        setFull(pos_goal[0], pos_goal[1], spawnStateMatrix);
-        goal.transform.position = new Vector3(pos_goal[0], pos_goal[1], 0f);
+        float[] posXY_goal = getFensibleIndexDistance(spawnStateMatrix, posXY, 10);
+        setFull(posXY_goal[0], posXY_goal[1], spawnStateMatrix);
+        goal.transform.position = setAndGetVector(posXY_goal[0], posXY_goal[1]);
 
-        setFull(pos[0], pos[1], spawnStateMatrix);
-
-        for (int i = 0; i < nObstacles; i++)
+        setFull(posXY[0], posXY[1], spawnStateMatrix);
+                
+        foreach (Transform child in obstacles.transform)
         {
-            float[] pos_obs = getFensibleIndexs(spawnStateMatrix);
-            setFull(pos_obs[0], pos_obs[1], spawnStateMatrix);
-
-            GameObject instantiatedObject = Instantiate(obstaclesPrefab, new Vector3(pos_obs[0], pos_obs[1], 0f), Quaternion.identity);
-            instantiatedObject.transform.SetParent(obstacles.transform);
+            float[] posXY_obs = getFensibleIndexs(spawnStateMatrix);
+            setFull(posXY_obs[0], posXY_obs[1], spawnStateMatrix);
+            child.position = setAndGetVector(posXY_obs[0], posXY_obs[1]);
         }
     }
 
@@ -265,8 +297,11 @@ public class Regenerate : MonoBehaviour
             xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;
             yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;            
         }
-        
-        return new float[] { xP, yP };
+
+        posGoal[0] = xP;
+        posGoal[1] = yP;
+
+        return posGoal;
     }
 
     private void spawnGoal(float goalRadius)
@@ -284,7 +319,7 @@ public class Regenerate : MonoBehaviour
         yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;
        
 
-        goal.transform.position = new Vector3(xP, yP, 0f);
+        goal.transform.position = setAndGetVector(xP, yP);
     }
     
     private void spawnEnemy(float x, float y)
@@ -301,7 +336,7 @@ public class Regenerate : MonoBehaviour
             }
         }
         // GameObject instantiatedObject = Instantiate(enemyPrefab, new Vector3(x, y, 0f), Quaternion.identity);
-        enemy.transform.position = new Vector3(x, y, 0f);
+        enemy.transform.position = setAndGetVector(x, y);
         enemy.transform.rotation = Quaternion.identity;
         enemy.GetComponent<EnemyMovement>().movePoint.transform.position = enemy.transform.position;
         enemy.GetComponent<VictimAgent>()._inference = !_training;
@@ -315,7 +350,7 @@ public class Regenerate : MonoBehaviour
     public void RemoveEnemyFromPool(GameObject enemy)
     {
         enemy.transform.SetParent(transform);
-        enemy.transform.position = new Vector3(-99f, -99f, 0f);
+        enemy.transform.position = setAndGetVector(-99f, -99f);
         enemy.GetComponent<EnemyMovement>().movePoint.transform.position = enemy.transform.position;
         enemy.SetActive(false);
     }
@@ -359,8 +394,13 @@ public class Regenerate : MonoBehaviour
 
     public int[,] getFullStateMatrix()
     {
-        int[,] stateMatrix = new int[10, 10]; // 0: blank
-
+        for(int i = 0; i<10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                stateMatrix[i, j] = 0;
+            }
+        }
         foreach (Transform child in obstacles.transform)
         {
             try
