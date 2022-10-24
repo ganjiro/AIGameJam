@@ -20,8 +20,10 @@ public class VictimAgent : Agent
     public bool _decision;
     public bool _waitingForAction;
     
-    private int _stepCount = 0;
+    public int _stepCount = 0;
     private BarracudaModel _brain;
+
+    private float[] _allDistances;
 
     public int _currentAction = 99;
     public int _defaultActionValue = 99;
@@ -31,6 +33,7 @@ public class VictimAgent : Agent
     {
         _brain = GetComponent<BarracudaModel>();
         _currentAction = _defaultActionValue;
+        _allDistances = new float[101];
     }
     
     /*public void FixedUpdate()
@@ -124,6 +127,7 @@ public class VictimAgent : Agent
         else
         {
             RequestDecision();
+            
         }
     }
 

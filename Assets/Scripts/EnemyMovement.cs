@@ -10,6 +10,8 @@ public class EnemyMovement : MonoBehaviour
     public GameObject goal;
     public GameObject player;
     public bool _isMoving = false;
+    private float[] _allDistances;
+    
 
     private VictimAgent _agentComponent;
     public float _movementThreshold = 0.005f;
@@ -19,6 +21,7 @@ public class EnemyMovement : MonoBehaviour
     {
         movePoint.parent = null;
         _agentComponent = GetComponent<VictimAgent>();
+        _allDistances = new float[101];
     }
 
     // Update is called once per frame
@@ -33,6 +36,29 @@ public class EnemyMovement : MonoBehaviour
             {
                 // Give a negative reward to finish as soon as it can
                 _agentComponent.AddReward(-0.05f);
+                        // Add dense reward
+                float dt = Vector3.Distance(transform.position, goal.transform.position);
+
+                if(_agentComponent._stepCount == 0)
+                {
+                    _agentComponent.AddReward(0f);
+                }
+                else
+                {
+                    float minDist = float.PositiveInfinity;
+                    for(int i = 0; i < _agentComponent._stepCount; i++)
+                    {
+                        if(_allDistances[i] < minDist)
+                        {
+                            minDist = _allDistances[i];
+                        }
+                    }
+                    _agentComponent.AddReward(Mathf.Max(minDist - dt, 0));
+                }
+                _allDistances[_agentComponent._stepCount] = dt;
+
+                _agentComponent._stepCount ++;   
+                _isMoving = false;
             }
         }
         
