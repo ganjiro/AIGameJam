@@ -55,6 +55,7 @@ public class VictimAgent : Agent
         _stepCount = 0;
         _currentAction = _defaultActionValue;
         GetComponent<EnemyMovement>()._isMoving = false;
+        GetComponent<EnemyMovement>()._hasStarted = false;
         _waitingForAction = false;
     }
     
@@ -91,6 +92,8 @@ public class VictimAgent : Agent
         {
             obs.Add(a);
         }
+        // TODO: delete this
+        obs[obs.Count-1] = 0;
         
         
         return obs;
@@ -101,7 +104,6 @@ public class VictimAgent : Agent
     public void MakeAction()
     {
         // Starting from here, the enemy is moving
-        GetComponent<EnemyMovement>()._isMoving = true;
         _waitingForAction = true;
         
         if (_inference)
@@ -127,7 +129,6 @@ public class VictimAgent : Agent
         else
         {
             RequestDecision();
-            
         }
     }
 

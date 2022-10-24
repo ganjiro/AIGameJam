@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
 
     public void MakeAction(int action)
     {
+        GetComponent<EnemyMovement>()._hasStarted = true;
+        _startedAction = true;
         switch (action)
         {
             // Movement action
@@ -51,19 +53,23 @@ public class PlayerController : MonoBehaviour
             case 7:
                 movePoint.position += new Vector3(1f, 1f, 0f);
                 break;
-            case 8:               
+            case 8:     
+                GetComponent<EnemyMovement>()._hasStarted = false;
+                _startedAction = false;          
                 break;
             case 9:
                 TurnFlashlightRight();
+                GetComponent<EnemyMovement>()._hasStarted = false;
+                _startedAction = false;
                 break;
             case 10:
                 TurnFlashlightLeft();
+                GetComponent<EnemyMovement>()._hasStarted = false;
+                _startedAction = false;
                 break;
             default:
                 break;
         }
-        GetComponent<EnemyMovement>()._isMoving = true;
-
     }
 
     public void randomFlashLightOrientation()
@@ -224,15 +230,17 @@ public class PlayerController : MonoBehaviour
             }
     }
 
+    public bool _startedAction;
+
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
 
         bool oneIsMoving = false;
         foreach (EnemyMovement e in Regenerate.instance.agents.GetComponentsInChildren<EnemyMovement>())
         {
-            if (e._isMoving)
+            if (e._hasStarted || e.gameObject.GetComponent<VictimAgent>()._waitingForAction)
             {
                 oneIsMoving = true;
                 break;
@@ -240,16 +248,17 @@ public class PlayerController : MonoBehaviour
         }
         
         // if the player has ended its action, do the enemy action
-        if (GetComponent<EnemyMovement>()._isMoving)
+        if (_startedAction)
         {
-            if (Vector3.Distance(transform.position, movePoint.position) <
-                GetComponent<EnemyMovement>()._movementThreshold)
+            if (!GetComponent<EnemyMovement>()._isMoving)
             {
                 StartCoroutine(_enemyManager.moveAgents());
+                _startedAction = false;
             }
+            return;
         }
         
-        if (!GetComponent<EnemyMovement>()._isMoving && !oneIsMoving)
+        if (!GetComponent<EnemyMovement>()._hasStarted && !oneIsMoving)
         {
             // In case we are training, the player does not accept input
             if (Regenerate.instance._training)
@@ -278,7 +287,6 @@ public class PlayerController : MonoBehaviour
                 int random = UnityEngine.Random.Range(0, actionsIdxList.Count);
 
                 int action = (int) actionsIdxList[random];
-                
                 MakeAction(action);
                 // StartCoroutine(_enemyManager.moveAgents());
             }
