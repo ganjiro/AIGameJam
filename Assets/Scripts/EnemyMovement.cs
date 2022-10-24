@@ -32,7 +32,7 @@ public class EnemyMovement : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
 
         // Give instantaneous reward only if the movement has finished
-        if (_isMoving && (Vector3.Distance(transform.position, movePoint.position) <= _movementThreshold))
+        if (_hasStarted && (Vector3.Distance(transform.position, movePoint.position) <= _movementThreshold))
         {
             if (_agentComponent != null)
             {
@@ -71,11 +71,15 @@ public class EnemyMovement : MonoBehaviour
             if (Regenerate.instance._training)
             {
                 _agentComponent.AddReward(10f);
+                _isMoving = false;
+                _hasStarted = false;
                 _agentComponent.EndEpisode();
+                return;
             }
             else
             {
                 Regenerate.instance.RemoveEnemyFromPool(gameObject);
+                return;
             }
         }
         if (_hasStarted)
@@ -88,6 +92,8 @@ public class EnemyMovement : MonoBehaviour
         if (_agentComponent != null)
         {
             _agentComponent.AddReward(-5f);
+            _isMoving = false;
+            _hasStarted = false;
             _agentComponent.EndEpisode();
         }
     }

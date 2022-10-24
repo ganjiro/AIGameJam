@@ -102,7 +102,7 @@ public class Regenerate : MonoBehaviour
             feasible[i] = 0; 
         }
 
-        feasible[8] = 1; // wait always feasible
+        feasible[8] = 0; // wait always feasible
 
         if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(1f, 0f), .2f, cantMove)) // E
         {
@@ -344,8 +344,12 @@ public class Regenerate : MonoBehaviour
         enemy.transform.rotation = Quaternion.identity;
         enemy.GetComponent<EnemyMovement>().movePoint.transform.position = enemy.transform.position;
         enemy.GetComponent<VictimAgent>()._inference = !_training;
+        enemy.GetComponent<VictimAgent>()._waitingForAction = false;
         enemy.GetComponent<EnemyMovement>().goal = goal;
         enemy.GetComponent<EnemyMovement>().player = player;
+        enemy.GetComponent<EnemyMovement>()._hasStarted = false;
+        enemy.GetComponent<EnemyMovement>()._isMoving = false;
+
         enemy.transform.SetParent(agents.transform);
     }
 
