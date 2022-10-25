@@ -268,7 +268,7 @@ public class EnemyMovement : MonoBehaviour
     {
         int[,] state = Regenerate.instance.getCropStateMatrix(transform.position, 1);
 
-        if (state[1,1] == 5)
+        if (state[1,1] != 2 && !transform.gameObject.CompareTag("Player"))
         {
             if (Regenerate.instance._training)
             {
