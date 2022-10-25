@@ -542,7 +542,7 @@ PrefabInstance:
       objectReference: {fileID: 1194417398165917064}
     - target: {fileID: 4834341128210292643, guid: 0478d9856697a26419116f56e9b94e74, type: 3}
       propertyPath: _training
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4834341128210292643, guid: 0478d9856697a26419116f56e9b94e74, type: 3}
       propertyPath: cantMove.m_Bits
@@ -559,7 +559,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 41605154041234133, guid: b5b6a6ef7c59e7749a0feb386a5a4a35, type: 3}
       propertyPath: moveSpeed
-      value: 5
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 2719456581972890404, guid: b5b6a6ef7c59e7749a0feb386a5a4a35, type: 3}
       propertyPath: m_Layer
@@ -627,7 +627,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8338922058995291836, guid: b5b6a6ef7c59e7749a0feb386a5a4a35, type: 3}
       propertyPath: moveSpeed
-      value: 5
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 8338922058995291836, guid: b5b6a6ef7c59e7749a0feb386a5a4a35, type: 3}
       propertyPath: _enemyManager

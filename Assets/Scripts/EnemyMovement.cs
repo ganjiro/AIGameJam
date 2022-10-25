@@ -153,7 +153,7 @@ public class EnemyMovement : MonoBehaviour
                 moveNE();
                 break;
             case 8:
-                _hasStarted = false;
+                // _hasStarted = false;
                 break;
             default:
                 break;

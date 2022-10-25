@@ -101,7 +101,8 @@ public class Regenerate : MonoBehaviour
         {
             feasible[i] = 0; 
         }
-
+        
+        // TODO: FOR NOW THE WAIT ACTION IS ALWAYS INFEASIBLE
         feasible[8] = 0; // wait always feasible
 
         if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(1f, 0f), .2f, cantMove)) // E

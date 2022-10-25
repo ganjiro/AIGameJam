@@ -54,18 +54,12 @@ public class PlayerController : MonoBehaviour
                 movePoint.position += Regenerate.instance.setAndGetVector(1f, 1f);
                 break;
             case 8:     
-                GetComponent<EnemyMovement>()._hasStarted = false;
-                _startedAction = false;          
                 break;
             case 9:
                 TurnFlashlightRight();
-                GetComponent<EnemyMovement>()._hasStarted = false;
-                _startedAction = false;
                 break;
             case 10:
                 TurnFlashlightLeft();
-                GetComponent<EnemyMovement>()._hasStarted = false;
-                _startedAction = false;
                 break;
             default:
                 break;
@@ -354,12 +348,12 @@ public class PlayerController : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E))
                 {
 
-                    TurnFlashlightRight();
+                    MakeAction(9);
                     // StartCoroutine(_enemyManager.moveAgents());
                 }
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
-                    TurnFlashlightLeft();
+                    MakeAction(10);
                     // StartCoroutine(_enemyManager.moveAgents());
                 }
 
