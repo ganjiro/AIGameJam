@@ -66,7 +66,7 @@ public class BarracudaModel : MonoBehaviour
         _runtimeModel = ModelLoader.Load(model);
         _currentModel = model;
         _outputName = _runtimeModel.outputs[0];
-        _worker = WorkerFactory.CreateWorker(WorkerFactory.Type.ComputePrecompiled, _runtimeModel);
+        _worker = WorkerFactory.CreateWorker(WorkerFactory.Type.CSharpBurst, _runtimeModel);
     }
     
     // In case you have a discrete action space, this method will run the model given the state and 

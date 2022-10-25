@@ -36,7 +36,8 @@ public class VictimAgent : Agent
         _allDistances = new float[101];
     }
     
-    /*public void FixedUpdate()
+    /*
+     public void FixedUpdate()
     {
         if(_stepCount % _timeScale == 0)	
         {
@@ -47,7 +48,8 @@ public class VictimAgent : Agent
         }
 
         _stepCount++;
-    }*/
+    }
+    */
     
     // Call it when the episode restarts.
     public override void OnEpisodeBegin()

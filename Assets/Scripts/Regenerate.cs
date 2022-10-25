@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using System.Linq;
 using Unity.MLAgents;
 using System;
+using Unity.VisualScripting;
 
 public class Regenerate : MonoBehaviour
 {   
@@ -15,18 +16,22 @@ public class Regenerate : MonoBehaviour
     public GameObject player;
     public GameObject agents;
     public GameObject goal;
+    [Range(0f, 1f)]
+    public float rationNObstacles;
     public int nObstacles;
     public GameObject obstaclesPrefab;
     public GameObject enemyPrefab;
     public GameObject playerPrefab;
     public LayerMask cantMove;
     public bool _training;
-    int[,] spawnStateMatrix = new int[10, 10];
+    public int width = 10;
+    public int height = 10;
+    private int[,] spawnStateMatrix;
     int[] feasible = new int[9];
     float[] pos = new float[2];
     float[] posGoal = new float[2];
     Vector3 aux3dVector = new Vector3(0f, 0f, 0f);
-    int[,] stateMatrix = new int[10, 10]; // 0: blank
+    int[,] stateMatrix; // 0: blank
 
     public List<GameObject> _enemyPool;
     
@@ -41,13 +46,6 @@ public class Regenerate : MonoBehaviour
     }
     void Awake()
     {
-
-        for (int i = 0; i < nObstacles; i++)
-        {            
-            GameObject instantiatedObject = Instantiate(obstaclesPrefab, setAndGetVector(69f, 69f), Quaternion.identity);
-            instantiatedObject.transform.SetParent(obstacles.transform);
-        }
-
         //Check if instance already exists
         if (instance == null)
 
@@ -62,6 +60,18 @@ public class Regenerate : MonoBehaviour
 
         //Sets this to not be destroyed when reloading scene
         DontDestroyOnLoad(gameObject);
+        
+        // Create matrices based on variables
+        spawnStateMatrix = new int[width, height];
+        stateMatrix = new int[width, height];
+        transform.localScale += new Vector3((width - 10) * 0.1f, (height - 10) * 0.1f, 0f);
+        nObstacles = (int) (width * height * rationNObstacles);
+        
+        for (int i = 0; i < nObstacles; i++)
+        {            
+            GameObject instantiatedObject = Instantiate(obstaclesPrefab, setAndGetVector(69f, 69f), Quaternion.identity);
+            instantiatedObject.transform.SetParent(obstacles.transform);
+        }
         
         // Populate enemy pool
         for (int i = 0; i < 10; i++)
@@ -160,7 +170,7 @@ public class Regenerate : MonoBehaviour
             {
                 try
                 {
-                    spawnStateMatrix[(int)(x + 4.5) + i, Mathf.Abs((int)(y - 4.5)) + j] = 1;
+                    spawnStateMatrix[(int)(x + (width / 2) - 0.5f) + i, Mathf.Abs((int)(y - (height/ 2) - 0.5f)) + j] = 1;
                 }
                 catch {}
             }
@@ -173,28 +183,28 @@ public class Regenerate : MonoBehaviour
             switch (state)
             {
                 case (0):
-                    spawnStateMatrix[(int)(x + 4.5) + 2, Mathf.Abs((int)(y - 4.5))] = 1;
+                    spawnStateMatrix[(int)(x + (width / 2) - 0.5f) + 2, Mathf.Abs((int)(y - ((height / 2) - 0.5f)))] = 1;
                     break;
                 case (1):
-                    spawnStateMatrix[(int)(x + 4.5) + 2, Mathf.Abs((int)(y - 4.5)) - 2] = 1;
+                    spawnStateMatrix[(int)(x + (width / 2) - 0.5f) + 2, Mathf.Abs((int)(y - ((height / 2) - 0.5f))) - 2] = 1;
                     break;
                 case (2):
-                    spawnStateMatrix[(int)(x + 4.5), Mathf.Abs((int)(y - 4.5)) - 2] = 1;
+                    spawnStateMatrix[(int)(x + (width / 2) - 0.5f), Mathf.Abs((int)(y - ((height / 2) - 0.5f))) - 2] = 1;
                     break;
                 case (3):
-                    spawnStateMatrix[(int)(x + 4.5) - 2, Mathf.Abs((int)(y - 4.5)) - 2] = 1;
+                    spawnStateMatrix[(int)(x + (width / 2) - 0.5f) - 2, Mathf.Abs((int)(y - ((height / 2) - 0.5f))) - 2] = 1;
                     break;
                 case (4):
-                    spawnStateMatrix[(int)(x + 4.5) - 2, Mathf.Abs((int)(y - 4.5))] = 1;
+                    spawnStateMatrix[(int)(x + (width / 2) - 0.5f) - 2, Mathf.Abs((int)(y -((height / 2) - 0.5f)))] = 1;
                     break;
                 case (5):
-                    spawnStateMatrix[(int)(x + 4.5) - 2, Mathf.Abs((int)(y - 4.5)) + 2] = 1;
+                    spawnStateMatrix[(int)(x + (width / 2) - 0.5f) - 2, Mathf.Abs((int)(y - ((height / 2) - 0.5f))) + 2] = 1;
                     break;
                 case (6):
-                    spawnStateMatrix[(int)(x + 4.5), Mathf.Abs((int)(y - 4.5)) + 2] = 1;
+                    spawnStateMatrix[(int)(x + (width / 2) - 0.5f), Mathf.Abs((int)(y - ((height / 2) - 0.5f))) + 2] = 1;
                     break;
                 case (7):
-                    spawnStateMatrix[(int)(x + 4.5) + 2, Mathf.Abs((int)(y - 4.5)) + 2] = 1;
+                    spawnStateMatrix[(int)(x + (width / 2) - 0.5f) + 2, Mathf.Abs((int)(y - ((height / 2) - 0.5f))) + 2] = 1;
                     break;
                 default:
                     break;
@@ -205,14 +215,15 @@ public class Regenerate : MonoBehaviour
 
     private float[] getFensibleIndexs(int[,] spawnStateMatrix)
     {
-        float xP = UnityEngine.Random.Range(-5, 4) + 0.5f;  
-        float yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
+        float xP = UnityEngine.Random.Range(-(width / 2), (width / 2) - 1) + 0.5f;  
+        float yP = UnityEngine.Random.Range(-(height / 2), (height / 2) - 1) + 0.5f;
         int itr = 0;                                      
-
-        while (spawnStateMatrix[(int)(xP + 4.5), Mathf.Abs((int)(yP - 4.5))] == 1 && itr < 80)
+        
+        
+        while (spawnStateMatrix[(int)(xP + (width / 2) - 0.5f), Mathf.Abs((int)(yP - ((height / 2) - 0.5f)))] == 1 && itr < 80)
         {
-            xP = UnityEngine.Random.Range(-5, 4) + 0.5f;
-            yP = UnityEngine.Random.Range(-5, 4) + 0.5f;
+            xP = UnityEngine.Random.Range(-(width / 2), (width / 2) - 1) + 0.5f;  
+            yP = UnityEngine.Random.Range(-(height / 2), (height / 2) - 1) + 0.5f;
             itr++;
         }
 
@@ -247,9 +258,9 @@ public class Regenerate : MonoBehaviour
         goal.transform.position = setAndGetVector(89f, 89f);
         player.transform.position = setAndGetVector(79f, 79f);
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < height; j++)
             {
                 spawnStateMatrix[i, j] = 0;
             }
@@ -266,15 +277,13 @@ public class Regenerate : MonoBehaviour
         setTorch(posXY[0], posXY[1], spawnStateMatrix, player.GetComponent<PlayerController>().flashlightState);
 
         posXY = getFensibleIndexs(spawnStateMatrix);
-        spawnStateMatrix[(int)(posXY[0] + 4.5), Mathf.Abs((int)(posXY[1] - 4.5))] = 1;
+        spawnStateMatrix[(int)(posXY[0] + (width / 2) - 0.5f), Mathf.Abs((int)(posXY[1] - ((height / 2) - 0.5f)))] = 1;
         spawnEnemy(posXY[0], posXY[1]);
-         
-
+        
         float goalRadius = Academy.Instance.EnvironmentParameters.GetWithDefault("goalRadius", 10);
         float[] posXY_goal = getFensibleIndexDistance(spawnStateMatrix, posXY, (int)goalRadius);
         setFull(posXY_goal[0], posXY_goal[1], spawnStateMatrix);
         goal.transform.position = setAndGetVector(posXY_goal[0], posXY_goal[1]);
-
 
         setFull(posXY[0], posXY[1], spawnStateMatrix);
                 
@@ -288,16 +297,16 @@ public class Regenerate : MonoBehaviour
 
     private float[] getFensibleIndexDistance(int[,] spawnStateMatrix, float[] pos, int radius)
     {
-        int maxX = (int)Math.Min(pos[0] - 0.5f + radius, 4);       
-        int minX = (int)Math.Max(pos[0] - 0.5f - radius, -5);
+        int maxX = (int)Math.Min(pos[0] - 0.5f + radius, (width / 2) - 1);       
+        int minX = (int)Math.Max(pos[0] - 0.5f - radius, -(width / 2));
 
-        int maxY = (int)Math.Min(pos[1] - 0.5f + radius, 4);
-        int minY = (int)Math.Max(pos[1] - 0.5f - radius, -5);
+        int maxY = (int)Math.Min(pos[1] - 0.5f + radius, (height / 2) - 1);
+        int minY = (int)Math.Max(pos[1] - 0.5f - radius, -(height / 2));
 
         float xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;           
         float yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;
                
-        while (spawnStateMatrix[(int)(xP + 4.5), Mathf.Abs((int)(yP - 4.5))] == 1)
+        while (spawnStateMatrix[(int)(xP + (width / 2) - 0.5f), Mathf.Abs((int)(yP - ((height / 2) - 0.5f)))] == 1)
         {
             xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;
             yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;            
@@ -309,24 +318,6 @@ public class Regenerate : MonoBehaviour
         return posGoal;
     }
 
-    private void spawnGoal(float goalRadius)
-    {
-        int maxX = (int)Math.Min(agents.transform.GetChild(0).transform.position.x - 0.5f + goalRadius, 4);
-        int minX = (int)Math.Max(agents.transform.GetChild(0).transform.position.x - 0.5f - goalRadius, -5);
-        
-        int maxY = (int)Math.Min(agents.transform.GetChild(0).transform.position.y - 0.5f + goalRadius, 4);
-        int minY = (int)Math.Max(agents.transform.GetChild(0).transform.position.y - 0.5f - goalRadius, -5);
-        
-        float xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;
-        float yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;
-
-        xP = UnityEngine.Random.Range(minX, maxX) + 0.5f;
-        yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;
-       
-
-        goal.transform.position = setAndGetVector(xP, yP);
-    }
-    
     private void spawnEnemy(float x, float y)
     {
         // Get the first non active enemy from the pool       
@@ -366,8 +357,8 @@ public class Regenerate : MonoBehaviour
 
     public int[,] getCropStateMatrix(Vector3 agentPosition, int radius)
     {
-        int xRow = (int) (agentPosition.x + 4.5);
-        int yRow = (int)(Mathf.Abs((int)(agentPosition.y - 4.5)));
+        int xRow = (int) (agentPosition.x + (width / 2) - 0.5f);
+        int yRow = (int)(Mathf.Abs((int)(agentPosition.y - ((height / 2) - 0.5f))));
                 
         int diameter = (int)(radius) * 2 + 1;
         int[,] cropStateMatrix = new int[diameter, diameter];
@@ -403,9 +394,9 @@ public class Regenerate : MonoBehaviour
 
     public int[,] getFullStateMatrix()
     {
-        for(int i = 0; i<10; i++)
+        for(int i = 0; i<width; i++)
         {
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < height; j++)
             {
                 stateMatrix[i, j] = 0;
             }
@@ -414,7 +405,7 @@ public class Regenerate : MonoBehaviour
         {
             try
             {
-                stateMatrix[(int)(child.position.x + 4.5), Mathf.Abs((int)(child.position.y - 4.5))] = 1; // 1: obstacles
+                stateMatrix[(int)(child.position.x + (width / 2) - 0.5f), Mathf.Abs((int)(child.position.y - ((height / 2) - 0.5f)))] = 1; // 1: obstacles
             }
             catch
             {              
@@ -424,14 +415,14 @@ public class Regenerate : MonoBehaviour
 
         foreach (Transform child in agents.transform)
         {
-            stateMatrix[(int)(child.position.x + 4.5), Mathf.Abs((int)(child.position.y - 4.5))] = 2; // 2: agents
+            stateMatrix[(int)(child.position.x + (width / 2) - 0.5f), Mathf.Abs((int)(child.position.y - ((height / 2) - 0.5f)))] = 2; // 2: agents
         }
 
 
-        stateMatrix[(int)(goal.transform.position.x + 4.5), Mathf.Abs((int)(goal.transform.position.y - 4.5))] = 3; // 3: goal
+        stateMatrix[(int)(goal.transform.position.x + (width / 2) - 0.5f), Mathf.Abs((int)(goal.transform.position.y - ((height / 2) - 0.5f)))] = 3; // 3: goal
 
-        int posX = (int)(player.transform.position.x + 4.5);
-        int posY = Mathf.Abs((int)(player.transform.position.y - 4.5));
+        int posX = (int)(player.transform.position.x + (width / 2) - 0.5f);
+        int posY = Mathf.Abs((int)(player.transform.position.y - ((height / 2) - 0.5f)));
 
         stateMatrix[posX, posY] = 4; // 4: player
                
