@@ -379,7 +379,7 @@ public class Regenerate : MonoBehaviour
         {
             for (int j = yRow - (diameter - 1) / 2; j < 1 + yRow + (diameter - 1) / 2; j++)
             {
-                if (i >= 0 && i <= 9 && j >= 0 && j <= 9)
+                if (i >= 0 && i <= width - 1 && j >= 0 && j <= height - 1)
                 {                    
                     cropStateMatrix[localX, localY] = fullStateMatrix[i, j];                                        
                 }
@@ -1004,13 +1004,13 @@ public class Regenerate : MonoBehaviour
                 {
                     if (stateMatrix[posX, posY - 1] == 1)
                     {
-                       
+
                     }
                     else if (stateMatrix[posX, posY - 2] == 1)
                     {
                         stateMatrix[posX, posY - 1] = 5;
 
-                    }                   
+                    }
                     else
                     {
                         stateMatrix[posX, posY - 1] = 5;
@@ -1018,7 +1018,8 @@ public class Regenerate : MonoBehaviour
                     }
                 }
                 catch
-                { }
+                {
+                }
 
                 //inizio FOV
                 //stato 6                 
@@ -1190,7 +1191,8 @@ public class Regenerate : MonoBehaviour
     {
         foreach (GameObject e in _enemyPool)
         {
-            e.GetComponent<EnemyMovement>().checkLightOnEnemy();
+            if(e.activeSelf)
+                e.GetComponent<EnemyMovement>().checkLightOnEnemy();
         }
     }
      

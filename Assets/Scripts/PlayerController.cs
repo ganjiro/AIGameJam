@@ -64,6 +64,8 @@ public class PlayerController : MonoBehaviour
             default:
                 break;
         }
+        Regenerate.instance.checkLightOnEnemies();
+
     }
 
     public void randomFlashLightOrientation()
@@ -358,7 +360,6 @@ public class PlayerController : MonoBehaviour
                 }
 
 
-                Regenerate.instance.checkLightOnEnemies();
             }
         }      
         

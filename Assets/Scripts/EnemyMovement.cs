@@ -61,6 +61,7 @@ public class EnemyMovement : MonoBehaviour
                 _allDistances[_agentComponent._stepCount] = dt;
                 _agentComponent._stepCount ++;
             }
+            
             _isMoving = false;
             _hasStarted = false;
         }
@@ -83,9 +84,10 @@ public class EnemyMovement : MonoBehaviour
                 return;
             }
         }
+        checkLightOnEnemy();
+
         if (_hasStarted)
             _isMoving = Vector3.Distance(transform.position, movePoint.position) >= _movementThreshold;
-        checkLightOnEnemy();
     }
 
     public void GiveDeadReward()
@@ -269,10 +271,11 @@ public class EnemyMovement : MonoBehaviour
     {
         int[,] state = Regenerate.instance.getCropStateMatrix(transform.position, 1);
 
-        if (state[1,1] != 2 && !transform.gameObject.CompareTag("Player"))
+        if ((state[1,1] == 5 || state[1,1] == 4) && !gameObject.CompareTag("Player"))
         {
             if (Regenerate.instance._training)
             {
+                
                 GiveDeadReward();
             }
             else
