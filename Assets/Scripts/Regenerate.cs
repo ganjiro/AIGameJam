@@ -439,24 +439,92 @@ public class Regenerate : MonoBehaviour
         {
             case (0):
                 try
-                {
-                    if (stateMatrix[posX + 1, posY] == 1)
-                    {
-                        
-                    }
-                    else if (stateMatrix[posX + 2, posY] == 1)
+                { 
+                    if (stateMatrix[posX + 2, posY] == 1)
                     {
                         stateMatrix[posX + 1, posY] = 5; 
+                    }
+                    else
+                    {                       
+                        stateMatrix[posX + 2, posY] = 5;
+                    }
+                }
+                catch
+                {}
+
+
+                //inzio FOV
+                //stato 0
+                try
+                {
+                    if (stateMatrix[posX, posY - 1] != 1)
+                    {
+                        stateMatrix[posX, posY - 1] = 5;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (stateMatrix[posX + 1, posY - 1] != 1)
+                    {
+                        stateMatrix[posX + 1, posY - 1] = 5;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (stateMatrix[posX + 1, posY ] != 1)
+                    {
+                        stateMatrix[posX + 1, posY ] = 5;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (stateMatrix[posX +1, posY -1] != 1)
+                    {
+                        stateMatrix[posX + 1, posY + 1] = 5;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (stateMatrix[posX , posY + 1] != 1)
+                    {
+                        stateMatrix[posX, posY + 1] = 5;
+                    }
+                }
+                catch { }
+                //fine FOV
+                
+
+                break;
+
+            case (1):
+                try
+                {
+                    if (stateMatrix[posX + 2, posY + 2] == 1)
+                    {
+                        stateMatrix[posX + 1, posY + 1] = 5;
 
                     }
                     else
                     {
-                        stateMatrix[posX + 1, posY] = 5;
-                        stateMatrix[posX + 2, posY] = 5;
+                        stateMatrix[posX + 1, posY + 1] = 5;
+                        stateMatrix[posX + 2, posY + 2] = 5;
                     }
+                }
+                catch
+                { }
 
 
-                    //inzio FOV
+                //inzio FOV
+                if (player.GetComponent<PlayerController>().oldFlashlightState == 0)
+                {
                     //stato 0
                     try
                     {
@@ -478,16 +546,16 @@ public class Regenerate : MonoBehaviour
 
                     try
                     {
-                        if (stateMatrix[posX + 1, posY ] != 1)
+                        if (stateMatrix[posX + 1, posY] != 1)
                         {
-                            stateMatrix[posX + 1, posY ] = 5;
+                            stateMatrix[posX + 1, posY] = 5;
                         }
                     }
                     catch { }
 
                     try
                     {
-                        if (stateMatrix[posX +1, posY -1] != 1)
+                        if (stateMatrix[posX + 1, posY - 1] != 1)
                         {
                             stateMatrix[posX + 1, posY + 1] = 5;
                         }
@@ -496,160 +564,15 @@ public class Regenerate : MonoBehaviour
 
                     try
                     {
-                        if (stateMatrix[posX , posY + 1] != 1)
+                        if (stateMatrix[posX, posY + 1] != 1)
                         {
                             stateMatrix[posX, posY + 1] = 5;
                         }
                     }
                     catch { }
-                    //fine FOV
                 }
-                catch
-                { }
-
-                break;
-
-            case (1):
-                try
+                else
                 {
-                    if (stateMatrix[posX + 1, posY + 1] == 1)
-                    {
-                        
-                    }                    
-                    else if (stateMatrix[posX + 2, posY + 2] == 1)
-                    {
-                        stateMatrix[posX + 1, posY + 1] = 5;
-
-                    }
-                    else
-                    {
-                        stateMatrix[posX + 1, posY + 1] = 5;
-                        stateMatrix[posX + 2, posY + 2] = 5;
-                    }
-
-
-                    //inzio FOV
-                    if (player.GetComponent<PlayerController>().oldFlashlightState == 0)
-                    {
-                        //stato 0
-                        try
-                        {
-                            if (stateMatrix[posX, posY - 1] != 1)
-                            {
-                                stateMatrix[posX, posY - 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY - 1] != 1)
-                            {
-                                stateMatrix[posX + 1, posY - 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY] != 1)
-                            {
-                                stateMatrix[posX + 1, posY] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY - 1] != 1)
-                            {
-                                stateMatrix[posX + 1, posY + 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX, posY + 1] != 1)
-                            {
-                                stateMatrix[posX, posY + 1] = 5;
-                            }
-                        }
-                        catch { }
-                    }
-                    else
-                    {
-                        //stato 2
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY] != 1)
-                            {
-                                stateMatrix[posX + 1, posY] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY + 1] != 1)
-                            {
-                                stateMatrix[posX + 1, posY + 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX, posY + 1] != 1)
-                            {
-                                stateMatrix[posX, posY + 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX - 1, posY + 1] != 1)
-                            {
-                                stateMatrix[posX - 1, posY + 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX - 1, posY] != 1)
-                            {
-                                stateMatrix[posX - 1, posY] = 5;
-                            }
-                        }
-                        catch { }
-                    }
-                    //fine FOV
-
-                }
-                catch 
-                { }
-                break;
-            case (2):
-                try
-                {
-                    if (stateMatrix[posX, posY + 1] == 1)
-                    {
-                        
-                    }
-                    else if (stateMatrix[posX, posY + 2] == 1)
-                    {
-                        stateMatrix[posX, posY + 1] = 5;
-                        
-                    }else
-                    {
-                        stateMatrix[posX, posY + 1] = 5;
-                        stateMatrix[posX, posY + 2] = 5;
-                    }
-
-
-                    //inizio fov
                     //stato 2
                     try
                     {
@@ -695,19 +618,81 @@ public class Regenerate : MonoBehaviour
                         }
                     }
                     catch { }
-                    //fine fov
                 }
-                catch 
+                //fine FOV
+
+                
+                break;
+            case (2):
+                try
+                {
+                    if (stateMatrix[posX, posY + 2] == 1)
+                    {
+                        stateMatrix[posX, posY + 1] = 5;
+                        
+                    }else
+                    {
+                        stateMatrix[posX, posY + 1] = 5;
+                        stateMatrix[posX, posY + 2] = 5;
+                    }
+                }
+                catch
                 { }
+
+
+                //inizio fov
+                //stato 2
+                try
+                {
+                    if (stateMatrix[posX + 1, posY] != 1)
+                    {
+                        stateMatrix[posX + 1, posY] = 5;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (stateMatrix[posX + 1, posY + 1] != 1)
+                    {
+                        stateMatrix[posX + 1, posY + 1] = 5;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (stateMatrix[posX, posY + 1] != 1)
+                    {
+                        stateMatrix[posX, posY + 1] = 5;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (stateMatrix[posX - 1, posY + 1] != 1)
+                    {
+                        stateMatrix[posX - 1, posY + 1] = 5;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (stateMatrix[posX - 1, posY] != 1)
+                    {
+                        stateMatrix[posX - 1, posY] = 5;
+                    }
+                }
+                catch { }
+                //fine fov
+            
                 break;
             case (3):
                 try
                 {
-                    if (stateMatrix[posX - 1, posY + 1] == 1)
-                    {
-                        
-                    }
-                    else if (stateMatrix[posX - 2, posY + 2] == 1)
+                    if (stateMatrix[posX - 2, posY + 2] == 1)
                     {
                         stateMatrix[posX - 1, posY + 1] = 5;                       
                     }
@@ -716,129 +701,61 @@ public class Regenerate : MonoBehaviour
                         stateMatrix[posX - 1, posY + 1] = 5;
                         stateMatrix[posX - 2, posY + 2] = 5;
                     }
-
-                    //inzio FOV
-                    if (player.GetComponent<PlayerController>().oldFlashlightState == 2)
-                    {
-                        //stato 2
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY] != 1)
-                            {
-                                stateMatrix[posX + 1, posY] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY + 1] != 1)
-                            {
-                                stateMatrix[posX + 1, posY + 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX, posY + 1] != 1)
-                            {
-                                stateMatrix[posX, posY + 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX - 1, posY + 1] != 1)
-                            {
-                                stateMatrix[posX - 1, posY + 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX - 1, posY] != 1)
-                            {
-                                stateMatrix[posX - 1, posY] = 5;
-                            }
-                        }
-                        catch { }
-                    }
-                    else
-                    {
-                        //stato 4
-                        try
-                        {
-                            if (stateMatrix[posX, posY + 1] != 1)
-                            {
-                                stateMatrix[posX, posY + 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX - 1, posY + 1] != 1)
-                            {
-                                stateMatrix[posX - 1, posY + 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX - 1, posY] != 1)
-                            {
-                                stateMatrix[posX - 1, posY] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX - 1, posY - 1] != 1)
-                            {
-                                stateMatrix[posX - 1, posY - 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX, posY - 1] != 1)
-                            {
-                                stateMatrix[posX, posY - 1] = 5;
-                            }
-                        }
-                        catch { }
-                    }
-                    //fine FOV
-
                 }
                 catch
                 { }
-                break;
-            case (4):
-                try
-                {
-                    if (stateMatrix[posX - 1, posY] == 1)
-                    {
-                        
-                    }
-                    else if (stateMatrix[posX - 2, posY] == 1)
-                    {
-                        stateMatrix[posX - 1, posY] = 5;
-                        
-                    }
-                    else
-                    {
-                        stateMatrix[posX - 1, posY] = 5;
-                        stateMatrix[posX - 2, posY] = 5;
-                    }
 
-                    //inzio FOV
+                //inzio FOV
+                if (player.GetComponent<PlayerController>().oldFlashlightState == 2)
+                {
+                    //stato 2
+                    try
+                    {
+                        if (stateMatrix[posX + 1, posY] != 1)
+                        {
+                            stateMatrix[posX + 1, posY] = 5;
+                        }
+                    }
+                    catch { }
+
+                    try
+                    {
+                        if (stateMatrix[posX + 1, posY + 1] != 1)
+                        {
+                            stateMatrix[posX + 1, posY + 1] = 5;
+                        }
+                    }
+                    catch { }
+
+                    try
+                    {
+                        if (stateMatrix[posX, posY + 1] != 1)
+                        {
+                            stateMatrix[posX, posY + 1] = 5;
+                        }
+                    }
+                    catch { }
+
+                    try
+                    {
+                        if (stateMatrix[posX - 1, posY + 1] != 1)
+                        {
+                            stateMatrix[posX - 1, posY + 1] = 5;
+                        }
+                    }
+                    catch { }
+
+                    try
+                    {
+                        if (stateMatrix[posX - 1, posY] != 1)
+                        {
+                            stateMatrix[posX - 1, posY] = 5;
+                        }
+                    }
+                    catch { }
+                }
+                else
+                {
                     //stato 4
                     try
                     {
@@ -846,7 +763,8 @@ public class Regenerate : MonoBehaviour
                         {
                             stateMatrix[posX, posY + 1] = 5;
                         }
-                    } catch { }
+                    }
+                    catch { }
 
                     try
                     {
@@ -883,19 +801,76 @@ public class Regenerate : MonoBehaviour
                         }
                     }
                     catch { }
-                    //fine FOV
                 }
-                catch 
+                //fine FOV                                
+                break;
+            case (4):
+                try
+                {
+                    if (stateMatrix[posX - 2, posY] == 1)
+                    {
+                        stateMatrix[posX - 1, posY] = 5;
+                        
+                    }
+                    else
+                    {
+                        stateMatrix[posX - 1, posY] = 5;
+                        stateMatrix[posX - 2, posY] = 5;
+                    }
+                }
+                catch
                 { }
+                //inzio FOV
+                //stato 4
+                try
+                {
+                    if (stateMatrix[posX, posY + 1] != 1)
+                    {
+                        stateMatrix[posX, posY + 1] = 5;
+                    }
+                } catch { }
+
+                try
+                {
+                    if (stateMatrix[posX - 1, posY + 1] != 1)
+                    {
+                        stateMatrix[posX - 1, posY + 1] = 5;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (stateMatrix[posX - 1, posY] != 1)
+                    {
+                        stateMatrix[posX - 1, posY] = 5;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (stateMatrix[posX - 1, posY - 1] != 1)
+                    {
+                        stateMatrix[posX - 1, posY - 1] = 5;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (stateMatrix[posX, posY - 1] != 1)
+                    {
+                        stateMatrix[posX, posY - 1] = 5;
+                    }
+                }
+                catch { }
+                //fine FOV                
                 break;
             case (5):
                 try
                 {
-                    if (stateMatrix[posX - 1, posY - 1] == 1)
-                    {
-                       
-                    }
-                    else if(stateMatrix[posX - 2, posY - 2] == 1)
+                   if(stateMatrix[posX - 2, posY - 2] == 1)
                     {
                         stateMatrix[posX - 1, posY - 1] = 5;
                         
@@ -905,124 +880,61 @@ public class Regenerate : MonoBehaviour
                         stateMatrix[posX - 1, posY - 1] = 5;
                         stateMatrix[posX - 2, posY - 2] = 5;
                     }
+                }
+                catch
+                { }
 
-                    //inzio FOV
-                    if (player.GetComponent<PlayerController>().oldFlashlightState == 4)
+                //inzio FOV
+                if (player.GetComponent<PlayerController>().oldFlashlightState == 4)
+                {
+                    //stato 4
+                    try
                     {
-                        //stato 4
-                        try
+                        if (stateMatrix[posX, posY + 1] != 1)
                         {
-                            if (stateMatrix[posX, posY + 1] != 1)
-                            {
-                                stateMatrix[posX, posY + 1] = 5;
-                            }
+                            stateMatrix[posX, posY + 1] = 5;
                         }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX - 1, posY + 1] != 1)
-                            {
-                                stateMatrix[posX - 1, posY + 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX - 1, posY] != 1)
-                            {
-                                stateMatrix[posX - 1, posY] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX - 1, posY - 1] != 1)
-                            {
-                                stateMatrix[posX - 1, posY - 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX, posY - 1] != 1)
-                            {
-                                stateMatrix[posX, posY - 1] = 5;
-                            }
-                        }
-                        catch { }
                     }
-                    else
+                    catch { }
+
+                    try
                     {
-                        //stato 6                 
-                        try
+                        if (stateMatrix[posX - 1, posY + 1] != 1)
                         {
-                            if (stateMatrix[posX - 1, posY] != 1)
-                            {
-                                stateMatrix[posX - 1, posY] = 5;
-                            }
+                            stateMatrix[posX - 1, posY + 1] = 5;
                         }
-                        catch { }
+                    }
+                    catch { }
 
-                        try
+                    try
+                    {
+                        if (stateMatrix[posX - 1, posY] != 1)
                         {
-                            if (stateMatrix[posX - 1, posY - 1] != 1)
-                            {
-                                stateMatrix[posX - 1, posY - 1] = 5;
-                            }
+                            stateMatrix[posX - 1, posY] = 5;
                         }
-                        catch { }
+                    }
+                    catch { }
 
+                    try
+                    {
+                        if (stateMatrix[posX - 1, posY - 1] != 1)
+                        {
+                            stateMatrix[posX - 1, posY - 1] = 5;
+                        }
+                    }
+                    catch { }
+
+                    try
+                    {
                         if (stateMatrix[posX, posY - 1] != 1)
                         {
                             stateMatrix[posX, posY - 1] = 5;
                         }
-
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY - 1] != 1)
-                            {
-                                stateMatrix[posX + 1, posY - 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY] != 1)
-                            {
-                                stateMatrix[posX + 1, posY] = 5;
-                            }
-                        }
-                        catch { }
                     }
-                    //fine FOV
+                    catch { }
                 }
-                catch 
-                { }
-                break;
-            case (6):
-                try
+                else
                 {
-                    if (stateMatrix[posX, posY - 1] == 1)
-                    {
-                       
-                    }
-                    else if (stateMatrix[posX, posY - 2] == 1)
-                    {
-                        stateMatrix[posX, posY - 1] = 5;
-
-                    }                   
-                    else
-                    {
-                        stateMatrix[posX, posY - 1] = 5;
-                        stateMatrix[posX, posY - 2] = 5;
-                    }
-
-                    //inizio FOV
                     //stato 6                 
                     try
                     {
@@ -1064,19 +976,75 @@ public class Regenerate : MonoBehaviour
                         }
                     }
                     catch { }
-                    //fine FOV
                 }
-                catch 
+                //fine FOV
+           
+                break;
+            case (6):
+                try
+                {
+                    if (stateMatrix[posX, posY - 2] == 1)
+                    {
+                        stateMatrix[posX, posY - 1] = 5;
+
+                    }                   
+                    else
+                    {
+                        stateMatrix[posX, posY - 1] = 5;
+                        stateMatrix[posX, posY - 2] = 5;
+                    }
+                }
+                catch
                 { }
+
+                //inizio FOV
+                //stato 6                 
+                try
+                {
+                    if (stateMatrix[posX - 1, posY] != 1)
+                    {
+                        stateMatrix[posX - 1, posY] = 5;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (stateMatrix[posX - 1, posY - 1] != 1)
+                    {
+                        stateMatrix[posX - 1, posY - 1] = 5;
+                    }
+                }
+                catch { }
+
+                if (stateMatrix[posX, posY - 1] != 1)
+                {
+                    stateMatrix[posX, posY - 1] = 5;
+                }
+
+                try
+                {
+                    if (stateMatrix[posX + 1, posY - 1] != 1)
+                    {
+                        stateMatrix[posX + 1, posY - 1] = 5;
+                    }
+                }
+                catch { }
+
+                try
+                {
+                    if (stateMatrix[posX + 1, posY] != 1)
+                    {
+                        stateMatrix[posX + 1, posY] = 5;
+                    }
+                }
+                catch { }
+                //fine FOV            
                 break;
             case (7):
                 try
                 {
-                    if (stateMatrix[posX + 1, posY - 1] == 1)
-                    {
-                        
-                    }
-                    else if (stateMatrix[posX + 2, posY + 2] == 1)
+                    if (stateMatrix[posX + 2, posY + 2] == 1)
                     {
                         stateMatrix[posX + 1, posY - 1] = 5;
                     }
@@ -1085,104 +1053,104 @@ public class Regenerate : MonoBehaviour
                         stateMatrix[posX + 1, posY - 1] = 5;
                         stateMatrix[posX + 2, posY + 2] = 5;
                     }
+                }
+                catch
+                { }
 
-                    //inzio FOV
-                    if (player.GetComponent<PlayerController>().oldFlashlightState == 6)
+                //inzio FOV
+                if (player.GetComponent<PlayerController>().oldFlashlightState == 6)
+                {
+                    //stato 6                 
+                    try
                     {
-                        //stato 6                 
-                        try
+                        if (stateMatrix[posX - 1, posY] != 1)
                         {
-                            if (stateMatrix[posX - 1, posY] != 1)
-                            {
-                                stateMatrix[posX - 1, posY] = 5;
-                            }
+                            stateMatrix[posX - 1, posY] = 5;
                         }
-                        catch { }
+                    }
+                    catch { }
 
-                        try
+                    try
+                    {
+                        if (stateMatrix[posX - 1, posY - 1] != 1)
                         {
-                            if (stateMatrix[posX - 1, posY - 1] != 1)
-                            {
-                                stateMatrix[posX - 1, posY - 1] = 5;
-                            }
+                            stateMatrix[posX - 1, posY - 1] = 5;
                         }
-                        catch { }
+                    }
+                    catch { }
 
+                    if (stateMatrix[posX, posY - 1] != 1)
+                    {
+                        stateMatrix[posX, posY - 1] = 5;
+                    }
+
+                    try
+                    {
+                        if (stateMatrix[posX + 1, posY - 1] != 1)
+                        {
+                            stateMatrix[posX + 1, posY - 1] = 5;
+                        }
+                    }
+                    catch { }
+
+                    try
+                    {
+                        if (stateMatrix[posX + 1, posY] != 1)
+                        {
+                            stateMatrix[posX + 1, posY] = 5;
+                        }
+                    }
+                    catch { }
+                }
+                else
+                {
+                    //stato 0
+                    try
+                    {
                         if (stateMatrix[posX, posY - 1] != 1)
                         {
                             stateMatrix[posX, posY - 1] = 5;
                         }
-
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY - 1] != 1)
-                            {
-                                stateMatrix[posX + 1, posY - 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY] != 1)
-                            {
-                                stateMatrix[posX + 1, posY] = 5;
-                            }
-                        }
-                        catch { }
                     }
-                    else
+                    catch { }
+
+                    try
                     {
-                        //stato 0
-                        try
+                        if (stateMatrix[posX + 1, posY - 1] != 1)
                         {
-                            if (stateMatrix[posX, posY - 1] != 1)
-                            {
-                                stateMatrix[posX, posY - 1] = 5;
-                            }
+                            stateMatrix[posX + 1, posY - 1] = 5;
                         }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY - 1] != 1)
-                            {
-                                stateMatrix[posX + 1, posY - 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY] != 1)
-                            {
-                                stateMatrix[posX + 1, posY] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX + 1, posY - 1] != 1)
-                            {
-                                stateMatrix[posX + 1, posY + 1] = 5;
-                            }
-                        }
-                        catch { }
-
-                        try
-                        {
-                            if (stateMatrix[posX, posY + 1] != 1)
-                            {
-                                stateMatrix[posX, posY + 1] = 5;
-                            }
-                        }
-                        catch { }
                     }
-                    //fine FOV
+                    catch { }
+
+                    try
+                    {
+                        if (stateMatrix[posX + 1, posY] != 1)
+                        {
+                            stateMatrix[posX + 1, posY] = 5;
+                        }
+                    }
+                    catch { }
+
+                    try
+                    {
+                        if (stateMatrix[posX + 1, posY - 1] != 1)
+                        {
+                            stateMatrix[posX + 1, posY + 1] = 5;
+                        }
+                    }
+                    catch { }
+
+                    try
+                    {
+                        if (stateMatrix[posX, posY + 1] != 1)
+                        {
+                            stateMatrix[posX, posY + 1] = 5;
+                        }
+                    }
+                    catch { }
                 }
-                catch 
-                { }
+                //fine FOV               
                 break;
             default:
                 break;
