@@ -37,7 +37,7 @@ public class EnemyMovement : MonoBehaviour
             if (_agentComponent != null)
             {
                 // Give a negative reward to finish as soon as it can
-                _agentComponent.AddReward(-0.05f);
+                _agentComponent.AddReward(-0.025f);
                 // Add dense reward
                 float dt = Vector3.Distance(transform.position, goal.transform.position);
 
@@ -55,6 +55,7 @@ public class EnemyMovement : MonoBehaviour
                             minDist = _allDistances[i];
                         }
                     }
+
                     _agentComponent.AddReward(Mathf.Max(minDist - dt, 0));
                 }
                 _allDistances[_agentComponent._stepCount] = dt;
@@ -70,7 +71,7 @@ public class EnemyMovement : MonoBehaviour
             // Destroy(transform.gameObject);
             if (Regenerate.instance._training)
             {
-                _agentComponent.AddReward(10f);
+                _agentComponent.AddReward(50f);
                 _isMoving = false;
                 _hasStarted = false;
                 _agentComponent.EndEpisode();
