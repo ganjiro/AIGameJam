@@ -29,7 +29,7 @@ public class Regenerate : MonoBehaviour
     private int[,] spawnStateMatrix;
     int[] feasible = new int[9];
     float[] pos = new float[2];
-    float[] posGoal = new float[2];
+    float[] posNear = new float[2];
     Vector3 aux3dVector = new Vector3(0f, 0f, 0f);
     int[,] stateMatrix; // 0: blank
 
@@ -268,7 +268,7 @@ public class Regenerate : MonoBehaviour
 
         float[] posXY = getFensibleIndexs(spawnStateMatrix);
         setFull(posXY[0], posXY[1], spawnStateMatrix);
-        player.transform.position = setAndGetVector(posXY[0], posXY[1]);        
+        player.transform.position = setAndGetVector(posXY[0], posXY[1]);
         player.GetComponent<PlayerController>().movePoint.position = setAndGetVector(posXY[0], posXY[1]);
         player.GetComponent<EnemyMovement>()._isMoving = false;
         player.GetComponent<PlayerController>()._startedAction = false;
@@ -276,15 +276,15 @@ public class Regenerate : MonoBehaviour
         player.GetComponent<PlayerController>().randomFlashLightOrientation();
         setTorch(posXY[0], posXY[1], spawnStateMatrix, player.GetComponent<PlayerController>().flashlightState);
 
-        posXY = getFensibleIndexs(spawnStateMatrix);
+        float enemyRadius = Academy.Instance.EnvironmentParameters.GetWithDefault("enemyRadius", 5);
+        posXY = getFensibleIndexDistance(spawnStateMatrix, posXY, (int)enemyRadius);
         spawnStateMatrix[(int)(posXY[0] + (width / 2) - 0.5f), Mathf.Abs((int)(posXY[1] - ((height / 2) - 0.5f)))] = 1;
         spawnEnemy(posXY[0], posXY[1]);
         
-        float goalRadius = Academy.Instance.EnvironmentParameters.GetWithDefault("goalRadius", 10);
-        float[] posXY_goal = getFensibleIndexDistance(spawnStateMatrix, posXY, (int)goalRadius);
-        setFull(posXY_goal[0], posXY_goal[1], spawnStateMatrix);
-        goal.transform.position = setAndGetVector(posXY_goal[0], posXY_goal[1]);
-
+        float goalRadius = Academy.Instance.EnvironmentParameters.GetWithDefault("goalRadius", 2);
+        float[] posXY_near = getFensibleIndexDistance(spawnStateMatrix, posXY, (int)goalRadius);
+        setFull(posXY_near[0], posXY_near[1], spawnStateMatrix);
+        goal.transform.position = setAndGetVector(posXY_near[0], posXY_near[1]);               
         setFull(posXY[0], posXY[1], spawnStateMatrix);
                 
         foreach (Transform child in obstacles.transform)
@@ -312,10 +312,10 @@ public class Regenerate : MonoBehaviour
             yP = UnityEngine.Random.Range(minY, maxY) + 0.5f;            
         }
 
-        posGoal[0] = xP;
-        posGoal[1] = yP;
+        posNear[0] = xP;
+        posNear[1] = yP;
 
-        return posGoal;
+        return posNear;
     }
 
     private void spawnEnemy(float x, float y)
