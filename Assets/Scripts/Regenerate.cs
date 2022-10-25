@@ -439,18 +439,25 @@ public class Regenerate : MonoBehaviour
         {
             case (0):
                 try
-                { 
-                    if (stateMatrix[posX + 2, posY] == 1)
+                {
+
+                    if (stateMatrix[posX + 1, posY] == 1)
+                    {
+                        
+                    }
+                    else if (stateMatrix[posX + 2, posY] == 1)
                     {
                         stateMatrix[posX + 1, posY] = 5; 
+
                     }
                     else
-                    {                       
+                    {
+                        stateMatrix[posX + 1, posY] = 5;
                         stateMatrix[posX + 2, posY] = 5;
                     }
                 }
                 catch
-                {}
+                { }
 
 
                 //inzio FOV
@@ -507,7 +514,11 @@ public class Regenerate : MonoBehaviour
             case (1):
                 try
                 {
-                    if (stateMatrix[posX + 2, posY + 2] == 1)
+                    if (stateMatrix[posX + 1, posY + 1] == 1)
+                    {
+                        
+                    }                    
+                    else if (stateMatrix[posX + 2, posY + 2] == 1)
                     {
                         stateMatrix[posX + 1, posY + 1] = 5;
 
@@ -517,6 +528,7 @@ public class Regenerate : MonoBehaviour
                         stateMatrix[posX + 1, posY + 1] = 5;
                         stateMatrix[posX + 2, posY + 2] = 5;
                     }
+
                 }
                 catch
                 { }
@@ -620,13 +632,16 @@ public class Regenerate : MonoBehaviour
                     catch { }
                 }
                 //fine FOV
-
-                
+                                
                 break;
             case (2):
                 try
                 {
-                    if (stateMatrix[posX, posY + 2] == 1)
+                    if (stateMatrix[posX, posY + 1] == 1)
+                    {
+                        
+                    }
+                    else if (stateMatrix[posX, posY + 2] == 1)
                     {
                         stateMatrix[posX, posY + 1] = 5;
                         
@@ -686,13 +701,16 @@ public class Regenerate : MonoBehaviour
                     }
                 }
                 catch { }
-                //fine fov
-            
+                //fine fov                
                 break;
             case (3):
                 try
                 {
-                    if (stateMatrix[posX - 2, posY + 2] == 1)
+                    if (stateMatrix[posX - 1, posY + 1] == 1)
+                    {
+                        
+                    }
+                    else if (stateMatrix[posX - 2, posY + 2] == 1)
                     {
                         stateMatrix[posX - 1, posY + 1] = 5;                       
                     }
@@ -802,12 +820,17 @@ public class Regenerate : MonoBehaviour
                     }
                     catch { }
                 }
-                //fine FOV                                
+                //fine FOV
+                                
                 break;
             case (4):
                 try
                 {
-                    if (stateMatrix[posX - 2, posY] == 1)
+                    if (stateMatrix[posX - 1, posY] == 1)
+                    {
+                        
+                    }
+                    else if (stateMatrix[posX - 2, posY] == 1)
                     {
                         stateMatrix[posX - 1, posY] = 5;
                         
@@ -820,6 +843,7 @@ public class Regenerate : MonoBehaviour
                 }
                 catch
                 { }
+
                 //inzio FOV
                 //stato 4
                 try
@@ -870,7 +894,11 @@ public class Regenerate : MonoBehaviour
             case (5):
                 try
                 {
-                   if(stateMatrix[posX - 2, posY - 2] == 1)
+                    if (stateMatrix[posX - 1, posY - 1] == 1)
+                    {
+                       
+                    }
+                    else if(stateMatrix[posX - 2, posY - 2] == 1)
                     {
                         stateMatrix[posX - 1, posY - 1] = 5;
                         
@@ -978,12 +1006,16 @@ public class Regenerate : MonoBehaviour
                     catch { }
                 }
                 //fine FOV
-           
+                
                 break;
             case (6):
                 try
                 {
-                    if (stateMatrix[posX, posY - 2] == 1)
+                    if (stateMatrix[posX, posY - 1] == 1)
+                    {
+                       
+                    }
+                    else if (stateMatrix[posX, posY - 2] == 1)
                     {
                         stateMatrix[posX, posY - 1] = 5;
 
@@ -1039,12 +1071,16 @@ public class Regenerate : MonoBehaviour
                     }
                 }
                 catch { }
-                //fine FOV            
+                //fine FOV               
                 break;
             case (7):
                 try
                 {
-                    if (stateMatrix[posX + 2, posY + 2] == 1)
+                    if (stateMatrix[posX + 1, posY - 1] == 1)
+                    {
+                        
+                    }
+                    else if (stateMatrix[posX + 2, posY + 2] == 1)
                     {
                         stateMatrix[posX + 1, posY - 1] = 5;
                     }
@@ -1150,7 +1186,7 @@ public class Regenerate : MonoBehaviour
                     }
                     catch { }
                 }
-                //fine FOV               
+                //fine FOV                
                 break;
             default:
                 break;
