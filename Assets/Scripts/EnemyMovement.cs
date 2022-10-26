@@ -10,30 +10,60 @@ public class EnemyMovement : MonoBehaviour
     public GameObject goal;
     public GameObject player;
     public bool _isMoving = false;
+    private float[] _allDistances;
+
+    public bool _hasStarted;
+    
 
     private VictimAgent _agentComponent;
-    private float _movementThreshold = 0.005f;
+    public float _movementThreshold = 0.005f;
 
     // Start is called before the first frame update
     void Start()
     {
         movePoint.parent = null;
         _agentComponent = GetComponent<VictimAgent>();
+        _allDistances = new float[Regenerate.instance.width * Regenerate.instance.height*2];
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
-        
+
         // Give instantaneous reward only if the movement has finished
-        if (_isMoving && (Vector3.Distance(transform.position, movePoint.position) < _movementThreshold))
+        if (_hasStarted && (Vector3.Distance(transform.position, movePoint.position) <= _movementThreshold))
         {
             if (_agentComponent != null)
             {
                 // Give a negative reward to finish as soon as it can
-                _agentComponent.AddReward(-0.01f);
+                _agentComponent.AddReward(-0.025f);
+                // Add dense reward
+                float dt = Vector3.Distance(transform.position, goal.transform.position);
+
+                if(_agentComponent._stepCount == 0)
+                {
+                    _agentComponent.AddReward(0f);
+                }
+                else
+                {
+                    float minDist = float.PositiveInfinity;
+                    for(int i = 0; i < _agentComponent._stepCount; i++)
+                    {
+                        if(_allDistances[i] < minDist)
+                        {
+                            minDist = _allDistances[i];
+                        }
+                    }
+
+                    _agentComponent.AddReward(Mathf.Max(minDist - dt, 0));
+                }
+                _allDistances[_agentComponent._stepCount] = dt;
+                _agentComponent._stepCount ++;
             }
+            
+            _isMoving = false;
+            _hasStarted = false;
         }
         
         // Give the reward to the agent
@@ -42,17 +72,22 @@ public class EnemyMovement : MonoBehaviour
             // Destroy(transform.gameObject);
             if (Regenerate.instance._training)
             {
-                _agentComponent.AddReward(10f);
+                _agentComponent.AddReward(50f);
+                _isMoving = false;
+                _hasStarted = false;
                 _agentComponent.EndEpisode();
+                return;
             }
             else
             {
                 Regenerate.instance.RemoveEnemyFromPool(gameObject);
+                return;
             }
         }
+        checkLightOnEnemy();
 
-        // Store if this gameobject is moving or has finished the movement
-        _isMoving = Vector3.Distance(transform.position, movePoint.position) >= _movementThreshold;
+        if (_hasStarted)
+            _isMoving = Vector3.Distance(transform.position, movePoint.position) >= _movementThreshold;
     }
 
     public void GiveDeadReward()
@@ -60,6 +95,8 @@ public class EnemyMovement : MonoBehaviour
         if (_agentComponent != null)
         {
             _agentComponent.AddReward(-5f);
+            _isMoving = false;
+            _hasStarted = false;
             _agentComponent.EndEpisode();
         }
     }
@@ -91,6 +128,7 @@ public class EnemyMovement : MonoBehaviour
 
     public void actionMovement(int action)
     {
+        _hasStarted = true;
         switch (action)
         {
             case 0:
@@ -118,75 +156,114 @@ public class EnemyMovement : MonoBehaviour
                 moveNE();
                 break;
             case 8:
+                // _hasStarted = false;
                 break;
             default:
                 break;
         }
+    }
 
-        _isMoving = true;
+    public int VectorToAction(Vector2 endTile)
+    {
+        Vector3 endTile3 = Regenerate.instance.setAndGetVector(endTile.x, endTile.y);
+        Vector3 offset = endTile3 - movePoint.position;
+
+        if(offset.x == 0f && offset.y == 1f)
+        {
+            return 6;
+        }
+        if(offset.x == 0f && offset.y == -1f)
+        {
+            return 2;
+        }
+        if(offset.x == -1f && offset.y == 0f)
+        {
+            return 4;
+        }
+        if(offset.x == 1f && offset.y == 0f)
+        {
+            return 0;
+        }
+        if(offset.x == 1f && offset.y == 1f)
+        {
+            return 7;
+        }
+        if(offset.x == 1f && offset.y == -1f)
+        {
+            return 1;
+        }
+        if(offset.x == -1f && offset.y == -1f)
+        {
+            return 3;
+        }
+        if(offset.x == -1f && offset.y == 1f)
+        {
+            return 5;
+        }
+        return 99;
     }
 
     public void moveN()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, 1f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(0f, 1f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(0f, 1f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(0f, 1f);
         }
     }
 
     public void moveS()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(0f, -1f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(0f, -1f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(0f, -1f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(0f, -1f);
         }
     }
 
     public void moveW()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(-1f, 0f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(-1f, 0f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(-1f, 0f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(-1f, 0f);
         }
     }
 
     public void moveE()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(1f, 0f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(1f, 0f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(1f, 0f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(1f, 0f);
         }
     }
     
     public void moveNE()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(1f, 1f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(1f, 1f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(1f, 1f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(1f, 1f);
         }
     }
     
     public void moveSE()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(1f, -1f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(1f, -1f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(1f, -1f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(1f, -1f);
         }
     }
     
     public void moveSW()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(-1f, -1f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(-1f, -1f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(-1f, -1f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(-1f, -1f);
         }
     }
     
     public void moveNW()
     {
-        if (!Physics2D.OverlapCircle(movePoint.position + new Vector3(-1f, 1f, 0f), .2f, cantMove))
+        if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(-1f, 1f), .2f, cantMove))
         {
-            movePoint.position += new Vector3(-1f, 1f, 0f);
+            movePoint.position += Regenerate.instance.setAndGetVector(-1f, 1f);
         }
     }
 
@@ -194,10 +271,11 @@ public class EnemyMovement : MonoBehaviour
     {
         int[,] state = Regenerate.instance.getCropStateMatrix(transform.position, 1);
 
-        if (state[1,1] == 5)
+        if ((state[1,1] == 5 || state[1,1] == 4) && !gameObject.CompareTag("Player"))
         {
             if (Regenerate.instance._training)
-            {                
+            {
+                
                 GiveDeadReward();
             }
             else

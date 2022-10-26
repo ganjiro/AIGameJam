@@ -205,6 +205,8 @@ MonoBehaviour:
   goal: {fileID: 0}
   player: {fileID: 0}
   _isMoving: 0
+  _hasStarted: 0
+  _movementThreshold: 0.005
 --- !u!61 &7201677359210030739
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -244,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 100
+    VectorObservationSize: 443
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -279,6 +281,9 @@ MonoBehaviour:
   MaxStep: 0
   _stateDim: 100
   _inference: 1
+  _decision: 0
+  _waitingForAction: 0
+  _stepCount: 0
   _currentAction: 99
   _defaultActionValue: 99
 --- !u!114 &7206057936256848189
@@ -293,6 +298,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b6516c6ea5bbb049bc0d3795c06b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentModel: {fileID: 5022602860645237092, guid: 3fa5ea7d57606566e81e1181ecbbe68f, type: 3}
+  _currentModel: {fileID: 5022602860645237092, guid: f39d39f25c45f4c199aee39b6f2b436e, type: 3}
+  _withActionMasking: 1
+  _actionSize: 9
   _actionDim: 0
-  _top: 3
+  _top: 1
