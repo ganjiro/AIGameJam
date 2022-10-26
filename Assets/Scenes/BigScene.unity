@@ -620,7 +620,7 @@ PrefabInstance:
       objectReference: {fileID: 1194417398165917064}
     - target: {fileID: 4834341128210292643, guid: 0478d9856697a26419116f56e9b94e74, type: 3}
       propertyPath: _training
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4834341128210292643, guid: 0478d9856697a26419116f56e9b94e74, type: 3}
       propertyPath: obstacles
