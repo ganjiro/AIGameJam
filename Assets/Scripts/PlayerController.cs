@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,11 +18,18 @@ public class PlayerController : MonoBehaviour
     public EnemyManager _enemyManager;
     public int flashlightState = 0;
     public int oldFlashlightState = 0;
+    
+    // Buttons
+    public Button movUp;
+    public TextMeshProUGUI text;
+
+    private int requestedAction;
 
     // Start is called before the first frame update
     void Start()
     {
-        movePoint.parent = null;     
+        movePoint.parent = null;
+        requestedAction = 99;
     }
 
     public void MakeAction(int action)
@@ -305,7 +315,7 @@ public class PlayerController : MonoBehaviour
                     // moveEnemies.Invoke();
                     // StartCoroutine(_enemyManager.moveAgents());
                 }
-                else if ((Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1) || (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1))
+                else if ((Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1) || (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1) || requestedAction != 99)
                 {
                     int action = -1;
                     if (Math.Ceiling(Input.GetAxisRaw("Horizontal")) > 0) 
@@ -339,6 +349,13 @@ public class PlayerController : MonoBehaviour
                     {
                         action = 7;
                     }
+
+                    if (requestedAction != 99)
+                    {
+                        action = requestedAction;
+                        requestedAction = 99;
+                    }
+                    
                     if (Regenerate.instance.getFeasibleActionset(transform.position)[action] == 1)
                     {
                         MakeAction(action);
@@ -364,11 +381,18 @@ public class PlayerController : MonoBehaviour
 
                     // StartCoroutine(_enemyManager.moveAgents());
                 }
-
-
             }
-        }      
-        
+        }
+    }
+
+    public void GUIMove(int action)
+    {
+        requestedAction = action;
+    }
+
+    public void ChangeText()
+    {
+        text.text = "alsdj";
     }
 
     

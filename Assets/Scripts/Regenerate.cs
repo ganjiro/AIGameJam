@@ -19,6 +19,8 @@ public class Regenerate : MonoBehaviour
     [Range(0f, 1f)]
     public float rationNObstacles;
     public int nObstacles;
+    public int nEnemies = 10;
+
     public GameObject obstaclesPrefab;
     public GameObject enemyPrefab;
     public GameObject playerPrefab;
@@ -26,6 +28,7 @@ public class Regenerate : MonoBehaviour
     public bool _training;
     public int width = 10;
     public int height = 10;
+    public bool spawnGoalInThePlayer;
     private int[,] spawnStateMatrix;
     int[] feasible = new int[9];
     float[] pos = new float[2];
@@ -275,17 +278,25 @@ public class Regenerate : MonoBehaviour
         player.GetComponent<EnemyMovement>()._hasStarted = false;
         player.GetComponent<PlayerController>().randomFlashLightOrientation();
         setTorch(posXY[0], posXY[1], spawnStateMatrix, player.GetComponent<PlayerController>().flashlightState);
+        float[] playerPosXY = posXY;
 
         float enemyRadius = Academy.Instance.EnvironmentParameters.GetWithDefault("enemyRadius", width * (float)Math.Sqrt(2));
-        posXY = getFensibleIndexDistance(spawnStateMatrix, posXY, (int)enemyRadius);
-        spawnStateMatrix[(int)(posXY[0] + (width / 2) - 0.5f), Mathf.Abs((int)(posXY[1] - ((height / 2) - 0.5f)))] = 1;
-        spawnEnemy(posXY[0], posXY[1]);
+
+        for (int i = 0; i < nEnemies; i++)
+        {
+            posXY = getFensibleIndexDistance(spawnStateMatrix, posXY, (int)enemyRadius);
+            spawnStateMatrix[(int)(posXY[0] + (width / 2) - 0.5f), Mathf.Abs((int)(posXY[1] - ((height / 2) - 0.5f)))] = 1;
+            spawnEnemy(posXY[0], posXY[1]);    
+        }
         
         float goalRadius = Academy.Instance.EnvironmentParameters.GetWithDefault("goalRadius", width * (float)Math.Sqrt(2));
+
+
         float[] posXY_near = getFensibleIndexDistance(spawnStateMatrix, posXY, (int)goalRadius);
         setFull(posXY_near[0], posXY_near[1], spawnStateMatrix);
         goal.transform.position = setAndGetVector(posXY_near[0], posXY_near[1]);               
-        setFull(posXY[0], posXY[1], spawnStateMatrix);
+        setFull(posXY[0], posXY[1], spawnStateMatrix);    
+        
                 
         foreach (Transform child in obstacles.transform)
         {
