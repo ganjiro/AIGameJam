@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
                 oldFlashlightState = 1;
                 flashlightState = 2;
                 flashLight.localPosition = Regenerate.instance.setAndGetVector(0f, -1.5f);
-                flashLight.rotation = Quaternion.Euler(0, 0, 90f);
+                flashLight.rotation = Quaternion.Euler(0, 0, -90f);
 
                 positionalLight.localPosition = Regenerate.instance.setAndGetVector(0f, -0.5f);
                 positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
@@ -112,13 +112,13 @@ public class PlayerController : MonoBehaviour
                 oldFlashlightState = 2;
                 flashlightState = 3;
                 flashLight.localPosition = Regenerate.instance.setAndGetVector(-1.2f, -1.2f);
-                flashLight.rotation = Quaternion.Euler(0, 0, 45);
+                flashLight.rotation = Quaternion.Euler(0, 0, 225);
                 break;
             case (3):
                 oldFlashlightState = 3;
                 flashlightState = 4;
                 flashLight.localPosition = Regenerate.instance.setAndGetVector(-1.5f, 0f);
-                flashLight.rotation = Quaternion.Euler(0, 0, 0);
+                flashLight.rotation = Quaternion.Euler(0, 0, 180);
 
                 positionalLight.localPosition = Regenerate.instance.setAndGetVector(-0.5f, 0f);
                 positionalLight.rotation = Quaternion.Euler(0, 0, 0);
@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
                 oldFlashlightState = 4;
                 flashlightState = 5;
                 flashLight.localPosition = Regenerate.instance.setAndGetVector(-1.2f, 1.2f);
-                flashLight.rotation = Quaternion.Euler(0, 0, -45f);
+                flashLight.rotation = Quaternion.Euler(0, 0, 135f);
                 break;
             case (5):
                 oldFlashlightState = 5;
@@ -192,7 +192,7 @@ public class PlayerController : MonoBehaviour
                     oldFlashlightState = 3;
                     flashlightState = 2;
                     flashLight.localPosition = Regenerate.instance.setAndGetVector(0f, -1.5f);
-                    flashLight.rotation = Quaternion.Euler(0, 0, 90f);
+                    flashLight.rotation = Quaternion.Euler(0, 0, -90f);
 
                     positionalLight.localPosition = Regenerate.instance.setAndGetVector(0f, -0.5f);
                     positionalLight.rotation = Quaternion.Euler(0, 0, 90f);
@@ -202,14 +202,14 @@ public class PlayerController : MonoBehaviour
                     oldFlashlightState = 4;
                     flashlightState = 3;
                     flashLight.localPosition = Regenerate.instance.setAndGetVector(-1.2f, -1.2f);
-                    flashLight.rotation = Quaternion.Euler(0, 0, 45);
+                    flashLight.rotation = Quaternion.Euler(0, 0, 225);
                     break;
 
                 case (5):
                     oldFlashlightState = 5;
                     flashlightState = 4;
                     flashLight.localPosition = Regenerate.instance.setAndGetVector(-1.5f, 0f);
-                    flashLight.rotation = Quaternion.Euler(0, 0, 0);
+                    flashLight.rotation = Quaternion.Euler(0, 0, 180);
 
                     positionalLight.localPosition = Regenerate.instance.setAndGetVector(-0.5f, 0f);
                     positionalLight.rotation = Quaternion.Euler(0, 0, 0);
@@ -219,7 +219,7 @@ public class PlayerController : MonoBehaviour
                     oldFlashlightState = 6;
                     flashlightState = 5;
                     flashLight.localPosition = Regenerate.instance.setAndGetVector(-1.2f, 1.2f);
-                    flashLight.rotation = Quaternion.Euler(0, 0, -45f);
+                    flashLight.rotation = Quaternion.Euler(0, 0, 135f);
                     break;
                 case (7):
                     oldFlashlightState = 7;
@@ -239,7 +239,7 @@ public class PlayerController : MonoBehaviour
     public bool _startedAction;
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
 
