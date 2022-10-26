@@ -653,7 +653,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 41605154041234133, guid: b5b6a6ef7c59e7749a0feb386a5a4a35, type: 3}
       propertyPath: moveSpeed
-      value: 0.1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2719456581972890404, guid: b5b6a6ef7c59e7749a0feb386a5a4a35, type: 3}
       propertyPath: m_Layer
@@ -721,7 +721,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8338922058995291836, guid: b5b6a6ef7c59e7749a0feb386a5a4a35, type: 3}
       propertyPath: moveSpeed
-      value: 0.1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8338922058995291836, guid: b5b6a6ef7c59e7749a0feb386a5a4a35, type: 3}
       propertyPath: _enemyManager
