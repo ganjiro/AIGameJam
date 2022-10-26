@@ -602,7 +602,7 @@ GameObject:
   - component: {fileID: 1293839486103016963}
   - component: {fileID: 1293839486103016960}
   m_Layer: 0
-  m_Name: old Map
+  m_Name: DEPRECATED old Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
