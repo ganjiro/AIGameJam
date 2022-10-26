@@ -276,12 +276,12 @@ public class Regenerate : MonoBehaviour
         player.GetComponent<PlayerController>().randomFlashLightOrientation();
         setTorch(posXY[0], posXY[1], spawnStateMatrix, player.GetComponent<PlayerController>().flashlightState);
 
-        float enemyRadius = Academy.Instance.EnvironmentParameters.GetWithDefault("enemyRadius", 5);
+        float enemyRadius = Academy.Instance.EnvironmentParameters.GetWithDefault("enemyRadius", 20);
         posXY = getFensibleIndexDistance(spawnStateMatrix, posXY, (int)enemyRadius);
         spawnStateMatrix[(int)(posXY[0] + (width / 2) - 0.5f), Mathf.Abs((int)(posXY[1] - ((height / 2) - 0.5f)))] = 1;
         spawnEnemy(posXY[0], posXY[1]);
         
-        float goalRadius = Academy.Instance.EnvironmentParameters.GetWithDefault("goalRadius", 2);
+        float goalRadius = Academy.Instance.EnvironmentParameters.GetWithDefault("goalRadius", 20);
         float[] posXY_near = getFensibleIndexDistance(spawnStateMatrix, posXY, (int)goalRadius);
         setFull(posXY_near[0], posXY_near[1], spawnStateMatrix);
         goal.transform.position = setAndGetVector(posXY_near[0], posXY_near[1]);               
