@@ -23,7 +23,7 @@ public class EnemyMovement : MonoBehaviour
     {
         movePoint.parent = null;
         _agentComponent = GetComponent<VictimAgent>();
-        _allDistances = new float[200];
+        _allDistances = new float[Regenerate.instance.width * Regenerate.instance.height*2];
     }
 
     // Update is called once per frame

@@ -349,13 +349,19 @@ public class PlayerController : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-
-                    MakeAction(9);
+                    if(Regenerate.instance._training)
+                        TurnFlashlightRight();
+                    else
+                        MakeAction(9);
                     // StartCoroutine(_enemyManager.moveAgents());
                 }
                 if (Input.GetKeyDown(KeyCode.Q))
                 {
-                    MakeAction(10);
+                    if(Regenerate.instance._training)
+                        TurnFlashlightLeft();
+                    else
+                        MakeAction(10);
+
                     // StartCoroutine(_enemyManager.moveAgents());
                 }
 

@@ -973,10 +973,18 @@ public class Regenerate : MonoBehaviour
                     }
                     catch { }
 
-                    if (stateMatrix[posX, posY - 1] != 1)
+                    try
                     {
-                        stateMatrix[posX, posY - 1] = 5;
+                        if (stateMatrix[posX, posY - 1] != 1)
+                        {
+                            stateMatrix[posX, posY - 1] = 5;
+                        }
                     }
+                    catch
+                    {
+                        
+                    }
+                    
 
                     try
                     {
@@ -1041,10 +1049,15 @@ public class Regenerate : MonoBehaviour
                 }
                 catch { }
 
-                if (stateMatrix[posX, posY - 1] != 1)
+                try
                 {
-                    stateMatrix[posX, posY - 1] = 5;
+                    if (stateMatrix[posX, posY - 1] != 1)
+                    {
+                        stateMatrix[posX, posY - 1] = 5;
+                    }    
                 }
+                catch{ }
+                
 
                 try
                 {
@@ -1107,10 +1120,14 @@ public class Regenerate : MonoBehaviour
                     }
                     catch { }
 
-                    if (stateMatrix[posX, posY - 1] != 1)
+                    try
                     {
-                        stateMatrix[posX, posY - 1] = 5;
+                        if (stateMatrix[posX, posY - 1] != 1)
+                        {
+                            stateMatrix[posX, posY - 1] = 5;
+                        }    
                     }
+                    catch { }
 
                     try
                     {
