@@ -18,7 +18,8 @@ public class PlayerController : MonoBehaviour
     public EnemyManager _enemyManager;
     public int flashlightState = 0;
     public int oldFlashlightState = 0;
-    
+
+
     // Buttons
     public Button movUp;
     public TextMeshProUGUI text;
@@ -30,6 +31,19 @@ public class PlayerController : MonoBehaviour
     {
         movePoint.parent = null;
         requestedAction = 99;
+    }
+
+    public int getNumberAliveEnemies()
+    {
+        int count = 0;
+        foreach (Transform child in Regenerate.instance.obstacles.transform)
+        {
+            if (child.gameObject.active)
+            {
+                count++;
+            }
+        }
+        return count;
     }
 
     public void MakeAction(int action)
@@ -76,7 +90,8 @@ public class PlayerController : MonoBehaviour
         }
         Regenerate.instance.checkLightOnEnemies();
         requestedAction = 99;
-
+        Debug.Log("Round++");
+        Regenerate.instance.addRound();
     }
 
     public void randomFlashLightOrientation()

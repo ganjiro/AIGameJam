@@ -7,6 +7,7 @@ using System.Linq;
 using Unity.MLAgents;
 using System;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class Regenerate : MonoBehaviour
 {   
@@ -35,6 +36,8 @@ public class Regenerate : MonoBehaviour
     float[] posNear = new float[2];
     Vector3 aux3dVector = new Vector3(0f, 0f, 0f);
     int[,] stateMatrix; // 0: blank
+    public int maxRounds = 100;
+    private int actualRound = 0;
 
     public List<GameObject> _enemyPool;
     
@@ -47,6 +50,17 @@ public class Regenerate : MonoBehaviour
         aux3dVector[1] = y;
         return aux3dVector;
     }
+
+    public void addRound()
+    {
+        actualRound++;
+        if (actualRound > maxRounds)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            actualRound = 0;
+        }
+    }
+
     void Awake()
     {
         //Check if instance already exists
