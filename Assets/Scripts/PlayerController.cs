@@ -75,6 +75,7 @@ public class PlayerController : MonoBehaviour
                 break;
         }
         Regenerate.instance.checkLightOnEnemies();
+        requestedAction = 99;
 
     }
 
@@ -308,14 +309,14 @@ public class PlayerController : MonoBehaviour
                     Vector3 tmpVector = Regenerate.instance.setAndGetVector(2.5f, 2.5f); // just to test
                     Regenerate.instance.getCropStateMatrix(tmpVector, 3);
                 }
-                if (Input.GetKeyDown(KeyCode.F)) // F: wait 
+                if (Input.GetKeyDown(KeyCode.F) || requestedAction == 8) // F: wait 
                 {
                     int action = 8;
                     MakeAction(action);
                     // moveEnemies.Invoke();
                     // StartCoroutine(_enemyManager.moveAgents());
                 }
-                else if ((Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1) || (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1) || requestedAction != 99)
+                else if ((Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1) || (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1) || (requestedAction >= 0 && requestedAction <= 7))
                 {
                     int action = -1;
                     if (Math.Ceiling(Input.GetAxisRaw("Horizontal")) > 0) 
@@ -364,7 +365,7 @@ public class PlayerController : MonoBehaviour
                     }
                 }
 
-                if (Input.GetKeyDown(KeyCode.E))
+                if (Input.GetKeyDown(KeyCode.E) || requestedAction == 9)
                 {
                     if(Regenerate.instance._training)
                         TurnFlashlightRight();
@@ -372,13 +373,12 @@ public class PlayerController : MonoBehaviour
                         MakeAction(9);
                     // StartCoroutine(_enemyManager.moveAgents());
                 }
-                if (Input.GetKeyDown(KeyCode.Q))
+                if (Input.GetKeyDown(KeyCode.Q) || requestedAction == 10)
                 {
                     if(Regenerate.instance._training)
                         TurnFlashlightLeft();
                     else
                         MakeAction(10);
-
                     // StartCoroutine(_enemyManager.moveAgents());
                 }
             }
