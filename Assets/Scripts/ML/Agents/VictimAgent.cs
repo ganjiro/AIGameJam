@@ -75,7 +75,6 @@ public class VictimAgent : Agent
         
         // Create the local observation, 9x9, 5x5 and 3x3
         int[,] local9Map = Regenerate.instance.getCropStateMatrix(transform.position, 4);
-        Debug.Log(local9Map.Length);
         foreach (int v in local9Map)
         {
             obs.Add(v);
@@ -96,19 +95,18 @@ public class VictimAgent : Agent
         // Add distance information from goal and player
         float agentPlayerX = (transform.position.x - Regenerate.instance.player.transform.position.x) /  Regenerate.instance.width;
         float agentPlayerY = (transform.position.y - Regenerate.instance.player.transform.position.y)  /  Regenerate.instance.width;
-        float agentPlayerDistance = Vector3.Distance(transform.position, Regenerate.instance.player.transform.position)  /  (Regenerate.instance.width * Math.sqrt(2));
-        Debug.Log("APX: " + agentPlayerX);
-        Debug.Log("APY: " + agentPlayerY);
-        Debug.Log("APD: " + agentPlayerDistance);
+        float agentPlayerDistance = Vector3.Distance(transform.position, Regenerate.instance.player.transform.position)  /  (float)(Regenerate.instance.width * Math.Sqrt(2));
+        obs.Add(agentPlayerX);
+        obs.Add(agentPlayerY);
+        obs.Add(agentPlayerDistance);
         
         float agentGoalX = (transform.position.x - Regenerate.instance.goal.transform.position.x) /  Regenerate.instance.width;
         float agentGoalY = (transform.position.y - Regenerate.instance.goal.transform.position.y)  /  Regenerate.instance.width;
-        float agentGoalDistance = (Vector3.Distance(transform.position, Regenerate.instance.goal.transform.position))  /  (Regenerate.instance.width * Math.sqrt(2));
-        Debug.Log("AGX: " + agentGoalX);
-        Debug.Log("AGY: " + agentGoalY);
-        Debug.Log("AGD: " + agentGoalDistance);
+        float agentGoalDistance = (Vector3.Distance(transform.position, Regenerate.instance.goal.transform.position))  /  (float)(Regenerate.instance.width * Math.Sqrt(2));
+        obs.Add(agentGoalX);
+        obs.Add(agentGoalY);
+        obs.Add(agentGoalDistance);
 
-        
         // Create action masking
         // THIS MUST BE THE LAST PART OF THE OBS
         int[] feasibleActions = Regenerate.instance.getFeasibleActionset(transform.position);

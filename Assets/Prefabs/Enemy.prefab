@@ -197,7 +197,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e0924a05ebeef440923eb66eb1842cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 0.1
   movePoint: {fileID: 733464861543507110}
   cantMove:
     serializedVersion: 2
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 443
+    VectorObservationSize: 130
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -298,7 +298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78b6516c6ea5bbb049bc0d3795c06b56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _currentModel: {fileID: 5022602860645237092, guid: f39d39f25c45f4c199aee39b6f2b436e, type: 3}
+  _currentModel: {fileID: 5022602860645237092, guid: 7487ece6c2bec4c6dab06e21db6a902f, type: 3}
   _withActionMasking: 1
   _actionSize: 9
   _actionDim: 0
