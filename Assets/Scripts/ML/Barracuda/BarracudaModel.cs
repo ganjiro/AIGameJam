@@ -30,7 +30,7 @@ public class BarracudaModel : MonoBehaviour
     public int _actionDim;
     public int _top = 3;
     protected string _outputName = "actions";
-    
+
     Tensor input;
     Tensor output;
     

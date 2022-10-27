@@ -31,8 +31,8 @@ public class UIManager : MonoBehaviour
         // Compute battery life
         float batteryPerc = (float)(player.maxRound - player.actualRound) / (float)player.maxRound;
         _batteryLine.rectTransform.sizeDelta = new Vector2(startingBatteryWidth*batteryPerc, _batteryLine.rectTransform.sizeDelta.y );
-        float madnessPerc = (float)(GlobalBlackboard.instance.madnessValue) / (float)GlobalBlackboard.instance.maxMadnessValue;
-        _madnessLine.rectTransform.sizeDelta = new Vector2(startingMadWidth*madnessPerc,_madnessLine.rectTransform.sizeDelta.y );
+        
+        _madnessLine.rectTransform.sizeDelta = new Vector2(startingMadWidth*GlobalBlackboard.instance.GetMadnessPerc(),_madnessLine.rectTransform.sizeDelta.y );
 
         _enemyText.text = "" + player.getNumberAliveEnemies();
     }

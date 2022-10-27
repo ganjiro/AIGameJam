@@ -37,9 +37,14 @@ public class Regenerate : MonoBehaviour
     Vector3 aux3dVector = new Vector3(0f, 0f, 0f);
     int[,] stateMatrix; // 0: blank
 
+    public Canvas _gameOverCanvas;
+    public Canvas _gameWonCanvas;
+
     public GlobalBlackboard _blackboard;
 
     public List<GameObject> _enemyPool;
+    public List<GameObject> goodSprites;
+    public List<GameObject> madSrpites;
     
     public static Regenerate instance;
     public string _nextLevel;
@@ -61,8 +66,9 @@ public class Regenerate : MonoBehaviour
             RemoveEnemyFromPool(e.gameObject);
         }
         // Increase madness value
-        GlobalBlackboard.instance.madnessValue++;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        GlobalBlackboard.instance.IncreaseMadnessValue();
+        _gameOverCanvas.gameObject.SetActive(true);
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void GameWon()
@@ -72,8 +78,20 @@ public class Regenerate : MonoBehaviour
         {
             RemoveEnemyFromPool(e.gameObject);
         }
+        _gameWonCanvas.gameObject.SetActive(true);
+        // SceneManager.LoadScene(_nextLevel);
+    }
 
-        SceneManager.LoadScene(_nextLevel);
+    public void ReloadLevel(bool sameLevel)
+    {
+        if (sameLevel)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);    
+        }
+        else
+        {
+            SceneManager.LoadScene(_nextLevel);
+        }
     }
 
     // Check if the player has finished its turns
@@ -113,6 +131,12 @@ public class Regenerate : MonoBehaviour
 
     void InitializeAll()
     {
+        
+        // Disable game over/won canvases
+        _gameWonCanvas.gameObject.SetActive(false);
+        _gameOverCanvas.gameObject.SetActive(false);
+
+        
         // Get blackboard
         try
         {
@@ -150,6 +174,23 @@ public class Regenerate : MonoBehaviour
         {
             CreateMap();
             Academy.Instance.OnEnvironmentReset += CreateMap;
+        }
+        
+        // If madness level is at its maximum, change the sprite
+        if (_blackboard != null && _blackboard.GetMadnessPerc() >= 1)
+        {
+            // Disable good sprites
+            foreach(GameObject go in goodSprites)
+            {
+                go.SetActive(false);
+            }
+            
+            // Enable mad sprites
+            foreach(GameObject go in madSrpites)
+            {
+                go.SetActive(true);
+            }
+
         }
     }
 

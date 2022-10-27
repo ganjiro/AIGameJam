@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,16 @@ public class GlobalBlackboard : MonoBehaviour
 
         //Sets this to not be destroyed when reloading scene
         DontDestroyOnLoad(gameObject);
+    }
+
+    public float GetMadnessPerc()
+    {
+        return (float) madnessValue / (float) maxMadnessValue;
+    }
+
+    public void IncreaseMadnessValue()
+    {
+        madnessValue = Math.Min(madnessValue + 1, maxMadnessValue);
     }
 
     // Start is called before the first frame update
