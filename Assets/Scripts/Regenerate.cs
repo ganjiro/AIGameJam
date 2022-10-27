@@ -85,8 +85,32 @@ public class Regenerate : MonoBehaviour
         else
         {
             _gameOverCanvas.gameObject.SetActive(true);
+            _gameOverCanvas.GetComponentsInChildren<Animation>()[0].Play();
+            // StartCoroutine(fadeScreen(_gameOverCanvas));
         }
         // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public IEnumerator fadeScreen(Canvas canvas)
+    {
+        float alphaFactor = 0.01f;
+        foreach (Image i in canvas.GetComponentsInChildren<Image>())
+        {
+            if (i.color.a >= 1)
+            {
+
+                i.color = new Color(i.color.r, i.color.g, i.color.b, 0);
+            }
+
+            i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a + alphaFactor);
+        }
+        Debug.Log("boh");
+
+        if (canvas.GetComponentsInChildren<Image>()[0].color.a < 1)
+        {
+            Debug.Log("yeald");
+            yield return null;
+        }
     }
 
     public void GameWon()
