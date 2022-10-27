@@ -245,6 +245,7 @@ public class Regenerate : MonoBehaviour
         }
         
         // If madness level is at its maximum, change the sprite
+        // MADNESS MODE
         if (_blackboard != null && _blackboard.GetMadnessPerc() >= 1)
         {
             // Disable good sprites
@@ -259,9 +260,16 @@ public class Regenerate : MonoBehaviour
                 go.SetActive(true);
             }
             
-            // Do the same for the background canvases
-            
-
+            // Do the same for the sprites
+            // player
+            player.transform.Find("happyPlayer").gameObject.SetActive(false);
+            player.transform.Find("DarkSprite").gameObject.SetActive(true);
+            // agents
+            foreach (Transform a in agents.transform)
+            {
+                a.transform.Find("Sprite").gameObject.SetActive(false);
+                a.transform.Find("DarkSprite").gameObject.SetActive(true);
+            }
         }
         _goodBackground.color = new Color(_goodBackground.color.r, _goodBackground.color.b, _goodBackground.color.g, 1 - GlobalBlackboard.instance.GetMadnessPerc());
 
