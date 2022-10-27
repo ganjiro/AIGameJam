@@ -21,6 +21,9 @@ public class PlayerController : MonoBehaviour
     public int actualRound;
     public int maxRound;
 
+    private int _killedInThisLevel;
+    public int _hasToKillInThisLevel;
+
     private int requestedAction;
 
     // Start is called before the first frame update
@@ -28,6 +31,11 @@ public class PlayerController : MonoBehaviour
     {
         movePoint.parent = null;
         requestedAction = 99;
+    }
+
+    public void IncreaseEnemyKilled()
+    {
+        _killedInThisLevel++;
     }
 
     public int getNumberAliveEnemies()
@@ -41,6 +49,11 @@ public class PlayerController : MonoBehaviour
             }
         }
         return count;
+    }
+
+    public int getNumberEnemiesToKill()
+    {
+        return _hasToKillInThisLevel - _killedInThisLevel;
     }
 
     public void MakeAction(int action)

@@ -282,7 +282,9 @@ public class EnemyMovement : MonoBehaviour
             {
                 Regenerate.instance.RemoveEnemyFromPool(transform.gameObject);
                 transform.gameObject.SetActive(false);
+                // Increase madness value and enemy killed in this level
                 GlobalBlackboard.instance.madnessValue++;
+                Regenerate.instance.player.GetComponent<PlayerController>().IncreaseEnemyKilled();
             }
         }        
     }

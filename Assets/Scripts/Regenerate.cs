@@ -42,6 +42,7 @@ public class Regenerate : MonoBehaviour
     public List<GameObject> _enemyPool;
     
     public static Regenerate instance;
+    public string _nextLevel;
 
 
     public Vector3 setAndGetVector(float x, float y)
@@ -59,8 +60,20 @@ public class Regenerate : MonoBehaviour
         {
             RemoveEnemyFromPool(e.gameObject);
         }
-
+        // Increase madness value
+        GlobalBlackboard.instance.madnessValue++;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void GameWon()
+    {
+        // Add all enemies to the pool
+        foreach(Transform e in Regenerate.instance.agents.transform)
+        {
+            RemoveEnemyFromPool(e.gameObject);
+        }
+
+        SceneManager.LoadScene(_nextLevel);
     }
 
     // Check if the player has finished its turns
@@ -72,6 +85,11 @@ public class Regenerate : MonoBehaviour
     public int CheckNumberEnemies()
     {
         return player.GetComponent<PlayerController>().getNumberAliveEnemies();
+    }
+
+    public int CheckWinCondition()
+    {
+        return player.GetComponent<PlayerController>().getNumberEnemiesToKill();
     }
 
     void Awake()
@@ -145,6 +163,13 @@ public class Regenerate : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             getFullStateMatrix();
+        }
+        
+        // Check if player has killed the right number of enemies
+        if (CheckWinCondition() == 0)
+        {
+            GameWon();
+            return;
         }
 
         // Check if player has reached its maxround. If so, do game over
