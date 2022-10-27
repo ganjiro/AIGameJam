@@ -60,6 +60,10 @@ public class Regenerate : MonoBehaviour
     // Load the same scene where we are
     public void GameOver()
     {
+        if (_gameOverCanvas.gameObject.active)
+        {
+            return;
+        }
         // Add all enemies to the pool
         foreach(Transform e in Regenerate.instance.agents.transform)
         {
@@ -73,6 +77,10 @@ public class Regenerate : MonoBehaviour
 
     public void GameWon()
     {
+        if (_gameOverCanvas.gameObject.active)
+        {
+            return;
+        }
         // Add all enemies to the pool
         foreach(Transform e in Regenerate.instance.agents.transform)
         {
