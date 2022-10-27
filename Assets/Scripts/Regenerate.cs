@@ -8,6 +8,7 @@ using Unity.MLAgents;
 using System;
 using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Regenerate : MonoBehaviour
 {   
@@ -39,12 +40,15 @@ public class Regenerate : MonoBehaviour
 
     public Canvas _gameOverCanvas;
     public Canvas _gameWonCanvas;
+    public Canvas _madCanvas;
 
     public GlobalBlackboard _blackboard;
 
     public List<GameObject> _enemyPool;
     public List<GameObject> goodSprites;
     public List<GameObject> madSrpites;
+    public Image _goodBackground;
+    public Image _badBackground;
     
     public static Regenerate instance;
     public string _nextLevel;
@@ -60,6 +64,10 @@ public class Regenerate : MonoBehaviour
     // Load the same scene where we are
     public void GameOver()
     {
+        if (_gameOverCanvas.gameObject.active)
+        {
+            return;
+        }
         // Add all enemies to the pool
         foreach(Transform e in Regenerate.instance.agents.transform)
         {
@@ -67,18 +75,70 @@ public class Regenerate : MonoBehaviour
         }
         // Increase madness value
         GlobalBlackboard.instance.IncreaseMadnessValue();
-        _gameOverCanvas.gameObject.SetActive(true);
+        if (GlobalBlackboard.instance.GetMadnessPerc() >= 1)
+        {
+            _madCanvas.gameObject.SetActive(true);
+            _madCanvas.transform.GetChild(1).gameObject.SetActive(true);
+            _madCanvas.transform.GetChild(2).gameObject.SetActive(false);
+
+        }
+        else
+        {
+            _gameOverCanvas.gameObject.SetActive(true);
+            foreach(Animation a in _gameOverCanvas.GetComponentsInChildren<Animation>())
+            {
+                a.Play();
+            }
+            // StartCoroutine(fadeScreen(_gameOverCanvas));
+        }
         // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public IEnumerator fadeScreen(Canvas canvas)
+    {
+        float alphaFactor = 0.01f;
+        foreach (Image i in canvas.GetComponentsInChildren<Image>())
+        {
+            if (i.color.a >= 1)
+            {
+
+                i.color = new Color(i.color.r, i.color.g, i.color.b, 0);
+            }
+
+            i.color = new Color(i.color.r, i.color.g, i.color.b, i.color.a + alphaFactor);
+        }
+        Debug.Log("boh");
+
+        if (canvas.GetComponentsInChildren<Image>()[0].color.a < 1)
+        {
+            Debug.Log("yeald");
+            yield return null;
+        }
     }
 
     public void GameWon()
     {
+        if (_gameOverCanvas.gameObject.active)
+        {
+            return;
+        }
         // Add all enemies to the pool
         foreach(Transform e in Regenerate.instance.agents.transform)
         {
             RemoveEnemyFromPool(e.gameObject);
         }
-        _gameWonCanvas.gameObject.SetActive(true);
+        if (GlobalBlackboard.instance.GetMadnessPerc() >= 1)
+        {
+            _madCanvas.gameObject.SetActive(true);
+            _madCanvas.transform.GetChild(2).gameObject.SetActive(true);
+            _madCanvas.transform.GetChild(1).gameObject.SetActive(false);
+
+        }
+        else
+        {
+            _gameWonCanvas.gameObject.SetActive(true);
+        }
+
         // SceneManager.LoadScene(_nextLevel);
     }
 
@@ -135,8 +195,8 @@ public class Regenerate : MonoBehaviour
         // Disable game over/won canvases
         _gameWonCanvas.gameObject.SetActive(false);
         _gameOverCanvas.gameObject.SetActive(false);
+        _madCanvas.gameObject.SetActive(false);
 
-        
         // Get blackboard
         try
         {
@@ -190,8 +250,13 @@ public class Regenerate : MonoBehaviour
             {
                 go.SetActive(true);
             }
+            
+            // Do the same for the background canvases
+            
 
         }
+        _goodBackground.color = new Color(_goodBackground.color.r, _goodBackground.color.b, _goodBackground.color.g, 1 - GlobalBlackboard.instance.GetMadnessPerc());
+
     }
 
     // Update is called once per frame
