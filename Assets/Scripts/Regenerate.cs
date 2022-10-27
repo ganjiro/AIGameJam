@@ -43,6 +43,7 @@ public class Regenerate : MonoBehaviour
     public Canvas _madCanvas;
 
     public GlobalBlackboard _blackboard;
+    public UIManager _uiManager;
 
     public List<GameObject> _enemyPool;
     public List<GameObject> goodSprites;
@@ -201,6 +202,7 @@ public class Regenerate : MonoBehaviour
         try
         {
             _blackboard = GameObject.Find("BlackBoard").GetComponent<GlobalBlackboard>();
+            _uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
         }
         catch
         {
@@ -235,6 +237,12 @@ public class Regenerate : MonoBehaviour
             CreateMap();
             Academy.Instance.OnEnvironmentReset += CreateMap;
         }
+
+        // Set player to UI
+        if(_uiManager != null)
+        {
+            _uiManager.LinkButtons();
+        }
         
         // If madness level is at its maximum, change the sprite
         if (_blackboard != null && _blackboard.GetMadnessPerc() >= 1)
@@ -257,6 +265,8 @@ public class Regenerate : MonoBehaviour
         }
         _goodBackground.color = new Color(_goodBackground.color.r, _goodBackground.color.b, _goodBackground.color.g, 1 - GlobalBlackboard.instance.GetMadnessPerc());
 
+        // Set up the number of enemies the player has to kill as the total number of eneimes
+        player.GetComponent<PlayerController>()._hasToKillInThisLevel = agents.transform.childCount;
     }
 
     // Update is called once per frame
