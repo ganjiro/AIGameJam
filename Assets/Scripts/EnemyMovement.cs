@@ -282,6 +282,7 @@ public class EnemyMovement : MonoBehaviour
             {
                 Regenerate.instance.RemoveEnemyFromPool(transform.gameObject);
                 transform.gameObject.SetActive(false);
+                GlobalBlackboard.instance.madnessValue++;
             }
         }        
     }

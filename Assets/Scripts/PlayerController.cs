@@ -18,7 +18,8 @@ public class PlayerController : MonoBehaviour
     public EnemyManager _enemyManager;
     public int flashlightState = 0;
     public int oldFlashlightState = 0;
-
+    public int actualRound;
+    public int maxRound;
 
     // Buttons
     public Button movUp;
@@ -36,7 +37,7 @@ public class PlayerController : MonoBehaviour
     public int getNumberAliveEnemies()
     {
         int count = 0;
-        foreach (Transform child in Regenerate.instance.obstacles.transform)
+        foreach (Transform child in Regenerate.instance.agents.transform)
         {
             if (child.gameObject.active)
             {
@@ -90,8 +91,8 @@ public class PlayerController : MonoBehaviour
         }
         Regenerate.instance.checkLightOnEnemies();
         requestedAction = 99;
-        Debug.Log("Round++");
-        Regenerate.instance.addRound();
+        // Here the turn of the player adds 1
+        actualRound++;
     }
 
     public void randomFlashLightOrientation()

@@ -27,9 +27,13 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _batteryLine.rectTransform.sizeDelta = new Vector2(startingBatteryWidth*batteryLeft/100,_batteryLine.rectTransform.sizeDelta.y );
-        _madnessLine.rectTransform.sizeDelta = new Vector2(startingMadWidth*madnessValue/100,_madnessLine.rectTransform.sizeDelta.y );
+        PlayerController player = Regenerate.instance.player.GetComponent<PlayerController>();
+        // Compute battery life
+        float batteryPerc = (float)(player.maxRound - player.actualRound) / (float)player.maxRound;
+        _batteryLine.rectTransform.sizeDelta = new Vector2(startingBatteryWidth*batteryPerc, _batteryLine.rectTransform.sizeDelta.y );
+        float madnessPerc = (float)(GlobalBlackboard.instance.madnessValue) / (float)GlobalBlackboard.instance.maxMadnessValue;
+        _madnessLine.rectTransform.sizeDelta = new Vector2(startingMadWidth*madnessPerc,_madnessLine.rectTransform.sizeDelta.y );
 
-        _enemyText.text = "asdj";
+        _enemyText.text = "" + player.getNumberAliveEnemies();
     }
 }

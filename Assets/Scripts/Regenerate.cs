@@ -36,8 +36,8 @@ public class Regenerate : MonoBehaviour
     float[] posNear = new float[2];
     Vector3 aux3dVector = new Vector3(0f, 0f, 0f);
     int[,] stateMatrix; // 0: blank
-    public int maxRounds = 100;
-    private int actualRound = 0;
+
+    public GlobalBlackboard _blackboard;
 
     public List<GameObject> _enemyPool;
     
@@ -51,14 +51,22 @@ public class Regenerate : MonoBehaviour
         return aux3dVector;
     }
 
-    public void addRound()
+    // Load the same scene where we are
+    public void GameOver()
     {
-        actualRound++;
-        if (actualRound > maxRounds)
+        // Add all enemies to the pool
+        foreach(Transform e in Regenerate.instance.agents.transform)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            actualRound = 0;
+            RemoveEnemyFromPool(e.gameObject);
         }
+
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    // Check if the player has finished its turns
+    public bool CheckMaxRound()
+    {
+        return player.GetComponent<PlayerController>().actualRound >= player.GetComponent<PlayerController>().maxRound;
     }
 
     void Awake()
@@ -76,8 +84,22 @@ public class Regenerate : MonoBehaviour
             Destroy(gameObject);
 
         //Sets this to not be destroyed when reloading scene
-        DontDestroyOnLoad(gameObject);
-        
+        // DontDestroyOnLoad(gameObject);
+        InitializeAll();
+    }
+
+    void InitializeAll()
+    {
+        // Get blackboard
+        try
+        {
+            _blackboard = GameObject.Find("BlackBoard").GetComponent<GlobalBlackboard>();
+        }
+        catch
+        {
+
+        }
+
         // Create matrices based on variables
         spawnStateMatrix = new int[width, height];
         stateMatrix = new int[width, height];
@@ -99,8 +121,6 @@ public class Regenerate : MonoBehaviour
             _enemyPool.Add(instantiatedObject);            
         }
 
-      
-
         // If we are training, first of all create the map
         if (_training)
         {
@@ -120,6 +140,13 @@ public class Regenerate : MonoBehaviour
         {
             getFullStateMatrix();
         }
+
+        // Check if player has reached its maxround. If so, do game over
+        if(CheckMaxRound())
+        {
+            GameOver();
+        }
+
     }
 
     public int[] getFeasibleActionset(Vector3 objPosition)
