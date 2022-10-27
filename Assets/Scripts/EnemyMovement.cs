@@ -27,7 +27,7 @@ public class EnemyMovement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
 
@@ -285,6 +285,7 @@ public class EnemyMovement : MonoBehaviour
                 // Increase madness value and enemy killed in this level
                 GlobalBlackboard.instance.IncreaseMadnessValue();
                 Regenerate.instance.player.GetComponent<PlayerController>().IncreaseEnemyKilled();
+                Regenerate.instance.player.gameObject.GetComponent<Animator>().SetTrigger("enemyKilled");
             }
         }        
     }

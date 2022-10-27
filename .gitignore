@@ -57,3 +57,10 @@ crashlytics-build.properties
 Assets/ML-Agents/Timers/SampleScene_timers.json
 Assets/ML-Agents/Timers/SampleScene_timers.json
 Assets/Scripts/evolveMap.cs.meta
+Assets/Animation/DarkPlayerController.controller.meta
+Assets/Animation/idleDarkPlayerAnim.anim.meta
+Assets/Animation/killEmemy.anim.meta
+Assets/Sprites/enemyHappyWalk.png.meta
+Assets/Sprites/idle2.png.meta
+Assets/Sprites/skill1.png.meta
+Assets/Animation.meta
