@@ -85,7 +85,10 @@ public class Regenerate : MonoBehaviour
         else
         {
             _gameOverCanvas.gameObject.SetActive(true);
-            _gameOverCanvas.GetComponentsInChildren<Animation>()[0].Play();
+            foreach(Animation a in _gameOverCanvas.GetComponentsInChildren<Animation>())
+            {
+                a.Play();
+            }
             // StartCoroutine(fadeScreen(_gameOverCanvas));
         }
         // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
