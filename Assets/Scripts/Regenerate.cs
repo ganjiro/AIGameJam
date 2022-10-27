@@ -264,11 +264,13 @@ public class Regenerate : MonoBehaviour
             // player
             player.transform.Find("happyPlayer").gameObject.SetActive(false);
             player.transform.Find("DarkSprite").gameObject.SetActive(true);
+            player.GetComponent<PlayerController>().animator = player.transform.Find("DarkSprite").GetComponent<Animator>();
             // agents
             foreach (Transform a in agents.transform)
             {
-                a.transform.Find("Sprite").gameObject.SetActive(false);
+                a.transform.Find("happySprite").gameObject.SetActive(false);
                 a.transform.Find("DarkSprite").gameObject.SetActive(true);
+                a.GetComponent<PlayerController>().animator = a.transform.Find("DarkSprite").GetComponent<Animator>();
             }
         }
         _goodBackground.color = new Color(_goodBackground.color.r, _goodBackground.color.b, _goodBackground.color.g, 1 - GlobalBlackboard.instance.GetMadnessPerc());
@@ -559,9 +561,7 @@ public class Regenerate : MonoBehaviour
 
         enemy.transform.SetParent(agents.transform);
     }
-
-    
-    
+            
     public void RemoveEnemyFromPool(GameObject enemy)
     {
         enemy.transform.SetParent(transform);

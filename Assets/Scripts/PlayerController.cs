@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
 
+
 public class PlayerController : MonoBehaviour
 {
     public UnityEvent moveEnemies;
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour
     public int oldFlashlightState = 0;
     public int actualRound;
     public int maxRound;
+    public Animator animator;
 
     private int _killedInThisLevel;
     public int _hasToKillInThisLevel;
@@ -31,6 +33,10 @@ public class PlayerController : MonoBehaviour
     {
         movePoint.parent = null;
         requestedAction = 99;
+        if (!_enemyManager)
+        {
+            _enemyManager = GameObject.Find("Agent").GetComponent<EnemyManager>();
+        }
     }
 
     public void IncreaseEnemyKilled()
@@ -102,6 +108,10 @@ public class PlayerController : MonoBehaviour
         requestedAction = 99;
         // Here the turn of the player adds 1
         actualRound++;
+        if (animator)
+        {
+            animator.SetTrigger("movement");
+        }
     }
 
     public void randomFlashLightOrientation()

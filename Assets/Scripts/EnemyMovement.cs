@@ -28,6 +28,11 @@ public class EnemyMovement : MonoBehaviour
         movePoint.parent = null;
         _agentComponent = GetComponent<VictimAgent>();
         _allDistances = new float[Regenerate.instance.width * Regenerate.instance.height*2];
+        if (!goal)
+        {
+            goal = GameObject.Find("Goal");
+        }
+        
     }
 
     // Update is called once per frame
@@ -74,10 +79,7 @@ public class EnemyMovement : MonoBehaviour
             
             _isMoving = false;
             _hasStarted = false;
-            if (animator)
-            {
-                animator.SetTrigger("movement");
-            }
+        
         }
         
         // Give the reward to the agent
@@ -345,9 +347,9 @@ public class EnemyMovement : MonoBehaviour
             {
                 // Start the animation but do not kill it
                 anim = GetComponentInChildren<Animator>();
-                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("skeletonMageDeath"))
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("death"))
                 {
-                    animator.Play("skeletonMageDeath");
+                    animator.Play("death");
                     isDying = true;
                     return;
                 }
