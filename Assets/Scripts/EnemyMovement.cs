@@ -11,7 +11,9 @@ public class EnemyMovement : MonoBehaviour
     public GameObject player;
     public bool _isMoving = false;
     private float[] _allDistances;
-
+    public Animator animator;
+    public GameObject happySprite;
+    public GameObject darkSprite;
     public bool _hasStarted;
     
 
@@ -64,6 +66,10 @@ public class EnemyMovement : MonoBehaviour
             
             _isMoving = false;
             _hasStarted = false;
+            if (animator)
+            {
+                animator.SetTrigger("movement");
+            }
         }
         
         // Give the reward to the agent
@@ -209,6 +215,10 @@ public class EnemyMovement : MonoBehaviour
         if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(0f, 1f), .2f, cantMove))
         {
             movePoint.position += Regenerate.instance.setAndGetVector(0f, 1f);
+            if (animator)
+            {
+                animator.SetTrigger("movement");
+            }
         }
     }
 
@@ -217,6 +227,10 @@ public class EnemyMovement : MonoBehaviour
         if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(0f, -1f), .2f, cantMove))
         {
             movePoint.position += Regenerate.instance.setAndGetVector(0f, -1f);
+            if (animator)
+            {
+                animator.SetTrigger("movement");
+            }
         }
     }
 
@@ -225,6 +239,10 @@ public class EnemyMovement : MonoBehaviour
         if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(-1f, 0f), .2f, cantMove))
         {
             movePoint.position += Regenerate.instance.setAndGetVector(-1f, 0f);
+            if (animator)
+            {
+                animator.SetTrigger("movement");
+            }
         }
     }
 
@@ -233,6 +251,10 @@ public class EnemyMovement : MonoBehaviour
         if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(1f, 0f), .2f, cantMove))
         {
             movePoint.position += Regenerate.instance.setAndGetVector(1f, 0f);
+            if (animator)
+            {
+                animator.SetTrigger("movement");
+            }
         }
     }
     
@@ -241,6 +263,10 @@ public class EnemyMovement : MonoBehaviour
         if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(1f, 1f), .2f, cantMove))
         {
             movePoint.position += Regenerate.instance.setAndGetVector(1f, 1f);
+            if (animator)
+            {
+                animator.SetTrigger("movement");
+            }
         }
     }
     
@@ -249,6 +275,10 @@ public class EnemyMovement : MonoBehaviour
         if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(1f, -1f), .2f, cantMove))
         {
             movePoint.position += Regenerate.instance.setAndGetVector(1f, -1f);
+            if (animator)
+            {
+                animator.SetTrigger("movement");
+            }
         }
     }
     
@@ -257,6 +287,10 @@ public class EnemyMovement : MonoBehaviour
         if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(-1f, -1f), .2f, cantMove))
         {
             movePoint.position += Regenerate.instance.setAndGetVector(-1f, -1f);
+            if (animator)
+            {
+                animator.SetTrigger("movement");
+            }
         }
     }
     
@@ -265,6 +299,10 @@ public class EnemyMovement : MonoBehaviour
         if (!Physics2D.OverlapCircle(movePoint.position + Regenerate.instance.setAndGetVector(-1f, 1f), .2f, cantMove))
         {
             movePoint.position += Regenerate.instance.setAndGetVector(-1f, 1f);
+            if (animator)
+            {
+                animator.SetTrigger("movement");
+            }
         }
     }
 
@@ -282,11 +320,16 @@ public class EnemyMovement : MonoBehaviour
             else
             {
                 Regenerate.instance.RemoveEnemyFromPool(transform.gameObject);
+                happySprite.transform.parent = null;
+                darkSprite.transform.parent = null;
+                animator.SetTrigger("die");
                 transform.gameObject.SetActive(false);
                 GlobalBlackboard.instance.IncreaseMadnessValue();
                 // Increase madness value and enemy killed in this level
                 Regenerate.instance.player.GetComponent<PlayerController>().IncreaseEnemyKilled();
                 // Regenerate.instance.player.gameObject.GetComponent<Animator>().SetTrigger("enemyKilled");
+                
+                
             }
         }        
     }
