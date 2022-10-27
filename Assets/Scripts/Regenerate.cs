@@ -69,6 +69,11 @@ public class Regenerate : MonoBehaviour
         return player.GetComponent<PlayerController>().actualRound >= player.GetComponent<PlayerController>().maxRound;
     }
 
+    public int CheckNumberEnemies()
+    {
+        return player.GetComponent<PlayerController>().getNumberAliveEnemies();
+    }
+
     void Awake()
     {
         //Check if instance already exists
@@ -103,7 +108,8 @@ public class Regenerate : MonoBehaviour
         // Create matrices based on variables
         spawnStateMatrix = new int[width, height];
         stateMatrix = new int[width, height];
-        transform.localScale += new Vector3((width - 10) * 0.1f, (height - 10) * 0.1f, 0f);
+        if(SceneManager.GetActiveScene().name == "Big Scene")
+            transform.localScale += new Vector3((width - 10) * 0.1f, (height - 10) * 0.1f, 0f);
         nObstacles = (int) (width * height * rationNObstacles);
         
         for (int i = 0; i < nObstacles; i++)
@@ -145,6 +151,14 @@ public class Regenerate : MonoBehaviour
         if(CheckMaxRound())
         {
             GameOver();
+            return;
+        }
+        
+        // Do game over eve if the are no enemies in the scene
+        if (CheckNumberEnemies() <= 0)
+        {
+            GameOver();
+            return;
         }
 
     }

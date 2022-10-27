@@ -21,10 +21,6 @@ public class PlayerController : MonoBehaviour
     public int actualRound;
     public int maxRound;
 
-    // Buttons
-    public Button movUp;
-    public TextMeshProUGUI text;
-
     private int requestedAction;
 
     // Start is called before the first frame update
@@ -405,13 +401,4 @@ public class PlayerController : MonoBehaviour
     {
         requestedAction = action;
     }
-
-    public void ChangeText()
-    {
-        text.text = "alsdj";
-    }
-
-    
-
-
 }
