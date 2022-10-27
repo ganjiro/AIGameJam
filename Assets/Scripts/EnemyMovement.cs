@@ -15,7 +15,9 @@ public class EnemyMovement : MonoBehaviour
     public GameObject happySprite;
     public GameObject darkSprite;
     public bool _hasStarted;
-    
+
+    private Animator anim;
+    private bool isDying;
 
     private VictimAgent _agentComponent;
     public float _movementThreshold = 0.005f;
@@ -31,6 +33,12 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // If the animation is running, do nothing
+        if (isDying)
+        {
+            checkLightOnEnemy();
+            return;
+        }
         transform.position = Vector3.MoveTowards(transform.position, movePoint.position, moveSpeed * Time.deltaTime);
 
         // Give instantaneous reward only if the movement has finished
@@ -87,7 +95,7 @@ public class EnemyMovement : MonoBehaviour
             else
             {
                 Regenerate.instance.RemoveEnemyFromPool(gameObject);
-                Regenerate.instance.GameOver();
+                Regenerate.instance.GameOver();    
                 return;
             }
         }
@@ -309,6 +317,22 @@ public class EnemyMovement : MonoBehaviour
     public void checkLightOnEnemy()
     {
         int[,] state = Regenerate.instance.getCropStateMatrix(transform.position, 1);
+        
+        // When the animation is concluded, kill it
+        if (isDying && animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+        {
+            isDying = false;
+            Regenerate.instance.RemoveEnemyFromPool(transform.gameObject);
+            // happySprite.transform.parent = null;
+            // darkSprite.transform.parent = null;
+            // animator.SetTrigger("die");
+            transform.gameObject.SetActive(false);
+            GlobalBlackboard.instance.IncreaseMadnessValue();
+            // Increase madness value and enemy killed in this level
+            Regenerate.instance.player.GetComponent<PlayerController>().IncreaseEnemyKilled();
+            // Regenerate.instance.player.gameObject.GetComponent<Animator>().SetTrigger("enemyKilled");
+            return;
+        }
 
         if ((state[1,1] == 5 || state[1,1] == 4) && !gameObject.CompareTag("Player"))
         {
@@ -319,17 +343,14 @@ public class EnemyMovement : MonoBehaviour
             }
             else
             {
-                Regenerate.instance.RemoveEnemyFromPool(transform.gameObject);
-                happySprite.transform.parent = null;
-                darkSprite.transform.parent = null;
-                animator.SetTrigger("die");
-                transform.gameObject.SetActive(false);
-                GlobalBlackboard.instance.IncreaseMadnessValue();
-                // Increase madness value and enemy killed in this level
-                Regenerate.instance.player.GetComponent<PlayerController>().IncreaseEnemyKilled();
-                // Regenerate.instance.player.gameObject.GetComponent<Animator>().SetTrigger("enemyKilled");
-                
-                
+                // Start the animation but do not kill it
+                anim = GetComponentInChildren<Animator>();
+                if (!animator.GetCurrentAnimatorStateInfo(0).IsName("skeletonMageDeath"))
+                {
+                    animator.Play("skeletonMageDeath");
+                    isDying = true;
+                    return;
+                }
             }
         }        
     }
