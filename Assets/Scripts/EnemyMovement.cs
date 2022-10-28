@@ -331,6 +331,11 @@ public class EnemyMovement : MonoBehaviour
             transform.gameObject.SetActive(false);
             GlobalBlackboard.instance.IncreaseMadnessValue();
             // Increase madness value and enemy killed in this level
+            try
+            {
+                Regenerate.instance.audio.pitch = 1 - (GlobalBlackboard.instance.GetMadnessPerc() * 2);
+            }
+            catch { }
             Regenerate.instance.player.GetComponent<PlayerController>().IncreaseEnemyKilled();
             // Regenerate.instance.player.gameObject.GetComponent<Animator>().SetTrigger("enemyKilled");
             return;

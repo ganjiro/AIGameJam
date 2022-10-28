@@ -10,6 +10,7 @@ using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
 public class Regenerate : MonoBehaviour
 {   
 
@@ -41,7 +42,7 @@ public class Regenerate : MonoBehaviour
     public Canvas _gameOverCanvas;
     public Canvas _gameWonCanvas;
     public Canvas _madCanvas;
-
+    public AudioSource audio;
     public GlobalBlackboard _blackboard;
     public UIManager _uiManager;
 
@@ -74,8 +75,13 @@ public class Regenerate : MonoBehaviour
         {
             RemoveEnemyFromPool(e.gameObject);
         }
-        // Increase madness value
+        // Increase madness value 
         GlobalBlackboard.instance.IncreaseMadnessValue();
+        try
+        {
+            audio.pitch = 1 - (GlobalBlackboard.instance.GetMadnessPerc() * 2);
+        }
+        catch { }
         if (GlobalBlackboard.instance.GetMadnessPerc() >= 1)
         {
             _madCanvas.gameObject.SetActive(true);
@@ -188,6 +194,11 @@ public class Regenerate : MonoBehaviour
         //Sets this to not be destroyed when reloading scene
         // DontDestroyOnLoad(gameObject);
         InitializeAll();
+        try
+        {
+            audio.pitch = 1 - (GlobalBlackboard.instance.GetMadnessPerc() * 2);
+        }
+        catch { }
     }
 
     void InitializeAll()
