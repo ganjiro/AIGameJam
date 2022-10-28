@@ -335,6 +335,7 @@ public class PlayerController : MonoBehaviour
             // Otherwise, wait for input
             else
             {
+                /*
                 if (Input.GetKeyDown(KeyCode.P)) // P: full matrix
                 {
                     Regenerate.instance.getFullStateMatrix();
@@ -344,6 +345,7 @@ public class PlayerController : MonoBehaviour
                     Vector3 tmpVector = Regenerate.instance.setAndGetVector(2.5f, 2.5f); // just to test
                     Regenerate.instance.getCropStateMatrix(tmpVector, 3);
                 }
+                */
                 if (Input.GetKeyDown(KeyCode.F) || requestedAction == 8) // F: wait 
                 {
                     int action = 8;
@@ -351,6 +353,7 @@ public class PlayerController : MonoBehaviour
                     // moveEnemies.Invoke();
                     // StartCoroutine(_enemyManager.moveAgents());
                 }
+                
                 else if ((Mathf.Abs(Input.GetAxisRaw("Horizontal")) == 1) || (Mathf.Abs(Input.GetAxisRaw("Vertical")) == 1) || (requestedAction >= 0 && requestedAction <= 7))
                 {
                     int action = -1;

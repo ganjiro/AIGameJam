@@ -285,6 +285,7 @@ public class Regenerate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if (Input.GetKey(KeyCode.K))
         {
             CreateMap();
@@ -293,6 +294,7 @@ public class Regenerate : MonoBehaviour
         {
             getFullStateMatrix();
         }
+        */
         
         // Check if player has killed the right number of enemies
         if (CheckWinCondition() == 0)
@@ -327,35 +329,35 @@ public class Regenerate : MonoBehaviour
         // TODO: FOR NOW THE WAIT ACTION IS ALWAYS INFEASIBLE
         feasible[8] = 0; // wait always feasible
 
-        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(1f, 0f), .2f, cantMove)) // E
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(1f, 0f), .2f, cantMove) && !checkEnemiesInPosition(objPosition + setAndGetVector(1f, 0f))) // E
         {
             feasible[0] = 1; 
         }
-        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(1f, -1f), .2f, cantMove)) // SE
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(1f, -1f), .2f, cantMove) && !checkEnemiesInPosition(objPosition + setAndGetVector(1f, -1f))) // SE
         {
             feasible[1] = 1;
         }
-        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(0f, -1f), .2f, cantMove)) // S
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(0f, -1f), .2f, cantMove) && !checkEnemiesInPosition(objPosition + setAndGetVector(0f, -1f))) // S
         {
             feasible[2] = 1;
         }
-        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(-1f, -1f), .2f, cantMove)) // SO
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(-1f, -1f), .2f, cantMove) && !checkEnemiesInPosition(objPosition + setAndGetVector(-1f, -1f))) // SO
         {
             feasible[3] = 1;
         }
-        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(-1f, 0f), .2f, cantMove)) // O
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(-1f, 0f), .2f, cantMove) && !checkEnemiesInPosition(objPosition + setAndGetVector(-1f, 0f))) // O
         {
             feasible[4] = 1;
         }
-        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(-1f, 1f), .2f, cantMove)) // NO
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(-1f, 1f), .2f, cantMove) && !checkEnemiesInPosition(objPosition + setAndGetVector(-1f, 1f))) // NO
         {
             feasible[5] = 1;
         }
-        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(0f,1f), .2f, cantMove)) // N
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(0f,1f), .2f, cantMove) && !checkEnemiesInPosition(objPosition + setAndGetVector(0f, 1f))) // N
         {
             feasible[6] = 1;
         }
-        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(1f, 1f), .2f, cantMove)) // NE
+        if (!Physics2D.OverlapCircle(objPosition + setAndGetVector(1f, 1f), .2f, cantMove) && !checkEnemiesInPosition(objPosition + setAndGetVector(1f, 1f))) // NE
         {
             feasible[7] = 1;
         }
@@ -375,62 +377,19 @@ public class Regenerate : MonoBehaviour
     }
 
 
-    public int[] getFeasibleActionsetV2(Vector3 objPosition)
+    public bool checkEnemiesInPosition(Vector3 objPosition)
     {
-        int[,] state = Regenerate.instance.getCropStateMatrix(transform.position, 1);
-
-        for (int i = 0; i < 9; i++)
+        bool ret = false;
+        foreach (Transform child in agents.transform)
         {
-            feasible[i] = 0;
+            if (child.position == objPosition)
+            {
+                ret = true;
+                break;
+            }
         }
 
-        // TODO: FOR NOW THE WAIT ACTION IS ALWAYS INFEASIBLE
-        feasible[8] = 0; // wait always feasible
-
-        if (state[2, 1] != 0 && state[2, 1] != 1) // E
-        {
-            feasible[0] = 1;
-        }
-        if (state[2, 2] != 0 && state[2, 2] != 1) // SE
-        {
-            feasible[1] = 1;
-        }
-        if (state[1, 2] != 0 && state[1, 2] != 1) // S
-        {
-            feasible[2] = 1;
-        }
-        if (state[0, 2] != 0 && state[0, 2] != 1) // SO
-        {
-            feasible[3] = 1;
-        }
-        if (state[0, 1] != 0 && state[0, 1] != 1) // O
-        {
-            feasible[4] = 1;
-        }
-        if (state[0, 0] != 0 && state[0, 0] != 1) // NO
-        {
-            feasible[5] = 1;
-        }
-        if (state[1, 0] != 0 && state[1, 0] != 1) // N
-        {
-            feasible[6] = 1;
-        }
-        if (state[2, 0] != 0 && state[2, 0] != 1) // NE
-        {
-            feasible[7] = 1;
-        }
-
-        int sum = 0;
-        for (int i = 0; i < 9; i++)
-        {
-            sum += feasible[i]; // 0: not feasible
-        }
-        if (sum == 1)
-        {
-            // Debug.Log("Devo per forza stare fermo");
-        }
-
-        return feasible;
+        return ret;
     }
 
     private void setFull(float x, float y, int[,] spawnStateMatrix)
