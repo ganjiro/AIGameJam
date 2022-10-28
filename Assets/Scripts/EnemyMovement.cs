@@ -345,11 +345,16 @@ public class EnemyMovement : MonoBehaviour
             }
             else
             {
+                if (GlobalBlackboard.instance.madnessValue == GlobalBlackboard.instance.maxMadnessValue)
+                {
+                    player.GetComponent<PlayerController>().animator.SetTrigger("EnemyKilled");
+                }
                 // Start the animation but do not kill it
                 anim = GetComponentInChildren<Animator>();
                 if (!animator.GetCurrentAnimatorStateInfo(0).IsName("death"))
                 {
                     animator.Play("death");
+                    
                     isDying = true;
                     return;
                 }

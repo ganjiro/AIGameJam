@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour
         requestedAction = 99;
         // Here the turn of the player adds 1
         actualRound++;
-        if (animator)
+        if (animator && (action != 10 && action != 9))
         {
             animator.SetTrigger("movement");
         }

@@ -270,11 +270,14 @@ public class Regenerate : MonoBehaviour
             {
                 a.transform.Find("happySprite").gameObject.SetActive(false);
                 a.transform.Find("DarkSprite").gameObject.SetActive(true);
-                a.GetComponent<PlayerController>().animator = a.transform.Find("DarkSprite").GetComponent<Animator>();
+                a.GetComponent<EnemyMovement>().animator = a.transform.Find("DarkSprite").GetComponent<Animator>();
             }
         }
-        _goodBackground.color = new Color(_goodBackground.color.r, _goodBackground.color.b, _goodBackground.color.g, 1 - GlobalBlackboard.instance.GetMadnessPerc());
-
+        try
+        {
+            _goodBackground.color = new Color(_goodBackground.color.r, _goodBackground.color.b, _goodBackground.color.g, 1 - GlobalBlackboard.instance.GetMadnessPerc());
+        }
+        catch { }
         // Set up the number of enemies the player has to kill as the total number of eneimes
         player.GetComponent<PlayerController>()._hasToKillInThisLevel = agents.transform.childCount;
     }
@@ -369,6 +372,65 @@ public class Regenerate : MonoBehaviour
 
         return feasible;
 
+    }
+
+
+    public int[] getFeasibleActionsetV2(Vector3 objPosition)
+    {
+        int[,] state = Regenerate.instance.getCropStateMatrix(transform.position, 1);
+
+        for (int i = 0; i < 9; i++)
+        {
+            feasible[i] = 0;
+        }
+
+        // TODO: FOR NOW THE WAIT ACTION IS ALWAYS INFEASIBLE
+        feasible[8] = 0; // wait always feasible
+
+        if (state[2, 1] != 0 && state[2, 1] != 1) // E
+        {
+            feasible[0] = 1;
+        }
+        if (state[2, 2] != 0 && state[2, 2] != 1) // SE
+        {
+            feasible[1] = 1;
+        }
+        if (state[1, 2] != 0 && state[1, 2] != 1) // S
+        {
+            feasible[2] = 1;
+        }
+        if (state[0, 2] != 0 && state[0, 2] != 1) // SO
+        {
+            feasible[3] = 1;
+        }
+        if (state[0, 1] != 0 && state[0, 1] != 1) // O
+        {
+            feasible[4] = 1;
+        }
+        if (state[0, 0] != 0 && state[0, 0] != 1) // NO
+        {
+            feasible[5] = 1;
+        }
+        if (state[1, 0] != 0 && state[1, 0] != 1) // N
+        {
+            feasible[6] = 1;
+        }
+        if (state[2, 0] != 0 && state[2, 0] != 1) // NE
+        {
+            feasible[7] = 1;
+        }
+
+        int sum = 0;
+        for (int i = 0; i < 9; i++)
+        {
+            sum += feasible[i]; // 0: not feasible
+        }
+        if (sum == 1)
+        {
+            // Debug.Log("Devo per forza stare fermo");
+        }
+
+        return feasible;
     }
 
     private void setFull(float x, float y, int[,] spawnStateMatrix)
